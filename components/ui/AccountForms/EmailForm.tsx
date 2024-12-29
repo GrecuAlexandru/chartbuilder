@@ -1,6 +1,6 @@
 'use client';
 
-import Button from '@/components/ui/Button';
+import OldButton from '@/components/ui/OldButton';
 import Card from '@/components/ui/Card';
 import { updateEmail } from '@/utils/auth-helpers/server';
 import { handleRequest } from '@/utils/auth-helpers/client';
@@ -36,14 +36,14 @@ export default function EmailForm({
           <p className="pb-4 sm:pb-0">
             We will email you to verify the change.
           </p>
-          <Button
+          <OldButton
             variant="slim"
             type="submit"
             form="emailForm"
             loading={isSubmitting}
           >
             Update Email
-          </Button>
+          </OldButton>
         </div>
       }
     >
@@ -52,7 +52,7 @@ export default function EmailForm({
           <input
             type="text"
             name="newEmail"
-            className="w-1/2 p-3 rounded-md bg-zinc-800"
+            className="w-1/2 p-3 rounded-md bg-slate-200"
             defaultValue={userEmail ?? ''}
             placeholder="Your email"
             maxLength={64}

@@ -5,8 +5,11 @@ import { Toaster } from '@/components/ui/Toasts/toaster';
 import { PropsWithChildren, Suspense } from 'react';
 import { getURL } from '@/utils/helpers';
 import 'styles/main.css';
+import { GeistSans } from 'geist/font/sans';
+import { GeistMono } from 'geist/font/mono';
 
-const title = 'Next.js Subscription Starter';
+
+const title = 'ChartBuilder';
 const description = 'Brought to you by Vercel, Stripe, and Supabase.';
 
 export const metadata: Metadata = {
@@ -21,8 +24,8 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: PropsWithChildren) {
   return (
-    <html lang="en">
-      <body className="bg-black">
+    <html lang="en" className={GeistSans.className}>
+      <body className="bg-white">
         <Navbar />
         <main
           id="skip"

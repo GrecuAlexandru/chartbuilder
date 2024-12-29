@@ -1,6 +1,6 @@
 'use client';
 
-import Button from '@/components/ui/Button';
+import OldButton from '@/components/ui/OldButton';
 import Card from '@/components/ui/Card';
 import { updateName } from '@/utils/auth-helpers/server';
 import { handleRequest } from '@/utils/auth-helpers/client';
@@ -30,14 +30,14 @@ export default function NameForm({ userName }: { userName: string }) {
       footer={
         <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
           <p className="pb-4 sm:pb-0">64 characters maximum</p>
-          <Button
+          <OldButton
             variant="slim"
             type="submit"
             form="nameForm"
             loading={isSubmitting}
           >
             Update Name
-          </Button>
+          </OldButton>
         </div>
       }
     >
@@ -46,7 +46,7 @@ export default function NameForm({ userName }: { userName: string }) {
           <input
             type="text"
             name="fullName"
-            className="w-1/2 p-3 rounded-md bg-zinc-800"
+            className="w-1/2 p-3 rounded-md bg-slate-200"
             defaultValue={userName}
             placeholder="Your name"
             maxLength={64}

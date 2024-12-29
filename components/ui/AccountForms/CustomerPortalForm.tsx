@@ -1,6 +1,6 @@
 'use client';
 
-import Button from '@/components/ui/Button';
+import OldButton from '@/components/ui/OldButton';
 import { useRouter, usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { createStripePortal } from '@/utils/stripe/server';
@@ -14,10 +14,10 @@ type Product = Tables<'products'>;
 
 type SubscriptionWithPriceAndProduct = Subscription & {
   prices:
-    | (Price & {
-        products: Product | null;
-      })
-    | null;
+  | (Price & {
+    products: Product | null;
+  })
+  | null;
 };
 
 interface Props {
@@ -55,13 +55,13 @@ export default function CustomerPortalForm({ subscription }: Props) {
       footer={
         <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
           <p className="pb-4 sm:pb-0">Manage your subscription on Stripe.</p>
-          <Button
+          <OldButton
             variant="slim"
             onClick={handleStripePortalRequest}
             loading={isSubmitting}
           >
             Open customer portal
-          </Button>
+          </OldButton>
         </div>
       }
     >

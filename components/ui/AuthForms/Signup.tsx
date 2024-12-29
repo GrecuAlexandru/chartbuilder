@@ -1,6 +1,6 @@
 'use client';
 
-import Button from '@/components/ui/Button';
+import OldButton from '@/components/ui/OldButton';
 import React from 'react';
 import Link from 'next/link';
 import { signUp } from '@/utils/auth-helpers/server';
@@ -54,14 +54,14 @@ export default function SignUp({ allowEmail, redirectMethod }: SignUpProps) {
               className="w-full p-3 rounded-md bg-zinc-800"
             />
           </div>
-          <Button
+          <OldButton
             variant="slim"
             type="submit"
             className="mt-1"
             loading={isSubmitting}
           >
             Sign up
-          </Button>
+          </OldButton>
         </div>
       </form>
       <p>Already have an account?</p>
