@@ -16,14 +16,19 @@ const ChartType = z.enum([
     "scatter",
 ]);
 
-const DataPoint = z.object({
-    name: z.string().optional(),
-    values: z.array(z.union([z.string(), z.number()])),
+const DataSeries = z.object({
+    data_series_label: z.string(),
+    data_series_value: z.number(),
+})
+
+const DataRow = z.object({
+    label: z.string(),
+    data_series: z.array(DataSeries),
 });
 
 const Chart = z.object({
     chart_type: ChartType,
-    data: z.array(DataPoint),
+    data: z.array(DataRow),
     display_legend: z.boolean().optional(),
     display_label: z.boolean().optional(),
     display_x_axis: z.boolean().optional(),
@@ -71,17 +76,28 @@ const ChartResponseNoData = z.object({
     chart: ChartNoData,
 });
 
-async function generateChart(body: any) {
-    const systemPrompt = "You are a detail-oriented data visualization assistant. Analyze user requests and generate accurate, structured, and schema-compliant chart configurations. Always ensure you are extracting the data points correctly and entirely.";
+//"data":[{"name":"Value1","data_points":[{"name":"Desktop","value":1},{"name":"Mobile","value":3}]},{"name":"Value2","data_points":[{"name":"Desktop","value":5},{"name":"Mobile","value":8}]},{"name":"Value3","data_points":[{"name":"Desktop","value":10},{"name":"Mobile","value":5}]}]
 
+async function generateChart(body: any) {
+    const systemPrompt = `You are a detail-oriented data visualization assistant for creating charts based on user prompts. Analyze user requests and generate accurate, structured, and schema-compliant chart configurations. Always ensure you are extracting the data series correctly and entirely. Make sure you do not add more data series than asked.`;
+    // const examplePromptComplex = `Example data of chart with 2 different categories and 3 values for each category: "data":[{"label":"Label1","data_series":[{"data_series_label":"Desktop","data_series_value":1},{"data_series_label":"Mobile","data_series_value":3}]},{"label":"Label2","data_series":[{"data_series_label":"Desktop","data_series_value":5},{"data_series_label":"Mobile","data_series_value":8}]},{"label":"Label3","data_series":[{"data_series_label":"Desktop","data_series_value":10},{"data_series_label":"Mobile","data_series_value":5}]}].`;
+    // const examplePromptSimple = `Example data of chart with 2 values: "data":[{"label":"Label1","data_series":[{"data_series_label":"Desktop","data_series_value":1}]},{"label":"Label2","data_series":[{"data_series_label":"Desktop","data_series_value":5}]}].`;
+    const explanation = `DataRow's label represents the name or value of the point on the X axis (e.g. "January", "February", "March" or 1, 2, 3). DataRow's data_series can represent multiple Categories (e.g. "Desktop users", "Mobile users") for drawing different lines/bars/etc on the chart. Each data_series_label represents the name of the Category and data_series_value represents the value of the point on the Y axis.`;
     const completion = await openai.beta.chat.completions.parse({
         model: "gpt-4o-mini",
         messages: [
             { role: "system", content: systemPrompt },
+            { role: "user", content: explanation },
+            { role: "user", content: "Generate a bar chart with 3 values for each of the 2 categories" },
+            { role: "assistant", content: `"data": [{ "label": "Label1", "data_series": [{ "data_series_label": "Desktop", "data_series_value": 1 }, { "data_series_label": "Mobile", "data_series_value": 3 }] }, { "label": "Label2", "data_series": [{ "data_series_label": "Desktop", "data_series_value": 5 }, { "data_series_label": "Mobile", "data_series_value": 8 }] }, { "label": "Label3", "data_series": [{ "data_series_label": "Desktop", "data_series_value": 10 }, { "data_series_label": "Mobile", "data_series_value": 5 }] }].` },
+            { role: "user", content: "Generate a pie chart with 2 values" },
+            { role: "assistant", content: `"data":[{"label":"Label1","data_series":[{"data_series_label":"Desktop","data_series_value":1}]},{"label":"Label2","data_series":[{"data_series_label":"Desktop","data_series_value":5}]}]` },
             { role: "user", content: body.text },
         ],
         response_format: zodResponseFormat(ChartResponse, "chart_response"),
     });
+
+    console.log(completion.usage);
 
     return completion.choices[0].message.parsed;
 }
