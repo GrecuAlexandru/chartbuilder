@@ -10,6 +10,9 @@ import { z, infer as zInfer } from "zod";
 
 import { Bar, BarChart, Area, AreaChart, Line, LineChart, Pie, PieChart, Sector, Radar, RadarChart, RadialBar, RadialBarChart, CartesianGrid, XAxis, YAxis, LabelList } from "recharts"
 import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent } from "@/components/ui/chart"
+import { ChatInterface } from "./ChatInterface"
+import { ChartView } from "./ChartView"
+import { ChartSettings } from "./ChartSettings"
 
 // const chartData = [
 //     { label: "January", desktop: 186, mobile: 80 },
@@ -267,123 +270,11 @@ export default function ChartBuilder() {
                             transition={{ duration: 0.3 }}
                             className="p-4 border-r"
                         >
-                            <h2 className="text-2xl font-bold mb-4">Chart View</h2>
-                            <div className="w-full flex items-center justify-center border rounded-lg">
-                                {!chart && (
-                                    <div>Loading...</div>
-                                )}
-                                {chart.chart_type === 'bar' && (
-                                    <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
-                                        <BarChart accessibilityLayer data={chartData}>
-                                            {chart.display_x_axis &&
-                                                <XAxis
-                                                    dataKey="label"
-                                                />
-                                            }
-                                            {chart.display_y_axis &&
-                                                <YAxis
-                                                    stroke="#333"
-                                                />
-                                            }
-                                            {chart.display_y_axis && <YAxis stroke="#333" />}
-                                            {Object.keys(chartConfig).map((key, index) => (
-                                                <Bar key={index} dataKey={key} fill={chartConfig[key].color} />
-                                            ))}
-                                            {chart.display_legend &&
-                                                <ChartLegend content={<ChartLegendContent />} />
-                                            }
-                                        </BarChart>
-                                    </ChartContainer>
-                                )}
-                                {chart.chart_type === 'area' && (
-                                    <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
-                                        <AreaChart accessibilityLayer data={chartData}>
-                                            {chart.display_x_axis &&
-                                                <XAxis
-                                                    dataKey="label"
-                                                />
-                                            }
-                                            {chart.display_y_axis &&
-                                                <YAxis
-                                                    stroke="#333"
-                                                />
-                                            }
-                                            {Object.keys(chartConfig).map((key, index) => (
-                                                <Area key={index} dataKey={key} fill={chartConfig[key].color} />
-                                            ))}
-                                            {chart.display_legend &&
-                                                <ChartLegend content={<ChartLegendContent />} />
-                                            }
-                                        </AreaChart>
-                                    </ChartContainer>
-                                )}
-                                {chart.chart_type === 'line' && (
-                                    <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
-                                        <LineChart accessibilityLayer data={chartData}>
-                                            {chart.display_x_axis &&
-                                                <XAxis
-                                                    dataKey="label"
-                                                />
-                                            }
-                                            {chart.display_y_axis &&
-                                                <YAxis
-                                                    stroke="#333"
-                                                />
-                                            }
-                                            {Object.keys(chartConfig).map((key, index) => (
-                                                <Line key={index} dataKey={key} stroke={chartConfig[key].color} />
-                                            ))}
-                                            {chart.display_legend &&
-                                                <ChartLegend content={<ChartLegendContent />} />
-                                            }
-                                        </LineChart>
-                                    </ChartContainer>
-                                )}
-                                {chart.chart_type === 'pie' && (
-                                    <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
-                                        <PieChart accessibilityLayer>
-                                            <Pie
-                                                data={chartData}
-                                                dataKey={chart.data[0].data_series[0].data_series_label}
-                                            />
-
-                                            {chart.display_legend &&
-                                                <ChartLegend
-                                                    content={<ChartLegendContent nameKey="label" />}
-                                                    className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
-                                                />
-                                            }
-                                        </PieChart>
-                                    </ChartContainer>
-                                )}
-                                {chart.chart_type === 'radar' && (
-                                    <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
-                                        <RadarChart accessibilityLayer data={chartData}>
-                                            {chart.display_legend &&
-                                                <ChartLegend content={<ChartLegendContent />} />
-                                            }
-                                            <Radar dataKey={chart.data[0].data_series[0].data_series_label} fill={`var(--color-${chart.data[0].data_series[0].data_series_label}`} />
-                                        </RadarChart>
-                                    </ChartContainer>
-                                )}
-                                {chart.chart_type === 'radial' && (
-                                    <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
-                                        <RadialBarChart accessibilityLayer data={chartData}>
-                                            {chart.display_legend &&
-                                                <ChartLegend content={<ChartLegendContent />} />
-                                            }
-                                            <RadialBar dataKey={chart.data[0].data_series[0].data_series_label} fill={`var(--color-${chart.data[0].data_series[0].data_series_label}`} >
-                                                <LabelList
-                                                    position="insideStart"
-                                                    dataKey="label"
-                                                    className="fill-white capitalize mix-blend-luminosity"
-                                                    fontSize={11}
-                                                />
-                                            </RadialBar>
-                                        </RadialBarChart>
-                                    </ChartContainer>
-                                )}
-                            </div>
+                            <ChartView
+                                chart={chart}
+                                chartData={chartData}
+                                chartConfig={chartConfig}
+                            />
                         </motion.div>
                         <motion.div
                             initial={{ width: 0 }}
@@ -391,65 +282,11 @@ export default function ChartBuilder() {
                             transition={{ duration: 0.5 }}
                             className="p-4"
                         >
-                            <h2 className="text-2xl font-bold mb-4">Chart Settings</h2>
-                            <div className="space-y-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700">Chart Type</label>
-                                    <select className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                                        <option>Bar</option>
-                                        <option>Line</option>
-                                        <option>Pie</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700">Color Scheme</label>
-                                    <select className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                                        <option>Default</option>
-                                        <option>Pastel</option>
-                                        <option>Vibrant</option>
-                                    </select>
-                                </div>
-                                <Button>Update Chart</Button>
-                            </div>
+                            <ChartSettings />
                         </motion.div>
                     </motion.div>
                 )}
             </div>
         </div >
-    )
-}
-
-interface ChatInterfaceProps {
-    chatHistory: { role: string, content: string }[]
-    message: string
-    setMessage: (message: string) => void
-    handleSubmit: (e: React.FormEvent) => void
-}
-
-function ChatInterface({ chatHistory, message, setMessage, handleSubmit }: ChatInterfaceProps) {
-    return (
-        <div className="flex flex-col h-full">
-            <div className="flex-1 overflow-y-auto mb-4">
-                {chatHistory.map((msg, index) => (
-                    <div key={index} className={`mb-2 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
-                        <span className={`inline-block p-2 rounded-lg ${msg.role === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}`}>
-                            {msg.content}
-                        </span>
-                    </div>
-                ))}
-            </div>
-            <form onSubmit={handleSubmit} className="flex items-center">
-                <Input
-                    type="text"
-                    placeholder="Type your chart request..."
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    className="flex-1 mr-2"
-                />
-                <Button type="submit">
-                    <Send className="h-4 w-4" />
-                </Button>
-            </form>
-        </div>
     )
 }
