@@ -7,13 +7,15 @@ interface ChatInterfaceProps {
     message: string
     setMessage: (message: string) => void
     handleSubmit: (e: React.FormEvent) => void
+    handleDemo: () => void;
 }
 
 export function ChatInterface({
     chatHistory,
     message,
     setMessage,
-    handleSubmit
+    handleSubmit,
+    handleDemo
 }: ChatInterfaceProps) {
     return (
         <div className="flex flex-col h-full">
@@ -36,6 +38,9 @@ export function ChatInterface({
                 />
                 <Button type="submit">
                     <Send className="h-4 w-4" />
+                </Button>
+                <Button type="button" onClick={handleDemo} variant="outline">
+                    Demo
                 </Button>
             </form>
         </div>

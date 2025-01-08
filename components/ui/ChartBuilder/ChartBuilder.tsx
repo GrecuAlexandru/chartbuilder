@@ -74,10 +74,7 @@ const Chart = z.object({
     radial_chart_text: z.boolean().optional(),
     scatter_chart_three_dim: z.boolean().optional(),
 });
-
-const demoAreaString = `{ "chart_type": "area", "data": [ { "label": "Point1", "data_series": [ { "data_series_label": "Category1", "data_series_value": 4 } ] }, { "label": "Point2", "data_series": [ { "data_series_label": "Category1", "data_series_value": 7 } ] }, { "label": "Point3", "data_series": [ { "data_series_label": "Category1", "data_series_value": 2 } ] } ], "display_legend": true, "display_label": true, "display_x_axis": true, "display_y_axis": true, "area_chart_stacked": false, "bar_chart_horizontal": false, "bar_chart_negative": false, "line_chart_linear": false, "line_chart_dots": false, "pie_chart_labels": false, "pie_chart_donut": false, "pie_chart_donut_with_text": false, "radar_chart_dots": false, "radial_chart_grid": false, "radial_chart_text": false, "scatter_chart_three_dim": false }`;
-const demoString = `{ "chart_type": "bar", "data": [ { "label": "Label1", "data_series": [ { "data_series_label": "Category1", "data_series_value": 4 } ] }, { "label": "Label2", "data_series": [ { "data_series_label": "Category1", "data_series_value": 2 } ] }, { "label": "Label3", "data_series": [ { "data_series_label": "Category1", "data_series_value": 7 } ] }, { "label": "Label4", "data_series": [ { "data_series_label": "Category1", "data_series_value": 3 } ] } ], "display_legend": true, "display_label": true, "display_x_axis": true, "display_y_axis": true, "area_chart_stacked": false, "bar_chart_horizontal": false, "bar_chart_negative": false, "line_chart_linear": false, "line_chart_dots": false, "pie_chart_labels": false, "pie_chart_donut": false, "pie_chart_donut_with_text": false, "radar_chart_dots": false, "radial_chart_grid": false, "radial_chart_text": false, "scatter_chart_three_dim": false }`;
-const isDemo = false;
+const demoString = `{ "chart_type": "bar", "data": [ { "label": "Label1", "data_series": [ { "data_series_label": "Category1", "data_series_value": 12 } ] }, { "label": "Label2", "data_series": [ { "data_series_label": "Category1", "data_series_value": 5 } ] }, { "label": "Label3", "data_series": [ { "data_series_label": "Category1", "data_series_value": 9 } ] }, { "label": "Label4", "data_series": [ { "data_series_label": "Category1", "data_series_value": 6 } ] } ], "display_legend": true, "display_label": false, "display_x_axis": true, "display_y_axis": true, "area_chart_stacked": false, "bar_chart_horizontal": false, "bar_chart_negative": false, "line_chart_linear": false, "line_chart_dots": false, "pie_chart_labels": false, "pie_chart_donut": false, "pie_chart_donut_with_text": false, "radar_chart_dots": false, "radial_chart_grid": false, "radial_chart_text": false, "scatter_chart_three_dim": false }`;
 
 export default function ChartBuilder() {
     const [message, setMessage] = useState('')
@@ -106,113 +103,145 @@ export default function ChartBuilder() {
     const [chartData, setChartData] = useState<{ label: string;[key: string]: any }[]>([])
     const [chartConfig, setChartConfig] = useState<ChartConfig>({})
 
+    const handleDemo = () => {
+        const data = { chart: JSON.parse(demoString) };
+        setChart(data.chart);
+
+        if (data.chart.chart_type === 'pie') {
+            const chData: { label: string;[key: string]: any }[] = data.chart.data.map((row: zInfer<typeof DataRow>) => {
+                const dataObject: { label: string;[key: string]: any } = { label: row.label };
+                row.data_series.forEach((dataPoint: zInfer<typeof DataSeries>) => {
+                    dataObject[dataPoint.data_series_label] = dataPoint.data_series_value;
+                });
+                dataObject['fill'] = `var(--color-${row.label})`;
+                return dataObject;
+            });
+            setChartData(chData);
+
+            const chConfig: ChartConfig = {};
+            chConfig[data.chart.data[0].data_series[0].data_series_label] = {
+                label: data.chart.data[0].data_series[0].data_series_label,
+            };
+            data.chart.data.forEach((row: zInfer<typeof DataRow>) => {
+                if (!chConfig[row.label]) {
+                    chConfig[row.label] = {
+                        label: row.label,
+                        color: `hsl(var(--chart-${Math.floor(Math.random() * 5) + 1}))`,
+                    };
+                }
+            });
+            setChartConfig(chConfig);
+        } else {
+            const chData: { label: string;[key: string]: any }[] = data.chart.data.map((row: zInfer<typeof DataRow>) => {
+                const dataObject: { label: string;[key: string]: any } = { label: row.label };
+                row.data_series.forEach((dataPoint: zInfer<typeof DataSeries>) => {
+                    dataObject[dataPoint.data_series_label] = dataPoint.data_series_value;
+                });
+                return dataObject;
+            });
+            setChartData(chData);
+
+            const chConfig: ChartConfig = {};
+            data.chart.data.forEach((row: zInfer<typeof DataRow>) => {
+                row.data_series.forEach((dataPoint: zInfer<typeof DataSeries>) => {
+                    if (!chConfig[dataPoint.data_series_label]) {
+                        chConfig[dataPoint.data_series_label] = {
+                            label: dataPoint.data_series_label,
+                            color: `hsl(var(--chart-${Math.floor(Math.random() * 5) + 1}))`,
+                        };
+                    }
+                });
+            });
+            setChartConfig(chConfig);
+        }
+
+        const string_text = JSON.stringify(data.chart, null, 2);
+
+        setChatHistory(prev => [...prev, { role: 'agent', content: string_text }]);
+
+        setMessage('')
+
+        // Simulate agent response after 1 second
+        setTimeout(() => {
+            setChatHistory(prev => [...prev, { role: 'agent', content: 'Here\'s the chart you requested. You can customize it using the panel on the right.' }])
+            setIsFullScreen(false)
+        }, 1000)
+    }
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        if (message.trim() || isDemo) {
-            if (isDemo) {
-                setChatHistory([...chatHistory, { role: 'user', content: message }]);
-                setChatHistory(prev => [...prev, { role: 'agent', content: demoAreaString }]);
-                setMessage('');
-
-                const data = JSON.parse(demoAreaString);
-                setChart(data);
-
-                const chData: { label: string;[key: string]: any }[] = data.data.map((row: zInfer<typeof DataRow>) => {
-                    const dataObject: { label: string;[key: string]: any } = { label: row.label };
-                    row.data_series.forEach((dataPoint: zInfer<typeof DataSeries>) => {
-                        dataObject[dataPoint.data_series_label] = dataPoint.data_series_value;
-                    });
-                    return dataObject;
+        if (message.trim()) {
+            setChatHistory([...chatHistory, { role: 'user', content: message }])
+            try {
+                const response = await fetch('/api/chartbot', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text: message }),
                 });
-                setChartData(chData);
 
-                const chConfig: ChartConfig = {};
-                data.data.forEach((row: zInfer<typeof DataRow>) => {
-                    row.data_series.forEach((dataPoint: zInfer<typeof DataSeries>) => {
-                        if (!chConfig[dataPoint.data_series_label]) {
-                            chConfig[dataPoint.data_series_label] = {
-                                label: dataPoint.data_series_label,
-                                color: `hsl(var(--chart-${Object.keys(chConfig).length + 1}))`,
+                const data = await response.json();
+                setChart(data.chart);
+                console.log(data);
+
+
+                if (data.chart.chart_type === 'pie') {
+                    const chData: { label: string;[key: string]: any }[] = data.chart.data.map((row: zInfer<typeof DataRow>) => {
+                        const dataObject: { label: string;[key: string]: any } = { label: row.label };
+                        row.data_series.forEach((dataPoint: zInfer<typeof DataSeries>) => {
+                            dataObject[dataPoint.data_series_label] = dataPoint.data_series_value;
+                        });
+                        dataObject['fill'] = `var(--color-${row.label})`;
+                        return dataObject;
+                    });
+                    setChartData(chData);
+
+                    const chConfig: ChartConfig = {};
+                    chConfig[data.chart.data[0].data_series[0].data_series_label] = {
+                        label: data.chart.data[0].data_series[0].data_series_label,
+                    };
+                    data.chart.data.forEach((row: zInfer<typeof DataRow>) => {
+                        if (!chConfig[row.label]) {
+                            chConfig[row.label] = {
+                                label: row.label,
+                                color: `hsl(var(--chart-${Math.floor(Math.random() * 5) + 1}))`,
                             };
                         }
                     });
-                });
-                setChartConfig(chConfig);
-
-            } else {
-                setChatHistory([...chatHistory, { role: 'user', content: message }])
-                try {
-                    const response = await fetch('/api/chartbot', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ text: message }),
-                    });
-
-                    const data = await response.json();
-                    setChart(data.chart);
-                    console.log(data);
-
-
-                    if (data.chart.chart_type === 'pie') {
-                        const chData: { label: string;[key: string]: any }[] = data.chart.data.map((row: zInfer<typeof DataRow>) => {
-                            const dataObject: { label: string;[key: string]: any } = { label: row.label };
-                            row.data_series.forEach((dataPoint: zInfer<typeof DataSeries>) => {
-                                dataObject[dataPoint.data_series_label] = dataPoint.data_series_value;
-                            });
-                            dataObject['fill'] = `var(--color-${row.label})`;
-                            return dataObject;
+                    setChartConfig(chConfig);
+                } else {
+                    const chData: { label: string;[key: string]: any }[] = data.chart.data.map((row: zInfer<typeof DataRow>) => {
+                        const dataObject: { label: string;[key: string]: any } = { label: row.label };
+                        row.data_series.forEach((dataPoint: zInfer<typeof DataSeries>) => {
+                            dataObject[dataPoint.data_series_label] = dataPoint.data_series_value;
                         });
-                        setChartData(chData);
+                        return dataObject;
+                    });
+                    setChartData(chData);
 
-                        const chConfig: ChartConfig = {};
-                        chConfig[data.chart.data[0].data_series[0].data_series_label] = {
-                            label: data.chart.data[0].data_series[0].data_series_label,
-                        };
-                        data.chart.data.forEach((row: zInfer<typeof DataRow>) => {
-                            if (!chConfig[row.label]) {
-                                chConfig[row.label] = {
-                                    label: row.label,
+                    const chConfig: ChartConfig = {};
+                    data.chart.data.forEach((row: zInfer<typeof DataRow>) => {
+                        row.data_series.forEach((dataPoint: zInfer<typeof DataSeries>) => {
+                            if (!chConfig[dataPoint.data_series_label]) {
+                                chConfig[dataPoint.data_series_label] = {
+                                    label: dataPoint.data_series_label,
                                     color: `hsl(var(--chart-${Math.floor(Math.random() * 5) + 1}))`,
                                 };
                             }
                         });
-                        setChartConfig(chConfig);
-                    } else {
-                        const chData: { label: string;[key: string]: any }[] = data.chart.data.map((row: zInfer<typeof DataRow>) => {
-                            const dataObject: { label: string;[key: string]: any } = { label: row.label };
-                            row.data_series.forEach((dataPoint: zInfer<typeof DataSeries>) => {
-                                dataObject[dataPoint.data_series_label] = dataPoint.data_series_value;
-                            });
-                            return dataObject;
-                        });
-                        setChartData(chData);
-
-                        const chConfig: ChartConfig = {};
-                        data.chart.data.forEach((row: zInfer<typeof DataRow>) => {
-                            row.data_series.forEach((dataPoint: zInfer<typeof DataSeries>) => {
-                                if (!chConfig[dataPoint.data_series_label]) {
-                                    chConfig[dataPoint.data_series_label] = {
-                                        label: dataPoint.data_series_label,
-                                        color: `hsl(var(--chart-${Math.floor(Math.random() * 5) + 1}))`,
-                                    };
-                                }
-                            });
-                        });
-                        setChartConfig(chConfig);
-                    }
-
-                    const string_text = JSON.stringify(data.chart, null, 2);
-
-                    setChatHistory(prev => [...prev, { role: 'agent', content: string_text }]);
-                } catch (error) {
-                    console.error('Error:', error);
+                    });
+                    setChartConfig(chConfig);
                 }
 
-                setMessage('')
+                const string_text = JSON.stringify(data.chart, null, 2);
+
+                setChatHistory(prev => [...prev, { role: 'agent', content: string_text }]);
+            } catch (error) {
+                console.error('Error:', error);
             }
 
+            setMessage('')
 
             // Simulate agent response after 1 second
             setTimeout(() => {
@@ -241,6 +270,7 @@ export default function ChartBuilder() {
                             message={message}
                             setMessage={setMessage}
                             handleSubmit={handleSubmit}
+                            handleDemo={handleDemo}
                         />
                     </div>
                 )}
@@ -262,6 +292,7 @@ export default function ChartBuilder() {
                                 message={message}
                                 setMessage={setMessage}
                                 handleSubmit={handleSubmit}
+                                handleDemo={handleDemo}
                             />
                         </motion.div>
                         <motion.div
@@ -282,7 +313,10 @@ export default function ChartBuilder() {
                             transition={{ duration: 0.5 }}
                             className="p-4"
                         >
-                            <ChartSettings />
+                            <ChartSettings
+                                chart={chart}
+                                setChart={setChart}
+                            />
                         </motion.div>
                     </motion.div>
                 )}
