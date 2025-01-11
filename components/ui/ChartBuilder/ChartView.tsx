@@ -6,7 +6,8 @@ import { useToPng } from '@hugocxl/react-to-image'
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent } from "@/components/ui/card"
-import { CodeBlock } from "@/components/ui/CustomUI/codeblock"
+import PrismLoader from "@/components/ui/CustomUI/prism-loader";
+
 
 interface ChartViewProps {
     chart: any
@@ -26,7 +27,6 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
             link.click();
         }
     })
-
 
     const renderChart = () => {
         if (!chart) return <div>Loading...</div>;
@@ -169,13 +169,13 @@ export function Component() {
             </TabsContent>
             <TabsContent value="code">
                 <Card>
-                    <CardContent className="pt-6 overflow-auto max-h-[calc(100vh-300px)]">
-                        <CodeBlock
-                            code={generateChartCode()}
-                            language="tsx"
-                            filename="Chart.tsx"
-                            showLineNumbers={true}
-                        />
+                    <CardContent className="pt-6">
+                        <pre className="line-numbers">
+                            <code className="language-tsx">
+                                {generateChartCode()}
+                            </code>
+                        </pre>
+                        <PrismLoader />
                     </CardContent>
                 </Card>
             </TabsContent>
