@@ -1,13 +1,7 @@
-import PrismLoader from "@/components/ui/CustomUI/prism-loader";
-import 'prismjs/plugins/line-numbers/prism-line-numbers.js'
-import 'prismjs/plugins/line-numbers/prism-line-numbers.css'
+"use client"
 
-export default function Home() {
-    const str = `
-    "use client"
-
-import { BarChart, Bar } from "recharts"
-import { ChartConfig, ChartContainer } from "@/components/ui/chart"
+import { BarChart, Bar, XAxis, YAxis } from "recharts"
+import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent } from "@/components/ui/chart"
 
 const chartData = [
   {
@@ -35,7 +29,7 @@ const chartConfig = {
   }
 } satisfies ChartConfig
 
-export function Component() {
+export default function Component() {
   return (
     <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
       <BarChart accessibilityLayer data={chartData}>
@@ -46,16 +40,4 @@ export function Component() {
       </BarChart>
     </ChartContainer>
   )
-}
-    `
-    return (
-        <div>
-            <pre className="line-numbers">
-                <code className="language-tsx">
-                    {str}
-                </code>
-            </pre>
-            <PrismLoader />
-        </div>
-    );
 }

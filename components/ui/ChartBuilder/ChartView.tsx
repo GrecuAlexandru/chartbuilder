@@ -1,5 +1,6 @@
 "use client"
 
+import React, { useEffect } from "react"
 import { ChartContainer, ChartLegend, ChartLegendContent } from "@/components/ui/chart"
 import { BarChart, Bar, AreaChart, Area, LineChart, Line, PieChart, Pie, RadarChart, Radar, RadialBarChart, RadialBar, XAxis, YAxis, LabelList } from "recharts"
 import { useToPng } from '@hugocxl/react-to-image'
@@ -27,6 +28,19 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
             link.click();
         }
     })
+
+    const [chartCode, setChartCode] = React.useState<string>('');
+
+    useEffect(() => {
+        setChartCode(generateChartCode());
+    }, [chart]); // Add any dependencies that affect the code generation
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            // @ts-ignore
+            if (window.Prism) window.Prism.highlightAll();
+        }
+    }, [chartCode]);
 
     const renderChart = () => {
         if (!chart) return <div>Loading...</div>;
@@ -122,17 +136,30 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                 (chart.chart_type === 'radial' ? 'RadialBar' :
                     chart.chart_type.charAt(0).toUpperCase() + chart.chart_type.slice(1)));
 
+        const additionalImports = [
+            chart.display_x_axis ? 'XAxis' : '',
+            chart.display_y_axis ? 'YAxis' : '',
+        ].filter(Boolean);
+
+        const imports = additionalImports.length > 0 ?
+            `import { ${chartComponent}, ${chartElement}, ${additionalImports.join(', ')} } from "recharts"` :
+            `import { ${chartComponent}, ${chartElement} } from "recharts"`;
+
+        const chartImports = chart.display_legend ?
+            `import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent } from "@/components/ui/chart"` :
+            `import { ChartConfig, ChartContainer } from "@/components/ui/chart"`;
+
         return `
 "use client"
 
-import { ${chartComponent}, ${chartElement} } from "recharts"
-import { ChartConfig, ChartContainer } from "@/components/ui/chart"
+${imports}
+${chartImports}
 
 const chartData = ${JSON.stringify(chartData, null, 2)}
 
 const chartConfig = ${JSON.stringify(chartConfig, null, 2)} satisfies ChartConfig
 
-export function Component() {
+export default function Component() {
   return (
     <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
       <${chartComponent} accessibilityLayer data={chartData}>
@@ -171,8 +198,8 @@ export function Component() {
                 <Card>
                     <CardContent className="pt-6">
                         <pre className="line-numbers">
-                            <code className="language-tsx">
-                                {generateChartCode()}
+                            <code className="language-tsx text-sm">
+                                {chartCode}
                             </code>
                         </pre>
                         <PrismLoader />
