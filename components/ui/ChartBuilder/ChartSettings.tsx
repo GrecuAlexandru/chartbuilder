@@ -1,17 +1,25 @@
-import { Button } from "@/components/ui/button"
+import { Chart, ChartUISettings } from './types';
+import { z } from "zod";
 
 interface ChartSettingsProps {
-    chart: any  // Use your Chart type here
-    setChart: (chart: any) => void  // Function to update chart
+    chart: Chart
+    setChart: (chart: Chart) => void
+    updateChartUI: (updates: Partial<ChartUISettings>) => void
 }
 
-export function ChartSettings({ chart, setChart }: ChartSettingsProps) {
+export function ChartSettings({ chart, setChart, updateChartUI }: ChartSettingsProps) {
     const handleChartTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setChart({
             ...chart,
-            chart_type: e.target.value.toLowerCase()
+            chart_type: e.target.value.toLowerCase() as 'area' | 'bar' | 'line' | 'pie' | 'radar' | 'radial' | 'scatter'
         })
     }
+
+    const handleCartesianGridChange = (position: string) => {
+        updateChartUI({
+            cartesianGrid: position === 'true'
+        });
+    };
 
     return (
         <div className="p-4">
@@ -32,6 +40,21 @@ export function ChartSettings({ chart, setChart }: ChartSettingsProps) {
                         <option>Radial</option>
                     </select>
                 </div>
+            </div>
+
+            <div className="space-y-4">
+                <div>
+                    <label className="block text-sm font-medium text-gray-700">Cartesian Grid</label>
+                    <select
+                        value={chart.ui?.cartesianGrid?.toString() ?? 'false'}
+                        onChange={(e) => handleCartesianGridChange(e.target.value)}
+                        className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                    >
+                        <option value="true">Show</option>
+                        <option value="false">Hide</option>
+                    </select>
+                </div>
+                {/* Add more UI controls */}
             </div>
         </div>
     )

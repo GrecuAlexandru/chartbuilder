@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react"
 import { ChartContainer, ChartLegend, ChartLegendContent } from "@/components/ui/chart"
-import { BarChart, Bar, AreaChart, Area, LineChart, Line, PieChart, Pie, RadarChart, Radar, RadialBarChart, RadialBar, XAxis, YAxis, LabelList } from "recharts"
+import { BarChart, Bar, AreaChart, Area, LineChart, Line, PieChart, Pie, RadarChart, Radar, RadialBarChart, RadialBar, XAxis, YAxis, LabelList, CartesianGrid } from "recharts"
 import { useToPng } from '@hugocxl/react-to-image'
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -50,6 +50,7 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                 return (
                     <ChartContainer ref={ref} config={chartConfig} className="w-full p-4 pb-8 bg-white">
                         <BarChart accessibilityLayer data={chartData}>
+                            {chart.ui?.cartesianGrid && <CartesianGrid strokeDasharray="3 3" />}
                             {chart.display_x_axis && <XAxis dataKey="label" />}
                             {chart.display_y_axis && <YAxis stroke="#333" />}
                             {Object.keys(chartConfig).map((key, index) => (

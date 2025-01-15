@@ -13,6 +13,7 @@ import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent } from "@/
 import { ChatInterface } from "./ChatInterface"
 import { ChartView } from "./ChartView"
 import { ChartSettings } from "./ChartSettings"
+import { Chart, ChartUISettings, DataRow, DataSeries } from './types';
 
 // const chartData = [
 //     { label: "January", desktop: 186, mobile: 80 },
@@ -34,46 +35,81 @@ import { ChartSettings } from "./ChartSettings"
 //     },
 // } satisfies ChartConfig
 
-const ChartType = z.enum([
-    "area",
-    "bar",
-    "line",
-    "pie",
-    "radar",
-    "radial",
-    "scatter",
-]);
+// const ChartType = z.enum([
+//     "area",
+//     "bar",
+//     "line",
+//     "pie",
+//     "radar",
+//     "radial",
+//     "scatter",
+// ]);
 
-const DataSeries = z.object({
-    data_series_label: z.string(),
-    data_series_value: z.number(),
-})
+// const DataSeries = z.object({
+//     data_series_label: z.string(),
+//     data_series_value: z.number(),
+// })
 
-const DataRow = z.object({
-    label: z.string(),
-    data_series: z.array(DataSeries),
-});
+// const DataRow = z.object({
+//     label: z.string(),
+//     data_series: z.array(DataSeries),
+// });
 
-const Chart = z.object({
-    chart_type: ChartType,
-    data: z.array(DataRow),
-    display_legend: z.boolean().optional(),
-    display_label: z.boolean().optional(),
-    display_x_axis: z.boolean().optional(),
-    display_y_axis: z.boolean().optional(),
-    area_chart_stacked: z.boolean().optional(),
-    bar_chart_horizontal: z.boolean().optional(),
-    bar_chart_negative: z.boolean().optional(),
-    line_chart_linear: z.boolean().optional(),
-    line_chart_dots: z.boolean().optional(),
-    pie_chart_labels: z.boolean().optional(),
-    pie_chart_donut: z.boolean().optional(),
-    pie_chart_donut_with_text: z.boolean().optional(),
-    radar_chart_dots: z.boolean().optional(),
-    radial_chart_grid: z.boolean().optional(),
-    radial_chart_text: z.boolean().optional(),
-    scatter_chart_three_dim: z.boolean().optional(),
-});
+// const ChartUISettings = z.object({
+//     // Visual settings
+//     colors: z.array(z.string()).optional(),
+//     fontFamily: z.string().optional(),
+//     fontSize: z.number().optional(),
+
+//     // Axis settings
+//     xAxisLabel: z.string().optional(),
+//     yAxisLabel: z.string().optional(),
+//     xAxisRotation: z.number().optional(),
+//     yAxisRotation: z.number().optional(),
+
+//     // Legend settings
+//     legendPosition: z.enum(['top', 'right', 'bottom', 'left']).optional(),
+//     legendLayout: z.enum(['horizontal', 'vertical']).optional(),
+
+//     // Animation settings
+//     animate: z.boolean().optional(),
+//     animationDuration: z.number().optional(),
+
+//     // Interactivity
+//     tooltipEnabled: z.boolean().optional(),
+//     zoomEnabled: z.boolean().optional(),
+//     panEnabled: z.boolean().optional(),
+
+//     // Chart specific settings
+//     gridLines: z.boolean().optional(),
+//     borderRadius: z.number().optional(),
+//     barGap: z.number().optional(),
+//     lineStyle: z.enum(['solid', 'dashed', 'dotted']).optional(),
+//     fillOpacity: z.number().optional(),
+// });
+
+// const Chart = z.object({
+//     chart_type: ChartType,
+//     data: z.array(DataRow),
+//     display_legend: z.boolean().optional(),
+//     display_label: z.boolean().optional(),
+//     display_x_axis: z.boolean().optional(),
+//     display_y_axis: z.boolean().optional(),
+//     area_chart_stacked: z.boolean().optional(),
+//     bar_chart_horizontal: z.boolean().optional(),
+//     bar_chart_negative: z.boolean().optional(),
+//     line_chart_linear: z.boolean().optional(),
+//     line_chart_dots: z.boolean().optional(),
+//     pie_chart_labels: z.boolean().optional(),
+//     pie_chart_donut: z.boolean().optional(),
+//     pie_chart_donut_with_text: z.boolean().optional(),
+//     radar_chart_dots: z.boolean().optional(),
+//     radial_chart_grid: z.boolean().optional(),
+//     radial_chart_text: z.boolean().optional(),
+//     scatter_chart_three_dim: z.boolean().optional(),
+
+//     ui: ChartUISettings.optional()
+// });
 const demoString = `{ "chart_type": "bar", "data": [ { "label": "Label1", "data_series": [ { "data_series_label": "Category1", "data_series_value": 12 } ] }, { "label": "Label2", "data_series": [ { "data_series_label": "Category1", "data_series_value": 5 } ] }, { "label": "Label3", "data_series": [ { "data_series_label": "Category1", "data_series_value": 9 } ] }, { "label": "Label4", "data_series": [ { "data_series_label": "Category1", "data_series_value": 6 } ] } ], "display_legend": true, "display_label": false, "display_x_axis": true, "display_y_axis": true, "area_chart_stacked": false, "bar_chart_horizontal": false, "bar_chart_negative": false, "line_chart_linear": false, "line_chart_dots": false, "pie_chart_labels": false, "pie_chart_donut": false, "pie_chart_donut_with_text": false, "radar_chart_dots": false, "radial_chart_grid": false, "radial_chart_text": false, "scatter_chart_three_dim": false }`;
 
 export default function ChartBuilder() {
@@ -99,9 +135,24 @@ export default function ChartBuilder() {
         radial_chart_grid: false,
         radial_chart_text: false,
         scatter_chart_three_dim: false,
+
+        ui: {
+            cartesianGrid: false,
+        }
     })
     const [chartData, setChartData] = useState<{ label: string;[key: string]: any }[]>([])
     const [chartConfig, setChartConfig] = useState<ChartConfig>({})
+
+    // Helper function to update UI settings
+    const updateChartUI = (updates: Partial<zInfer<typeof ChartUISettings>>) => {
+        setChart(prev => ({
+            ...prev,
+            ui: {
+                ...prev.ui,
+                ...updates
+            }
+        }));
+    };
 
     const handleDemo = () => {
         const data = { chart: JSON.parse(demoString) };
@@ -251,9 +302,9 @@ export default function ChartBuilder() {
         }
     }
 
-    console.log("chartData", chartData);
-    console.log("chartConfig", chartConfig);
-    console.log("chart", chart);
+    // console.log("chartData", chartData);
+    // console.log("chartConfig", chartConfig);
+    // console.log("chart", chart);
 
     return (
         <div
@@ -316,6 +367,7 @@ export default function ChartBuilder() {
                             <ChartSettings
                                 chart={chart}
                                 setChart={setChart}
+                                updateChartUI={updateChartUI}
                             />
                         </motion.div>
                     </motion.div>
