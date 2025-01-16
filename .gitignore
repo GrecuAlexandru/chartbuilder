@@ -41,7 +41,6 @@ yarn-error.log*
 certificates
 .env*.local
 
-/supabase/migrations
-
 /supabase/migrations/
 /supbase/seed.sql
+types_db.ts
