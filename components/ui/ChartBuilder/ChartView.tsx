@@ -1,8 +1,9 @@
 "use client"
 
 import React, { useEffect } from "react"
+import dynamic from "next/dynamic"
 import { ChartContainer, ChartLegend, ChartLegendContent } from "@/components/ui/chart"
-import { BarChart, Bar, AreaChart, Area, LineChart, Line, PieChart, Pie, RadarChart, Radar, RadialBarChart, RadialBar, XAxis, YAxis, LabelList, CartesianGrid } from "recharts"
+import { Bar, Area, Pie, Radar, RadialBar, Line, XAxis, YAxis } from "recharts"
 import { useToPng } from '@hugocxl/react-to-image'
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -47,6 +48,8 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
 
         switch (chart.chart_type) {
             case 'bar':
+                const BarChart = dynamic(() => import("recharts").then(mod => mod.BarChart));
+                const CartesianGrid = dynamic(() => import("recharts").then(mod => mod.CartesianGrid));
                 return (
                     <ChartContainer ref={ref} config={chartConfig} className="w-full p-4 pb-8 bg-white">
                         <BarChart accessibilityLayer data={chartData}>
@@ -61,6 +64,7 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                     </ChartContainer>
                 );
             case 'area':
+                const AreaChart = dynamic(() => import("recharts").then(mod => mod.AreaChart));
                 return (
                     <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
                         <AreaChart accessibilityLayer data={chartData}>
@@ -74,6 +78,7 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                     </ChartContainer>
                 );
             case 'line':
+                const LineChart = dynamic(() => import("recharts").then(mod => mod.LineChart));
                 return (
                     <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
                         <LineChart accessibilityLayer data={chartData}>
@@ -87,6 +92,7 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                     </ChartContainer>
                 );
             case 'pie':
+                const PieChart = dynamic(() => import("recharts").then(mod => mod.PieChart));
                 return (
                     <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
                         <PieChart accessibilityLayer>
@@ -101,6 +107,7 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                     </ChartContainer>
                 );
             case 'radar':
+                const RadarChart = dynamic(() => import("recharts").then(mod => mod.RadarChart));
                 return (
                     <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
                         <RadarChart accessibilityLayer data={chartData}>
@@ -110,6 +117,8 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                     </ChartContainer>
                 );
             case 'radial':
+                const RadialBarChart = dynamic(() => import("recharts").then(mod => mod.RadialBarChart), { ssr: false });
+                const LabelList = dynamic(() => import("recharts").then(mod => mod.LabelList));
                 return (
                     <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
                         <RadialBarChart accessibilityLayer data={chartData}>
