@@ -165,7 +165,6 @@ export type Database = {
       }
       users: {
         Row: {
-          api_calls: number
           avatar_url: string | null
           billing_address: Json | null
           full_name: string | null
@@ -173,7 +172,6 @@ export type Database = {
           payment_method: Json | null
         }
         Insert: {
-          api_calls?: number
           avatar_url?: string | null
           billing_address?: Json | null
           full_name?: string | null
@@ -181,7 +179,6 @@ export type Database = {
           payment_method?: Json | null
         }
         Update: {
-          api_calls?: number
           avatar_url?: string | null
           billing_address?: Json | null
           full_name?: string | null
@@ -195,10 +192,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      increment_api_calls: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
+      [_ in never]: never
     }
     Enums: {
       pricing_plan_interval: "day" | "week" | "month" | "year"
