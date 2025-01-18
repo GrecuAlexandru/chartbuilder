@@ -12,7 +12,7 @@ export function ChartSettings({ chart, setChart, updateChartUI }: ChartSettingsP
         if (!chart) return;
         setChart({
             ...chart,
-            chart_type: e.target.value.toLowerCase() as 'area' | 'bar' | 'line' | 'pie' | 'radar' | 'radial' | 'scatter'
+            chartType: e.target.value.toLowerCase() as 'area' | 'bar' | 'line' | 'pie' | 'radar' | 'radial' | 'scatter'
         } as Chart)
     }
 
@@ -30,7 +30,7 @@ export function ChartSettings({ chart, setChart, updateChartUI }: ChartSettingsP
                 <div>
                     <label className="block text-sm font-medium text-gray-700">Chart Type</label>
                     <select
-                        value={chart.chart_type.charAt(0).toUpperCase() + chart.chart_type.slice(1)}
+                        value={chart.chartType.charAt(0).toUpperCase() + chart.chartType.slice(1)}
                         onChange={handleChartTypeChange}
                         className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
                     >

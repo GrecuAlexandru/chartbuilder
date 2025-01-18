@@ -14,7 +14,7 @@ import { ChartView } from "./ChartView"
 import { ChartSettings } from "./ChartSettings"
 import { Chart, ChartUISettings, AreaChartUISettings, BarChartUISettings, LineChartUISettings, ScatterChartUISettings, PieChartUISettings, RadarChartUISettings, RadialChartUISettings, DataRow, DataSeries } from "@/types/chart"
 
-const demoString = `{ "chart_type": "bar", "data": [ { "label": "Label1", "data_series": [ { "data_series_label": "Category1", "data_series_value": 12 } ] }, { "label": "Label2", "data_series": [ { "data_series_label": "Category1", "data_series_value": 5 } ] }, { "label": "Label3", "data_series": [ { "data_series_label": "Category1", "data_series_value": 9 } ] }, { "label": "Label4", "data_series": [ { "data_series_label": "Category1", "data_series_value": 6 } ] } ], "display_legend": true, "display_label": false, "display_x_axis": true, "display_y_axis": true, "area_chart_stacked": false, "bar_chart_horizontal": false, "bar_chart_negative": false, "line_chart_linear": false, "line_chart_dots": false, "pie_chart_labels": false, "pie_chart_donut": false, "pie_chart_donut_with_text": false, "radar_chart_dots": false, "radial_chart_grid": false, "radial_chart_text": false, "scatter_chart_three_dim": false }`;
+const demoString = `{ "chartType": "bar", "data": [ { "label": "Label1", "dataSeries": [ { "dataSeriesLabel": "Category1", "dataSeriesValue": 12 } ] }, { "label": "Label2", "dataSeries": [ { "dataSeriesLabel": "Category1", "dataSeriesValue": 5 } ] }, { "label": "Label3", "dataSeries": [ { "dataSeriesLabel": "Category1", "dataSeriesValue": 9 } ] }, { "label": "Label4", "dataSeries": [ { "dataSeriesLabel": "Category1", "dataSeriesValue": 6 } ] } ], "displayLegend": true, "displayLabel": false, "displayXAxis": true, "displayYAxis": true, "areaChartStacked": false, "barChartHorizontal": false, "barChartNegative": false, "line_chart_linear": false, "lineChartDots": false, "pie_chart_labels": false, "pieChartDonut": false, "pieChartDonut_with_text": false, "radarChartDots": false, "radial_chart_grid": false, "radialChartText": false, "scatterChartThreeDimensions": false }`;
 
 export default function ChartBuilder() {
     const [message, setMessage] = useState('')
@@ -30,7 +30,7 @@ export default function ChartBuilder() {
             if (!prev) return prev;
 
             // Type guard to ensure UI settings match chart type
-            switch (prev.chart_type) {
+            switch (prev.chartType) {
                 case 'area':
                     return {
                         ...prev,
@@ -97,11 +97,11 @@ export default function ChartBuilder() {
         const data = { chart: JSON.parse(demoString) };
         setChart(data.chart);
 
-        if (data.chart.chart_type === 'pie') {
+        if (data.chart.chartType === 'pie') {
             const chData: { label: string;[key: string]: any }[] = data.chart.data.map((row: zInfer<typeof DataRow>) => {
                 const dataObject: { label: string;[key: string]: any } = { label: row.label };
-                row.data_series.forEach((dataPoint: zInfer<typeof DataSeries>) => {
-                    dataObject[dataPoint.data_series_label] = dataPoint.data_series_value;
+                row.dataSeries.forEach((dataPoint: zInfer<typeof DataSeries>) => {
+                    dataObject[dataPoint.dataSeriesLabel] = dataPoint.dataSeriesValue;
                 });
                 dataObject['fill'] = `var(--color-${row.label})`;
                 return dataObject;
@@ -109,8 +109,8 @@ export default function ChartBuilder() {
             setChartData(chData);
 
             const chConfig: ChartConfig = {};
-            chConfig[data.chart.data[0].data_series[0].data_series_label] = {
-                label: data.chart.data[0].data_series[0].data_series_label,
+            chConfig[data.chart.data[0].dataSeries[0].dataSeriesLabel] = {
+                label: data.chart.data[0].dataSeries[0].dataSeriesLabel,
             };
             data.chart.data.forEach((row: zInfer<typeof DataRow>) => {
                 if (!chConfig[row.label]) {
@@ -124,8 +124,8 @@ export default function ChartBuilder() {
         } else {
             const chData: { label: string;[key: string]: any }[] = data.chart.data.map((row: zInfer<typeof DataRow>) => {
                 const dataObject: { label: string;[key: string]: any } = { label: row.label };
-                row.data_series.forEach((dataPoint: zInfer<typeof DataSeries>) => {
-                    dataObject[dataPoint.data_series_label] = dataPoint.data_series_value;
+                row.dataSeries.forEach((dataPoint: zInfer<typeof DataSeries>) => {
+                    dataObject[dataPoint.dataSeriesLabel] = dataPoint.dataSeriesValue;
                 });
                 return dataObject;
             });
@@ -133,10 +133,10 @@ export default function ChartBuilder() {
 
             const chConfig: ChartConfig = {};
             data.chart.data.forEach((row: zInfer<typeof DataRow>) => {
-                row.data_series.forEach((dataPoint: zInfer<typeof DataSeries>) => {
-                    if (!chConfig[dataPoint.data_series_label]) {
-                        chConfig[dataPoint.data_series_label] = {
-                            label: dataPoint.data_series_label,
+                row.dataSeries.forEach((dataPoint: zInfer<typeof DataSeries>) => {
+                    if (!chConfig[dataPoint.dataSeriesLabel]) {
+                        chConfig[dataPoint.dataSeriesLabel] = {
+                            label: dataPoint.dataSeriesLabel,
                             color: `hsl(var(--chart-${Math.floor(Math.random() * 5) + 1}))`,
                         };
                     }
@@ -176,11 +176,11 @@ export default function ChartBuilder() {
                 console.log(data);
 
 
-                if (data.chart.chart_type === 'pie') {
+                if (data.chart.chartType === 'pie') {
                     const chData: { label: string;[key: string]: any }[] = data.chart.data.map((row: zInfer<typeof DataRow>) => {
                         const dataObject: { label: string;[key: string]: any } = { label: row.label };
-                        row.data_series.forEach((dataPoint: zInfer<typeof DataSeries>) => {
-                            dataObject[dataPoint.data_series_label] = dataPoint.data_series_value;
+                        row.dataSeries.forEach((dataPoint: zInfer<typeof DataSeries>) => {
+                            dataObject[dataPoint.dataSeriesLabel] = dataPoint.dataSeriesValue;
                         });
                         dataObject['fill'] = `var(--color-${row.label})`;
                         return dataObject;
@@ -188,8 +188,8 @@ export default function ChartBuilder() {
                     setChartData(chData);
 
                     const chConfig: ChartConfig = {};
-                    chConfig[data.chart.data[0].data_series[0].data_series_label] = {
-                        label: data.chart.data[0].data_series[0].data_series_label,
+                    chConfig[data.chart.data[0].dataSeries[0].dataSeriesLabel] = {
+                        label: data.chart.data[0].dataSeries[0].dataSeriesLabel,
                     };
                     data.chart.data.forEach((row: zInfer<typeof DataRow>) => {
                         if (!chConfig[row.label]) {
@@ -203,8 +203,8 @@ export default function ChartBuilder() {
                 } else {
                     const chData: { label: string;[key: string]: any }[] = data.chart.data.map((row: zInfer<typeof DataRow>) => {
                         const dataObject: { label: string;[key: string]: any } = { label: row.label };
-                        row.data_series.forEach((dataPoint: zInfer<typeof DataSeries>) => {
-                            dataObject[dataPoint.data_series_label] = dataPoint.data_series_value;
+                        row.dataSeries.forEach((dataPoint: zInfer<typeof DataSeries>) => {
+                            dataObject[dataPoint.dataSeriesLabel] = dataPoint.dataSeriesValue;
                         });
                         return dataObject;
                     });
@@ -212,10 +212,10 @@ export default function ChartBuilder() {
 
                     const chConfig: ChartConfig = {};
                     data.chart.data.forEach((row: zInfer<typeof DataRow>) => {
-                        row.data_series.forEach((dataPoint: zInfer<typeof DataSeries>) => {
-                            if (!chConfig[dataPoint.data_series_label]) {
-                                chConfig[dataPoint.data_series_label] = {
-                                    label: dataPoint.data_series_label,
+                        row.dataSeries.forEach((dataPoint: zInfer<typeof DataSeries>) => {
+                            if (!chConfig[dataPoint.dataSeriesLabel]) {
+                                chConfig[dataPoint.dataSeriesLabel] = {
+                                    label: dataPoint.dataSeriesLabel,
                                     color: `hsl(var(--chart-${Math.floor(Math.random() * 5) + 1}))`,
                                 };
                             }

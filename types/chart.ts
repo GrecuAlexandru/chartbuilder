@@ -13,13 +13,22 @@ export const ChartType = z.enum([
 
 // Data Structure
 export const DataSeries = z.object({
-    data_series_label: z.string(),
-    data_series_value: z.number(),
+    dataSeriesLabel: z.string(),
+    dataSeriesValue: z.number(),
 });
 
 export const DataRow = z.object({
     label: z.string(),
-    data_series: z.array(DataSeries),
+    dataSeries: z.array(DataSeries),
+});
+
+export const CartesianGridSettings = z.object({
+    enabled: z.boolean().optional(),
+    horizontal: z.boolean().optional(),
+    vertical: z.boolean().optional(),
+    strokeDasharray: z.string().optional(),
+    backgroundFill: z.string().optional(),
+    fillOpacity: z.number().min(0).max(1).optional(),
 });
 
 // UI Settings for different chart types
@@ -49,70 +58,70 @@ export const RadialChartUISettings = z.object({
 });
 
 // Main Chart Schema
-export const Chart = z.discriminatedUnion('chart_type', [
+export const Chart = z.discriminatedUnion('chartType', [
     z.object({
-        chart_type: z.literal('area'),
+        chartType: z.literal('area'),
         data: z.array(DataRow),
-        display_legend: z.boolean().optional(),
-        display_label: z.boolean().optional(),
-        display_x_axis: z.boolean().optional(),
-        display_y_axis: z.boolean().optional(),
-        area_chart_stacked: z.boolean().optional(),
+        displayLegend: z.boolean().optional(),
+        displayLabel: z.boolean().optional(),
+        displayXAxis: z.boolean().optional(),
+        displayYAxis: z.boolean().optional(),
+        areaChartStacked: z.boolean().optional(),
         ui: AreaChartUISettings.optional()
     }),
     z.object({
-        chart_type: z.literal('bar'),
+        chartType: z.literal('bar'),
         data: z.array(DataRow),
-        display_legend: z.boolean().optional(),
-        display_label: z.boolean().optional(),
-        display_x_axis: z.boolean().optional(),
-        display_y_axis: z.boolean().optional(),
-        bar_chart_horizontal: z.boolean().optional(),
-        bar_chart_negative: z.boolean().optional(),
+        displayLegend: z.boolean().optional(),
+        displayLabel: z.boolean().optional(),
+        displayXAxis: z.boolean().optional(),
+        displayYAxis: z.boolean().optional(),
+        barChartHorizontal: z.boolean().optional(),
+        barChartNegative: z.boolean().optional(),
         ui: BarChartUISettings.optional()
     }),
     z.object({
-        chart_type: z.literal('line'),
+        chartType: z.literal('line'),
         data: z.array(DataRow),
-        display_legend: z.boolean().optional(),
-        display_label: z.boolean().optional(),
-        display_x_axis: z.boolean().optional(),
-        display_y_axis: z.boolean().optional(),
-        line_chart_dots: z.boolean().optional(),
+        displayLegend: z.boolean().optional(),
+        displayLabel: z.boolean().optional(),
+        displayXAxis: z.boolean().optional(),
+        displayYAxis: z.boolean().optional(),
+        lineChartDots: z.boolean().optional(),
         ui: LineChartUISettings.optional()
     }),
     z.object({
-        chart_type: z.literal('scatter'),
+        chartType: z.literal('scatter'),
         data: z.array(DataRow),
-        display_legend: z.boolean().optional(),
-        display_label: z.boolean().optional(),
-        display_x_axis: z.boolean().optional(),
-        display_y_axis: z.boolean().optional(),
-        scatter_chart_three_dim: z.boolean().optional(),
+        displayLegend: z.boolean().optional(),
+        displayLabel: z.boolean().optional(),
+        displayXAxis: z.boolean().optional(),
+        displayYAxis: z.boolean().optional(),
+        scatterChartThreeDimensions: z.boolean().optional(),
         ui: ScatterChartUISettings.optional()
     }),
     z.object({
-        chart_type: z.literal('pie'),
+        chartType: z.literal('pie'),
         data: z.array(DataRow),
-        display_legend: z.boolean().optional(),
-        display_label: z.boolean().optional(),
-        pie_chart_donut: z.boolean().optional(),
+        displayLegend: z.boolean().optional(),
+        displayLabel: z.boolean().optional(),
+        pieChartDonut: z.boolean().optional(),
         ui: PieChartUISettings.optional()
     }),
     z.object({
-        chart_type: z.literal('radar'),
+        chartType: z.literal('radar'),
         data: z.array(DataRow),
-        display_legend: z.boolean().optional(),
-        display_label: z.boolean().optional(),
-        radar_chart_dots: z.boolean().optional(),
+        displayLegend: z.boolean().optional(),
+        displayLabel: z.boolean().optional(),
+        radarChartDots: z.boolean().optional(),
         ui: RadarChartUISettings.optional()
     }),
     z.object({
-        chart_type: z.literal('radial'),
+        chartType: z.literal('radial'),
         data: z.array(DataRow),
-        display_legend: z.boolean().optional(),
-        display_label: z.boolean().optional(),
-        radial_chart_text: z.boolean().optional(),
+        displayLegend: z.boolean().optional(),
+        displayLabel: z.boolean().optional(),
+        radialChartText: z.boolean().optional(),
         ui: RadialChartUISettings.optional()
     }),
 ]);

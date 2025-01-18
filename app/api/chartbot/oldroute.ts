@@ -17,34 +17,34 @@ const ChartType = z.enum([
 ]);
 
 const DataSeries = z.object({
-    data_series_label: z.string(),
-    data_series_value: z.number(),
+    dataSeriesLabel: z.string(),
+    dataSeriesValue: z.number(),
 })
 
 const DataRow = z.object({
     label: z.string(),
-    data_series: z.array(DataSeries),
+    dataSeries: z.array(DataSeries),
 });
 
 const Chart = z.object({
-    chart_type: ChartType,
+    chartType: ChartType,
     data: z.array(DataRow),
-    display_legend: z.boolean().optional(),
-    display_label: z.boolean().optional(),
-    display_x_axis: z.boolean().optional(),
-    display_y_axis: z.boolean().optional(),
-    area_chart_stacked: z.boolean().optional(),
-    bar_chart_horizontal: z.boolean().optional(),
-    bar_chart_negative: z.boolean().optional(),
+    displayLegend: z.boolean().optional(),
+    displayLabel: z.boolean().optional(),
+    displayXAxis: z.boolean().optional(),
+    displayYAxis: z.boolean().optional(),
+    areaChartStacked: z.boolean().optional(),
+    barChartHorizontal: z.boolean().optional(),
+    barChartNegative: z.boolean().optional(),
     line_chart_linear: z.boolean().optional(),
-    line_chart_dots: z.boolean().optional(),
+    lineChartDots: z.boolean().optional(),
     pie_chart_labels: z.boolean().optional(),
-    pie_chart_donut: z.boolean().optional(),
-    pie_chart_donut_with_text: z.boolean().optional(),
-    radar_chart_dots: z.boolean().optional(),
+    pieChartDonut: z.boolean().optional(),
+    pieChartDonut_with_text: z.boolean().optional(),
+    radarChartDots: z.boolean().optional(),
     radial_chart_grid: z.boolean().optional(),
-    radial_chart_text: z.boolean().optional(),
-    scatter_chart_three_dim: z.boolean().optional(),
+    radialChartText: z.boolean().optional(),
+    scatterChartThreeDimensions: z.boolean().optional(),
 });
 
 const ChartResponse = z.object({
@@ -52,24 +52,24 @@ const ChartResponse = z.object({
 });
 
 const ChartNoData = z.object({
-    chart_type: ChartType,
+    chartType: ChartType,
     columns: z.array(z.string()).optional(),
-    display_legend: z.boolean().optional(),
-    display_label: z.boolean().optional(),
-    display_x_axis: z.boolean().optional(),
-    display_y_axis: z.boolean().optional(),
-    area_chart_stacked: z.boolean().optional(),
-    bar_chart_horizontal: z.boolean().optional(),
-    bar_chart_negative: z.boolean().optional(),
+    displayLegend: z.boolean().optional(),
+    displayLabel: z.boolean().optional(),
+    displayXAxis: z.boolean().optional(),
+    displayYAxis: z.boolean().optional(),
+    areaChartStacked: z.boolean().optional(),
+    barChartHorizontal: z.boolean().optional(),
+    barChartNegative: z.boolean().optional(),
     line_chart_linear: z.boolean().optional(),
-    line_chart_dots: z.boolean().optional(),
+    lineChartDots: z.boolean().optional(),
     pie_chart_labels: z.boolean().optional(),
-    pie_chart_donut: z.boolean().optional(),
-    pie_chart_donut_with_text: z.boolean().optional(),
-    radar_chart_dots: z.boolean().optional(),
+    pieChartDonut: z.boolean().optional(),
+    pieChartDonut_with_text: z.boolean().optional(),
+    radarChartDots: z.boolean().optional(),
     radial_chart_grid: z.boolean().optional(),
-    radial_chart_text: z.boolean().optional(),
-    scatter_chart_three_dim: z.boolean().optional(),
+    radialChartText: z.boolean().optional(),
+    scatterChartThreeDimensions: z.boolean().optional(),
 });
 
 const ChartResponseNoData = z.object({
@@ -80,18 +80,18 @@ const ChartResponseNoData = z.object({
 
 async function generateChart(body: any) {
     const systemPrompt = `You are a detail-oriented data visualization assistant for creating charts based on user prompts. Analyze user requests and generate accurate, structured, and schema-compliant chart configurations. Always ensure you are extracting the data series correctly and entirely. Make sure you do not add more data series than asked.`;
-    // const examplePromptComplex = `Example data of chart with 2 different categories and 3 values for each category: "data":[{"label":"Label1","data_series":[{"data_series_label":"Desktop","data_series_value":1},{"data_series_label":"Mobile","data_series_value":3}]},{"label":"Label2","data_series":[{"data_series_label":"Desktop","data_series_value":5},{"data_series_label":"Mobile","data_series_value":8}]},{"label":"Label3","data_series":[{"data_series_label":"Desktop","data_series_value":10},{"data_series_label":"Mobile","data_series_value":5}]}].`;
-    // const examplePromptSimple = `Example data of chart with 2 values: "data":[{"label":"Label1","data_series":[{"data_series_label":"Desktop","data_series_value":1}]},{"label":"Label2","data_series":[{"data_series_label":"Desktop","data_series_value":5}]}].`;
-    const explanation = `DataRow's label represents the name or value of the point on the X axis (e.g. "January", "February", "March" or 1, 2, 3). DataRow's data_series can represent multiple Categories (e.g. "Desktop users", "Mobile users") for drawing different lines/bars/etc on the chart. Each data_series_label represents the name of the Category and data_series_value represents the value of the point on the Y axis.`;
+    // const examplePromptComplex = `Example data of chart with 2 different categories and 3 values for each category: "data":[{"label":"Label1","dataSeries":[{"dataSeriesLabel":"Desktop","dataSeriesValue":1},{"dataSeriesLabel":"Mobile","dataSeriesValue":3}]},{"label":"Label2","dataSeries":[{"dataSeriesLabel":"Desktop","dataSeriesValue":5},{"dataSeriesLabel":"Mobile","dataSeriesValue":8}]},{"label":"Label3","dataSeries":[{"dataSeriesLabel":"Desktop","dataSeriesValue":10},{"dataSeriesLabel":"Mobile","dataSeriesValue":5}]}].`;
+    // const examplePromptSimple = `Example data of chart with 2 values: "data":[{"label":"Label1","dataSeries":[{"dataSeriesLabel":"Desktop","dataSeriesValue":1}]},{"label":"Label2","dataSeries":[{"dataSeriesLabel":"Desktop","dataSeriesValue":5}]}].`;
+    const explanation = `DataRow's label represents the name or value of the point on the X axis (e.g. "January", "February", "March" or 1, 2, 3). DataRow's dataSeries can represent multiple Categories (e.g. "Desktop users", "Mobile users") for drawing different lines/bars/etc on the chart. Each dataSeriesLabel represents the name of the Category and dataSeriesValue represents the value of the point on the Y axis.`;
     const completion = await openai.beta.chat.completions.parse({
         model: "gpt-4o-mini",
         messages: [
             { role: "system", content: systemPrompt },
             { role: "user", content: explanation },
             { role: "user", content: "Generate a bar chart with 3 values for each of the 2 categories" },
-            { role: "assistant", content: `"data": [{ "label": "Label1", "data_series": [{ "data_series_label": "Desktop", "data_series_value": 1 }, { "data_series_label": "Mobile", "data_series_value": 3 }] }, { "label": "Label2", "data_series": [{ "data_series_label": "Desktop", "data_series_value": 5 }, { "data_series_label": "Mobile", "data_series_value": 8 }] }, { "label": "Label3", "data_series": [{ "data_series_label": "Desktop", "data_series_value": 10 }, { "data_series_label": "Mobile", "data_series_value": 5 }] }].` },
+            { role: "assistant", content: `"data": [{ "label": "Label1", "dataSeries": [{ "dataSeriesLabel": "Desktop", "dataSeriesValue": 1 }, { "dataSeriesLabel": "Mobile", "dataSeriesValue": 3 }] }, { "label": "Label2", "dataSeries": [{ "dataSeriesLabel": "Desktop", "dataSeriesValue": 5 }, { "dataSeriesLabel": "Mobile", "dataSeriesValue": 8 }] }, { "label": "Label3", "dataSeries": [{ "dataSeriesLabel": "Desktop", "dataSeriesValue": 10 }, { "dataSeriesLabel": "Mobile", "dataSeriesValue": 5 }] }].` },
             { role: "user", content: "Generate a pie chart with 2 values" },
-            { role: "assistant", content: `"data":[{"label":"Label1","data_series":[{"data_series_label":"Desktop","data_series_value":1}]},{"label":"Label2","data_series":[{"data_series_label":"Desktop","data_series_value":5}]}]` },
+            { role: "assistant", content: `"data":[{"label":"Label1","dataSeries":[{"dataSeriesLabel":"Desktop","dataSeriesValue":1}]},{"label":"Label2","dataSeries":[{"dataSeriesLabel":"Desktop","dataSeriesValue":5}]}]` },
             { role: "user", content: body.text },
         ],
         response_format: zodResponseFormat(ChartResponse, "chart_response"),

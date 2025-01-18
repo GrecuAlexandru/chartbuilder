@@ -48,19 +48,19 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
     const renderChart = () => {
         if (!chart) return <div>Loading...</div>;
 
-        switch (chart.chart_type) {
+        switch (chart.chartType) {
             case 'bar':
                 const BarChart = dynamic(() => import("recharts").then(mod => mod.BarChart));
                 return (
                     <ChartContainer ref={ref} config={chartConfig} className="w-full p-4 pb-8 bg-white">
                         <BarChart accessibilityLayer data={chartData}>
                             {chart.ui?.cartesianGrid && <CartesianGrid strokeDasharray="3 3" />}
-                            {chart.display_x_axis && <XAxis dataKey="label" />}
-                            {chart.display_y_axis && <YAxis stroke="#333" />}
+                            {chart.displayXAxis && <XAxis dataKey="label" />}
+                            {chart.displayYAxis && <YAxis stroke="#333" />}
                             {Object.keys(chartConfig).map((key, index) => (
                                 <Bar key={index} dataKey={key} fill={chartConfig[key].color} />
                             ))}
-                            {chart.display_legend && <ChartLegend content={<ChartLegendContent />} />}
+                            {chart.displayLegend && <ChartLegend content={<ChartLegendContent />} />}
                         </BarChart>
                     </ChartContainer>
                 );
@@ -69,12 +69,12 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                 return (
                     <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
                         <AreaChart accessibilityLayer data={chartData}>
-                            {chart.display_x_axis && <XAxis dataKey="label" />}
-                            {chart.display_y_axis && <YAxis stroke="#333" />}
+                            {chart.displayXAxis && <XAxis dataKey="label" />}
+                            {chart.displayYAxis && <YAxis stroke="#333" />}
                             {Object.keys(chartConfig).map((key, index) => (
                                 <Area key={index} dataKey={key} fill={chartConfig[key].color} />
                             ))}
-                            {chart.display_legend && <ChartLegend content={<ChartLegendContent />} />}
+                            {chart.displayLegend && <ChartLegend content={<ChartLegendContent />} />}
                         </AreaChart>
                     </ChartContainer>
                 );
@@ -83,12 +83,12 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                 return (
                     <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
                         <LineChart accessibilityLayer data={chartData}>
-                            {chart.display_x_axis && <XAxis dataKey="label" />}
-                            {chart.display_y_axis && <YAxis stroke="#333" />}
+                            {chart.displayXAxis && <XAxis dataKey="label" />}
+                            {chart.displayYAxis && <YAxis stroke="#333" />}
                             {Object.keys(chartConfig).map((key, index) => (
                                 <Line key={index} dataKey={key} stroke={chartConfig[key].color} />
                             ))}
-                            {chart.display_legend && <ChartLegend content={<ChartLegendContent />} />}
+                            {chart.displayLegend && <ChartLegend content={<ChartLegendContent />} />}
                         </LineChart>
                     </ChartContainer>
                 );
@@ -97,8 +97,8 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                 return (
                     <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
                         <PieChart accessibilityLayer>
-                            <Pie data={chartData} dataKey={chart.data[0].data_series[0].data_series_label} />
-                            {chart.display_legend && (
+                            <Pie data={chartData} dataKey={chart.data[0].dataSeries[0].dataSeriesLabel} />
+                            {chart.displayLegend && (
                                 <ChartLegend
                                     content={<ChartLegendContent nameKey="label" />}
                                     className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
@@ -112,8 +112,8 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                 return (
                     <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
                         <RadarChart accessibilityLayer data={chartData}>
-                            {chart.display_legend && <ChartLegend content={<ChartLegendContent />} />}
-                            <Radar dataKey={chart.data[0].data_series[0].data_series_label} fill={`var(--color-${chart.data[0].data_series[0].data_series_label})`} />
+                            {chart.displayLegend && <ChartLegend content={<ChartLegendContent />} />}
+                            <Radar dataKey={chart.data[0].dataSeries[0].dataSeriesLabel} fill={`var(--color-${chart.data[0].dataSeries[0].dataSeriesLabel})`} />
                         </RadarChart>
                     </ChartContainer>
                 );
@@ -123,8 +123,8 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                 return (
                     <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
                         <RadialBarChart accessibilityLayer data={chartData}>
-                            {chart.display_legend && <ChartLegend content={<ChartLegendContent />} />}
-                            <RadialBar dataKey={chart.data[0].data_series[0].data_series_label} fill={`var(--color-${chart.data[0].data_series[0].data_series_label})`}>
+                            {chart.displayLegend && <ChartLegend content={<ChartLegendContent />} />}
+                            <RadialBar dataKey={chart.data[0].dataSeries[0].dataSeriesLabel} fill={`var(--color-${chart.data[0].dataSeries[0].dataSeriesLabel})`}>
                                 <LabelList
                                     position="insideStart"
                                     dataKey="label"
@@ -141,22 +141,22 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
     };
 
     const generateChartCode = () => {
-        const chartComponent = chart.chart_type.charAt(0).toUpperCase() + chart.chart_type.slice(1) + 'Chart';
-        const chartElement = chart.chart_type === 'pie' ? 'Pie' :
-            (chart.chart_type === 'radar' ? 'Radar' :
-                (chart.chart_type === 'radial' ? 'RadialBar' :
-                    chart.chart_type.charAt(0).toUpperCase() + chart.chart_type.slice(1)));
+        const chartComponent = chart.chartType.charAt(0).toUpperCase() + chart.chartType.slice(1) + 'Chart';
+        const chartElement = chart.chartType === 'pie' ? 'Pie' :
+            (chart.chartType === 'radar' ? 'Radar' :
+                (chart.chartType === 'radial' ? 'RadialBar' :
+                    chart.chartType.charAt(0).toUpperCase() + chart.chartType.slice(1)));
 
         const additionalImports = [
-            chart.display_x_axis ? 'XAxis' : '',
-            chart.display_y_axis ? 'YAxis' : '',
+            chart.displayXAxis ? 'XAxis' : '',
+            chart.displayYAxis ? 'YAxis' : '',
         ].filter(Boolean);
 
         const imports = additionalImports.length > 0 ?
             `import { ${chartComponent}, ${chartElement}, ${additionalImports.join(', ')} } from "recharts"` :
             `import { ${chartComponent}, ${chartElement} } from "recharts"`;
 
-        const chartImports = chart.display_legend ?
+        const chartImports = chart.displayLegend ?
             `import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent } from "@/components/ui/chart"` :
             `import { ChartConfig, ChartContainer } from "@/components/ui/chart"`;
 
@@ -175,12 +175,12 @@ export default function Component() {
     <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
       <${chartComponent} accessibilityLayer data={chartData}>
         ${Object.keys(chartConfig).map(key =>
-            `<${chartElement} dataKey="${key}" ${chart.chart_type === 'line' ? 'stroke' : 'fill'
+            `<${chartElement} dataKey="${key}" ${chart.chartType === 'line' ? 'stroke' : 'fill'
             }="var(--color-${key})" radius={4} />`
         ).join('\n        ')}
-        ${chart.display_x_axis ? '<XAxis dataKey="label" />' : ''}
-        ${chart.display_y_axis ? '<YAxis stroke="#333" />' : ''}
-        ${chart.display_legend ? '<ChartLegend content={<ChartLegendContent />} />' : ''}
+        ${chart.displayXAxis ? '<XAxis dataKey="label" />' : ''}
+        ${chart.displayYAxis ? '<YAxis stroke="#333" />' : ''}
+        ${chart.displayLegend ? '<ChartLegend content={<ChartLegendContent />} />' : ''}
       </${chartComponent}>
     </ChartContainer>
   )
