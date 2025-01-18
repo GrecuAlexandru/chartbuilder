@@ -3,7 +3,7 @@
 import React, { useEffect } from "react"
 import dynamic from "next/dynamic"
 import { ChartContainer, ChartLegend, ChartLegendContent } from "@/components/ui/chart"
-import { Bar, Area, Pie, Radar, RadialBar, Line, XAxis, YAxis } from "recharts"
+import { Bar, Area, Pie, Radar, RadialBar, Line, XAxis, YAxis, CartesianGrid } from "recharts"
 import { useToPng } from '@hugocxl/react-to-image'
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -43,13 +43,14 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
         }
     }, [chartCode]);
 
+    console.log(chart.ui?.cartesianGrid);
+
     const renderChart = () => {
         if (!chart) return <div>Loading...</div>;
 
         switch (chart.chart_type) {
             case 'bar':
                 const BarChart = dynamic(() => import("recharts").then(mod => mod.BarChart));
-                const CartesianGrid = dynamic(() => import("recharts").then(mod => mod.CartesianGrid));
                 return (
                     <ChartContainer ref={ref} config={chartConfig} className="w-full p-4 pb-8 bg-white">
                         <BarChart accessibilityLayer data={chartData}>

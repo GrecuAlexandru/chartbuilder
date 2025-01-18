@@ -3,50 +3,49 @@ import { z } from "zod";
 import { zodResponseFormat } from "openai/helpers/zod";
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
-import { Chart, ChartType, DataSeries, DataRow } from '@/types/chart';
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-// const ChartType = z.enum([
-//     "area",
-//     "bar",
-//     "line",
-//     "pie",
-//     "radar",
-//     "radial",
-//     "scatter",
-// ]);
+const ChartType = z.enum([
+    "area",
+    "bar",
+    "line",
+    "pie",
+    "radar",
+    "radial",
+    "scatter",
+]);
 
-// const DataSeries = z.object({
-//     data_series_label: z.string(),
-//     data_series_value: z.number(),
-// })
+const DataSeries = z.object({
+    data_series_label: z.string(),
+    data_series_value: z.number(),
+})
 
-// const DataRow = z.object({
-//     label: z.string(),
-//     data_series: z.array(DataSeries),
-// });
+const DataRow = z.object({
+    label: z.string(),
+    data_series: z.array(DataSeries),
+});
 
-// const Chart = z.object({
-//     chart_type: ChartType,
-//     data: z.array(DataRow),
-//     display_legend: z.boolean().optional(),
-//     display_label: z.boolean().optional(),
-//     display_x_axis: z.boolean().optional(),
-//     display_y_axis: z.boolean().optional(),
-//     area_chart_stacked: z.boolean().optional(),
-//     bar_chart_horizontal: z.boolean().optional(),
-//     bar_chart_negative: z.boolean().optional(),
-//     line_chart_linear: z.boolean().optional(),
-//     line_chart_dots: z.boolean().optional(),
-//     pie_chart_labels: z.boolean().optional(),
-//     pie_chart_donut: z.boolean().optional(),
-//     pie_chart_donut_with_text: z.boolean().optional(),
-//     radar_chart_dots: z.boolean().optional(),
-//     radial_chart_grid: z.boolean().optional(),
-//     radial_chart_text: z.boolean().optional(),
-//     scatter_chart_three_dim: z.boolean().optional(),
-// });
+const Chart = z.object({
+    chart_type: ChartType,
+    data: z.array(DataRow),
+    display_legend: z.boolean().optional(),
+    display_label: z.boolean().optional(),
+    display_x_axis: z.boolean().optional(),
+    display_y_axis: z.boolean().optional(),
+    area_chart_stacked: z.boolean().optional(),
+    bar_chart_horizontal: z.boolean().optional(),
+    bar_chart_negative: z.boolean().optional(),
+    line_chart_linear: z.boolean().optional(),
+    line_chart_dots: z.boolean().optional(),
+    pie_chart_labels: z.boolean().optional(),
+    pie_chart_donut: z.boolean().optional(),
+    pie_chart_donut_with_text: z.boolean().optional(),
+    radar_chart_dots: z.boolean().optional(),
+    radial_chart_grid: z.boolean().optional(),
+    radial_chart_text: z.boolean().optional(),
+    scatter_chart_three_dim: z.boolean().optional(),
+});
 
 const ChartResponse = z.object({
     chart: Chart,
@@ -97,9 +96,6 @@ async function generateChart(body: any) {
         ],
         response_format: zodResponseFormat(ChartResponse, "chart_response"),
     });
-
-    // Print response_format
-    console.log(completion.choices[0].message);
 
     console.log(completion.usage);
 

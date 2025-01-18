@@ -7,151 +7,90 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { motion } from "motion/react"
 import { z, infer as zInfer } from "zod";
-
 import { Bar, BarChart, Area, AreaChart, Line, LineChart, Pie, PieChart, Sector, Radar, RadarChart, RadialBar, RadialBarChart, CartesianGrid, XAxis, YAxis, LabelList } from "recharts"
 import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent } from "@/components/ui/chart"
 import { ChatInterface } from "./ChatInterface"
 import { ChartView } from "./ChartView"
 import { ChartSettings } from "./ChartSettings"
-import { Chart, ChartUISettings, DataRow, DataSeries } from './types';
+import { Chart, ChartUISettings, AreaChartUISettings, BarChartUISettings, LineChartUISettings, ScatterChartUISettings, PieChartUISettings, RadarChartUISettings, RadialChartUISettings, DataRow, DataSeries } from "@/types/chart"
 
-// const chartData = [
-//     { label: "January", desktop: 186, mobile: 80 },
-//     { label: "February", desktop: 305, mobile: 200 },
-//     { label: "March", desktop: 237, mobile: 120 },
-//     { label: "April", desktop: 73, mobile: 190 },
-//     { label: "May", desktop: 209, mobile: 130 },
-//     { label: "June", desktop: 214, mobile: 140 },
-// ]
-
-// const chartConfig = {
-//     desktop: {
-//         label: "Desktop",
-//         color: "#2563eb",
-//     },
-//     mobile: {
-//         label: "Mobile",
-//         color: "#60a5fa",
-//     },
-// } satisfies ChartConfig
-
-// const ChartType = z.enum([
-//     "area",
-//     "bar",
-//     "line",
-//     "pie",
-//     "radar",
-//     "radial",
-//     "scatter",
-// ]);
-
-// const DataSeries = z.object({
-//     data_series_label: z.string(),
-//     data_series_value: z.number(),
-// })
-
-// const DataRow = z.object({
-//     label: z.string(),
-//     data_series: z.array(DataSeries),
-// });
-
-// const ChartUISettings = z.object({
-//     // Visual settings
-//     colors: z.array(z.string()).optional(),
-//     fontFamily: z.string().optional(),
-//     fontSize: z.number().optional(),
-
-//     // Axis settings
-//     xAxisLabel: z.string().optional(),
-//     yAxisLabel: z.string().optional(),
-//     xAxisRotation: z.number().optional(),
-//     yAxisRotation: z.number().optional(),
-
-//     // Legend settings
-//     legendPosition: z.enum(['top', 'right', 'bottom', 'left']).optional(),
-//     legendLayout: z.enum(['horizontal', 'vertical']).optional(),
-
-//     // Animation settings
-//     animate: z.boolean().optional(),
-//     animationDuration: z.number().optional(),
-
-//     // Interactivity
-//     tooltipEnabled: z.boolean().optional(),
-//     zoomEnabled: z.boolean().optional(),
-//     panEnabled: z.boolean().optional(),
-
-//     // Chart specific settings
-//     gridLines: z.boolean().optional(),
-//     borderRadius: z.number().optional(),
-//     barGap: z.number().optional(),
-//     lineStyle: z.enum(['solid', 'dashed', 'dotted']).optional(),
-//     fillOpacity: z.number().optional(),
-// });
-
-// const Chart = z.object({
-//     chart_type: ChartType,
-//     data: z.array(DataRow),
-//     display_legend: z.boolean().optional(),
-//     display_label: z.boolean().optional(),
-//     display_x_axis: z.boolean().optional(),
-//     display_y_axis: z.boolean().optional(),
-//     area_chart_stacked: z.boolean().optional(),
-//     bar_chart_horizontal: z.boolean().optional(),
-//     bar_chart_negative: z.boolean().optional(),
-//     line_chart_linear: z.boolean().optional(),
-//     line_chart_dots: z.boolean().optional(),
-//     pie_chart_labels: z.boolean().optional(),
-//     pie_chart_donut: z.boolean().optional(),
-//     pie_chart_donut_with_text: z.boolean().optional(),
-//     radar_chart_dots: z.boolean().optional(),
-//     radial_chart_grid: z.boolean().optional(),
-//     radial_chart_text: z.boolean().optional(),
-//     scatter_chart_three_dim: z.boolean().optional(),
-
-//     ui: ChartUISettings.optional()
-// });
 const demoString = `{ "chart_type": "bar", "data": [ { "label": "Label1", "data_series": [ { "data_series_label": "Category1", "data_series_value": 12 } ] }, { "label": "Label2", "data_series": [ { "data_series_label": "Category1", "data_series_value": 5 } ] }, { "label": "Label3", "data_series": [ { "data_series_label": "Category1", "data_series_value": 9 } ] }, { "label": "Label4", "data_series": [ { "data_series_label": "Category1", "data_series_value": 6 } ] } ], "display_legend": true, "display_label": false, "display_x_axis": true, "display_y_axis": true, "area_chart_stacked": false, "bar_chart_horizontal": false, "bar_chart_negative": false, "line_chart_linear": false, "line_chart_dots": false, "pie_chart_labels": false, "pie_chart_donut": false, "pie_chart_donut_with_text": false, "radar_chart_dots": false, "radial_chart_grid": false, "radial_chart_text": false, "scatter_chart_three_dim": false }`;
 
 export default function ChartBuilder() {
     const [message, setMessage] = useState('')
     const [chatHistory, setChatHistory] = useState<{ role: string, content: string }[]>([])
     const [isFullScreen, setIsFullScreen] = useState(true)
-    const [chart, setChart] = useState<zInfer<typeof Chart>>({
-        chart_type: "bar",
-        data: [],
-        display_legend: false,
-        display_label: false,
-        display_x_axis: false,
-        display_y_axis: false,
-        area_chart_stacked: false,
-        bar_chart_horizontal: false,
-        bar_chart_negative: false,
-        line_chart_linear: false,
-        line_chart_dots: false,
-        pie_chart_labels: false,
-        pie_chart_donut: false,
-        pie_chart_donut_with_text: false,
-        radar_chart_dots: false,
-        radial_chart_grid: false,
-        radial_chart_text: false,
-        scatter_chart_three_dim: false,
-
-        ui: {
-            cartesianGrid: false,
-        }
-    })
+    const [chart, setChart] = useState<zInfer<typeof Chart>>();
     const [chartData, setChartData] = useState<{ label: string;[key: string]: any }[]>([])
     const [chartConfig, setChartConfig] = useState<ChartConfig>({})
 
     // Helper function to update UI settings
-    const updateChartUI = (updates: Partial<zInfer<typeof ChartUISettings>>) => {
-        setChart(prev => ({
-            ...prev,
-            ui: {
-                ...prev.ui,
-                ...updates
+    const updateChartUI = (updates: Partial<ChartUISettings>) => {
+        setChart(prev => {
+            if (!prev) return prev;
+
+            // Type guard to ensure UI settings match chart type
+            switch (prev.chart_type) {
+                case 'area':
+                    return {
+                        ...prev,
+                        ui: {
+                            ...prev.ui,
+                            ...(updates as AreaChartUISettings)
+                        }
+                    };
+                case 'bar':
+                    return {
+                        ...prev,
+                        ui: {
+                            ...prev.ui,
+                            ...(updates as BarChartUISettings)
+                        }
+                    };
+                case 'line':
+                    return {
+                        ...prev,
+                        ui: {
+                            ...prev.ui,
+                            ...(updates as LineChartUISettings)
+                        }
+                    };
+                case 'scatter':
+                    return {
+                        ...prev,
+                        ui: {
+                            ...prev.ui,
+                            ...(updates as ScatterChartUISettings)
+                        }
+                    };
+                case 'pie':
+                    return {
+                        ...prev,
+                        ui: {
+                            ...prev.ui,
+                            ...(updates as PieChartUISettings)
+                        }
+                    };
+                case 'radar':
+                    return {
+                        ...prev,
+                        ui: {
+                            ...prev.ui,
+                            ...(updates as RadarChartUISettings)
+                        }
+                    };
+                case 'radial':
+                    return {
+                        ...prev,
+                        ui: {
+                            ...prev.ui,
+                            ...(updates as RadialChartUISettings)
+                        }
+                    };
+                default:
+                    return prev;
             }
-        }));
+        });
     };
 
     const handleDemo = () => {
