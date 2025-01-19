@@ -43,8 +43,6 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
         }
     }, [chartCode]);
 
-    console.log(chart.ui?.cartesianGrid);
-
     const renderChart = () => {
         if (!chart) return <div>Loading...</div>;
 
@@ -54,7 +52,15 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                 return (
                     <ChartContainer ref={ref} config={chartConfig} className="w-full p-4 pb-8 bg-white">
                         <BarChart accessibilityLayer data={chartData}>
-                            {chart.ui?.cartesianGrid && <CartesianGrid strokeDasharray="3 3" />}
+                            {chart.ui?.cartesianGrid?.enabled && (
+                                <CartesianGrid
+                                    horizontal={chart.ui.cartesianGrid.horizontal ?? true}
+                                    vertical={chart.ui.cartesianGrid.vertical ?? true}
+                                    strokeDasharray={chart.ui.cartesianGrid.strokeDasharray}
+                                    fill={chart.ui.cartesianGrid.backgroundFill}
+                                    fillOpacity={chart.ui.cartesianGrid.fillOpacity}
+                                />
+                            )}
                             {chart.displayXAxis && <XAxis dataKey="label" />}
                             {chart.displayYAxis && <YAxis stroke="#333" />}
                             {Object.keys(chartConfig).map((key, index) => (

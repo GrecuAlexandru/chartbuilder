@@ -1,5 +1,8 @@
-import { Chart, ChartUISettings } from "@/types/chart";
+import { Chart, ChartUISettings, CartesianGridSettings } from "@/types/chart";
 import { z } from "zod";
+import { Switch } from "@/components/ui/switch";
+import { Input } from "@/components/ui/input";
+import { Slider } from "@/components/ui/slider";
 
 interface ChartSettingsProps {
     chart?: Chart
@@ -16,13 +19,48 @@ export function ChartSettings({ chart, setChart, updateChartUI }: ChartSettingsP
         } as Chart)
     }
 
-    const handleCartesianGridChange = (position: string) => {
+    const handleCartesianGridChange = (key: keyof z.infer<typeof CartesianGridSettings>, value: any) => {
+        if (!chart || !chart.ui || !('cartesianGrid' in chart.ui)) return;
+
+        const currentGrid = chart.ui.cartesianGrid ?? {};
+
+        if (key === 'enabled') {
+            updateChartUI({
+                cartesianGrid: {
+                    ...currentGrid,
+                    enabled: value,
+                    horizontal: value,
+                    vertical: value,
+                    fillOpacity: 0,
+                }
+            });
+            return;
+        }
+
+        if ((key === 'horizontal' || key === 'vertical') && value === false) {
+            const otherKey = key === 'horizontal' ? 'vertical' : 'horizontal';
+            const otherValue = currentGrid[otherKey] ?? false;
+
+            updateChartUI({
+                cartesianGrid: {
+                    ...currentGrid,
+                    [key]: false,
+                    enabled: otherValue
+                }
+            });
+            return;
+        }
+
         updateChartUI({
-            cartesianGrid: position === 'true'
+            cartesianGrid: {
+                ...currentGrid,
+                [key]: value
+            }
         });
     };
 
     if (!chart) return null;
+
     return (
         <div className="p-4">
             <h2 className="text-2xl font-bold mb-4">Chart Settings</h2>
@@ -44,22 +82,73 @@ export function ChartSettings({ chart, setChart, updateChartUI }: ChartSettingsP
                 </div>
             </div>
 
-            <div className="space-y-4">
-                {chart.ui && 'cartesianGrid' in chart.ui && (
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Cartesian Grid</label>
-                        <select
-                            value={chart.ui?.cartesianGrid?.toString() ?? 'false'}
-                            onChange={(e) => handleCartesianGridChange(e.target.value)}
-                            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                        >
-                            <option value="true">Show</option>
-                            <option value="false">Hide</option>
-                        </select>
+            {chart.ui && 'cartesianGrid' in chart.ui && (
+                <div className="space-y-4">
+                    <h3 className="text-lg font-semibold">Cartesian Grid Settings</h3>
+
+                    <div className="flex items-center justify-between">
+                        <label className="text-sm font-medium text-gray-700">Enable Grid</label>
+                        <Switch
+                            checked={chart.ui.cartesianGrid?.enabled ?? false}
+                            onCheckedChange={(checked) => handleCartesianGridChange('enabled', checked)}
+                        />
                     </div>
-                )}
-                {/* Add more UI controls */}
-            </div>
+
+                    <div className={`space-y-4 ${!chart.ui.cartesianGrid?.enabled ? 'opacity-50 pointer-events-none' : ''}`}>
+                        <div className="flex items-center justify-between">
+                            <label className="text-sm font-medium text-gray-700">Horizontal Lines</label>
+                            <Switch
+                                checked={chart.ui.cartesianGrid?.horizontal ?? false}
+                                onCheckedChange={(checked) => handleCartesianGridChange('horizontal', checked)}
+                            />
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                            <label className="text-sm font-medium text-gray-700">Vertical Lines</label>
+                            <Switch
+                                checked={chart.ui.cartesianGrid?.vertical ?? false}
+                                onCheckedChange={(checked) => handleCartesianGridChange('vertical', checked)}
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Stroke Dash Array</label>
+                            <Input
+                                type="text"
+                                value={chart.ui.cartesianGrid?.strokeDasharray ?? ''}
+                                onChange={(e) => handleCartesianGridChange('strokeDasharray', e.target.value)}
+                                placeholder="e.g., 3 3"
+                                className="w-full"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Background Fill</label>
+                            <Input
+                                type="color"
+                                value={chart.ui.cartesianGrid?.backgroundFill ?? '#ffffff'}
+                                onChange={(e) => handleCartesianGridChange('backgroundFill', e.target.value)}
+                                className="w-full h-10"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Fill Opacity</label>
+                            <Slider
+                                value={[chart.ui.cartesianGrid?.fillOpacity ?? 0]}
+                                onValueChange={(value) => handleCartesianGridChange('fillOpacity', value[0])}
+                                min={0}
+                                max={1}
+                                step={0.01}
+                                className="w-full"
+                            />
+                            <div className="text-xs text-gray-500 mt-1">
+                                {chart.ui.cartesianGrid?.fillOpacity?.toFixed(2) ?? '0.00'}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

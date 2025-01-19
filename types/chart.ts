@@ -33,19 +33,19 @@ export const CartesianGridSettings = z.object({
 
 // UI Settings for different chart types
 export const AreaChartUISettings = z.object({
-    cartesianGrid: z.boolean().optional(),
+    cartesianGrid: CartesianGridSettings.optional(),
 });
 
 export const BarChartUISettings = z.object({
-    cartesianGrid: z.boolean().optional(),
+    cartesianGrid: CartesianGridSettings.optional(),
 });
 
 export const LineChartUISettings = z.object({
-    cartesianGrid: z.boolean().optional(),
+    cartesianGrid: CartesianGridSettings.optional(),
 });
 
 export const ScatterChartUISettings = z.object({
-    cartesianGrid: z.boolean().optional(),
+    cartesianGrid: CartesianGridSettings.optional(),
 });
 
 export const PieChartUISettings = z.object({
