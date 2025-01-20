@@ -79,12 +79,17 @@ const ChartResponseNoData = z.object({
 
 //"data":[{"name":"Value1","data_points":[{"name":"Desktop","value":1},{"name":"Mobile","value":3}]},{"name":"Value2","data_points":[{"name":"Desktop","value":5},{"name":"Mobile","value":8}]},{"name":"Value3","data_points":[{"name":"Desktop","value":10},{"name":"Mobile","value":5}]}]
 
-async function generateChart(body: any) {
+async function generateChart(body: { text: string, chatHistory?: Array<OpenAI.Chat.ChatCompletionMessageParam> }) {
     const systemPrompt = `You are a detail-oriented data visualization assistant for creating charts based on user prompts. Analyze user requests and generate accurate, structured, and schema-compliant chart configurations. Always ensure you are extracting the data series correctly and entirely. Make sure you do not add more data series than asked.`;
     // const examplePromptComplex = `Example data of chart with 2 different categories and 3 values for each category: "data":[{"label":"Label1","dataSeries":[{"dataSeriesLabel":"Desktop","dataSeriesValue":1},{"dataSeriesLabel":"Mobile","dataSeriesValue":3}]},{"label":"Label2","dataSeries":[{"dataSeriesLabel":"Desktop","dataSeriesValue":5},{"dataSeriesLabel":"Mobile","dataSeriesValue":8}]},{"label":"Label3","dataSeries":[{"dataSeriesLabel":"Desktop","dataSeriesValue":10},{"dataSeriesLabel":"Mobile","dataSeriesValue":5}]}].`;
     // const examplePromptSimple = `Example data of chart with 2 values: "data":[{"label":"Label1","dataSeries":[{"dataSeriesLabel":"Desktop","dataSeriesValue":1}]},{"label":"Label2","dataSeries":[{"dataSeriesLabel":"Desktop","dataSeriesValue":5}]}].`;
     const explanation = `DataRow's label represents the name or value of the point on the X axis (e.g. "January", "February", "March" or 1, 2, 3). DataRow's dataSeries can represent multiple Categories (e.g. "Desktop users", "Mobile users") for drawing different lines/bars/etc on the chart. Each dataSeriesLabel represents the name of the Category and dataSeriesValue represents the value of the point on the Y axis.`;
     const responseFormat = zodResponseFormat(ChartResponse, "chart_response");
+    console.log('Response Format:', JSON.stringify(responseFormat, null, 2));
+
+    // daca bag "...body.chatHistory" direct in messages da ceva eroare urata
+    let chatHistory = body.chatHistory ?? [];
+
     const completion = await openai.beta.chat.completions.parse({
         model: "gpt-4o-mini",
         messages: [
@@ -94,6 +99,8 @@ async function generateChart(body: any) {
             { role: "assistant", content: `"data": [{ "label": "Label1", "dataSeries": [{ "dataSeriesLabel": "Desktop", "dataSeriesValue": 1 }, { "dataSeriesLabel": "Mobile", "dataSeriesValue": 3 }] }, { "label": "Label2", "dataSeries": [{ "dataSeriesLabel": "Desktop", "dataSeriesValue": 5 }, { "dataSeriesLabel": "Mobile", "dataSeriesValue": 8 }] }, { "label": "Label3", "dataSeries": [{ "dataSeriesLabel": "Desktop", "dataSeriesValue": 10 }, { "dataSeriesLabel": "Mobile", "dataSeriesValue": 5 }] }].` },
             { role: "user", content: "Generate a pie chart with 2 values" },
             { role: "assistant", content: `"data":[{"label":"Label1","dataSeries":[{"dataSeriesLabel":"Desktop","dataSeriesValue":1}]},{"label":"Label2","dataSeries":[{"dataSeriesLabel":"Desktop","dataSeriesValue":5}]}]` },
+            { role: "user", content: "From now on we will be working on the same chart, which I will define in the next message." },
+            ...chatHistory,
             { role: "user", content: body.text },
         ],
         response_format: responseFormat,
@@ -149,6 +156,16 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
+
+    //TODO: probabil nu e prea corecta treaba asta, cred ca mai bine se ia
+    // response-ul de la ultimul request si se verifica valoarea de acolo
+    if (body.chatHistory) {
+        const tokens = body.chatHistory.reduce((acc: any, msg: { content: string | any[]; }) => acc + msg.content.length, 0);
+        if (tokens > 5000) {
+            return NextResponse.json({ error: "Chat history too large" }, { status: 413 });
+        }
+    }
+
     const chart_response = await generateChart(body);
 
     // Update user's API calls
