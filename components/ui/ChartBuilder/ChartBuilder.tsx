@@ -147,13 +147,13 @@ export default function ChartBuilder() {
 
         const string_text = JSON.stringify(data.chart, null, 2);
 
-        setChatHistory(prev => [...prev, { role: 'agent', content: string_text }]);
+        setChatHistory(prev => [...prev, { role: 'assistant', content: string_text }]);
 
         setMessage('')
 
         // Simulate agent response after 1 second
         setTimeout(() => {
-            setChatHistory(prev => [...prev, { role: 'agent', content: 'Here\'s the chart you requested. You can customize it using the panel on the right.' }])
+            setChatHistory(prev => [...prev, { role: 'assistant', content: 'Here\'s the chart you requested. You can customize it using the panel on the right.' }])
             setIsFullScreen(false)
         }, 1000)
     }
@@ -163,6 +163,9 @@ export default function ChartBuilder() {
         if (message.trim()) {
             setChatHistory([...chatHistory, { role: 'user', content: message }])
             try {
+                
+                console.log(message);
+
                 const response = await fetch('/api/chartbot', {
                     method: 'POST',
                     headers: {
@@ -226,7 +229,7 @@ export default function ChartBuilder() {
 
                 const string_text = JSON.stringify(data.chart, null, 2);
 
-                setChatHistory(prev => [...prev, { role: 'agent', content: string_text }]);
+                setChatHistory(prev => [...prev, { role: 'assistant', content: string_text }]);
             } catch (error) {
                 console.error('Error:', error);
             }
@@ -235,7 +238,7 @@ export default function ChartBuilder() {
 
             // Simulate agent response after 1 second
             setTimeout(() => {
-                setChatHistory(prev => [...prev, { role: 'agent', content: 'Here\'s the chart you requested. You can customize it using the panel on the right.' }])
+                setChatHistory(prev => [...prev, { role: 'assistant', content: 'Here\'s the chart you requested. You can customize it using the panel on the right.' }])
                 setIsFullScreen(false)
             }, 1000)
         }
