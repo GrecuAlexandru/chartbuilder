@@ -21,8 +21,6 @@ export function ChartSettings({ chart, setChart }: ChartSettingsProps) {
 
     if (!chart) return null;
 
-    console.log(chart);
-
     return (
         <div className="p-4">
             <h2 className="text-2xl font-bold mb-4">Chart Settings</h2>

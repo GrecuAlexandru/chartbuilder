@@ -84,7 +84,6 @@ export default function ChartBuilder() {
 
         // Simulate agent response after 1 second
         setTimeout(() => {
-            setChatHistory(prev => [...prev, { role: 'assistant', content: 'Here\'s the chart you requested. You can customize it using the panel on the right.' }])
             setIsFullScreen(false)
         }, 1000)
     }
@@ -92,9 +91,11 @@ export default function ChartBuilder() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         if (message.trim()) {
-            setChatHistory([...chatHistory, { role: 'user', content: message }])
+            const oldHistory = chatHistory;
+            const newHistory = [...chatHistory, { role: 'user', content: message }];
+            setChatHistory(newHistory);
             try {
-                
+
                 console.log(message);
 
                 const response = await fetch('/api/chartbot', {
@@ -102,7 +103,10 @@ export default function ChartBuilder() {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ text: message }),
+                    body: JSON.stringify({
+                        text: message,
+                        history: oldHistory // Send existing chat history
+                    }),
                 });
 
                 const data = await response.json();
@@ -158,9 +162,10 @@ export default function ChartBuilder() {
                     setChartConfig(chConfig);
                 }
 
+                // Update chat history with response
                 const string_text = JSON.stringify(data.chart, null, 2);
-
                 setChatHistory(prev => [...prev, { role: 'assistant', content: string_text }]);
+
             } catch (error) {
                 console.error('Error:', error);
             }
@@ -169,7 +174,6 @@ export default function ChartBuilder() {
 
             // Simulate agent response after 1 second
             setTimeout(() => {
-                setChatHistory(prev => [...prev, { role: 'assistant', content: 'Here\'s the chart you requested. You can customize it using the panel on the right.' }])
                 setIsFullScreen(false)
             }, 1000)
         }
