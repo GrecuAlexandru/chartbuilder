@@ -1,8 +1,9 @@
-import { Chart, ChartUISettings, CartesianGridSettings } from "@/types/chart";
+import { Chart, ChartUISettings, BarChartSettings, CartesianGridSettings } from "@/types/chart";
 import { z } from "zod";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
+import { Label } from "@/components/ui/label";
 
 interface ChartSettingsProps {
     chart?: Chart
@@ -59,7 +60,22 @@ export function ChartSettings({ chart, setChart, updateChartUI }: ChartSettingsP
         });
     };
 
+    const handleBarChartSettingChange = (key: keyof z.infer<typeof BarChartSettings>, value: any) => {
+        if (!chart || !chart.ui || !('settings' in chart.ui)) return;
+
+        const currentSettings = chart.ui.settings ?? {};
+
+        updateChartUI({
+            settings: {
+                ...currentSettings,
+                [key]: value
+            }
+        });
+    };
+
     if (!chart) return null;
+
+    console.log(chart);
 
     return (
         <div className="p-4">
@@ -82,10 +98,88 @@ export function ChartSettings({ chart, setChart, updateChartUI }: ChartSettingsP
                 </div>
             </div>
 
+            {chart.chartType === 'bar' && chart.ui && 'settings' in chart.ui && (
+                <div className="space-y-4 mt-4">
+                    <h3 className="text-lg font-semibold">Bar Chart Settings</h3>
+                    <div>
+                        <Label htmlFor="width">Width</Label>
+                        <Input
+                            id="width"
+                            type="number"
+                            value={chart.ui.settings?.width ?? ''}
+                            onChange={(e) => handleBarChartSettingChange('width', parseInt(e.target.value))}
+                            className="w-full"
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="height">Height</Label>
+                        <Input
+                            id="height"
+                            type="number"
+                            value={chart.ui.settings?.height ?? ''}
+                            onChange={(e) => handleBarChartSettingChange('height', parseInt(e.target.value))}
+                            className="w-full"
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="barCategoryGap">Bar Category Gap</Label>
+                        <Input
+                            id="barCategoryGap"
+                            type="text"
+                            value={chart.ui.settings?.barCategoryGap ?? ''}
+                            onChange={(e) => handleBarChartSettingChange('barCategoryGap', e.target.value)}
+                            className="w-full"
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="barGap">Bar Gap</Label>
+                        <Input
+                            id="barGap"
+                            type="text"
+                            value={chart.ui.settings?.barGap ?? ''}
+                            onChange={(e) => handleBarChartSettingChange('barGap', e.target.value)}
+                            className="w-full"
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="barSize">Bar Size</Label>
+                        <Input
+                            id="barSize"
+                            type="text"
+                            value={chart.ui.settings?.barSize ?? ''}
+                            onChange={(e) => handleBarChartSettingChange('barSize', e.target.value)}
+                            className="w-full"
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="stackOffset">Stack Offset</Label>
+                        <select
+                            id="stackOffset"
+                            value={chart.ui.settings?.stackOffset ?? 'none'}
+                            onChange={(e) => handleBarChartSettingChange('stackOffset', e.target.value)}
+                            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                        >
+                            <option value="expand">Expand</option>
+                            <option value="none">None</option>
+                            <option value="wiggle">Wiggle</option>
+                            <option value="silhouette">Silhouette</option>
+                            <option value="sign">Sign</option>
+                        </select>
+                    </div>
+                    <div className="flex items-center justify-between">
+                        <Label htmlFor="reverseStackOrder">Reverse Stack Order</Label>
+                        <Switch
+                            id="reverseStackOrder"
+                            checked={chart.ui.settings?.reverseStackOrder ?? false}
+                            onCheckedChange={(checked) => handleBarChartSettingChange('reverseStackOrder', checked)}
+                        />
+                    </div>
+                </div>
+            )}
+
             {chart.ui && 'cartesianGrid' in chart.ui && (
                 <div className="space-y-4">
                     <h3 className="text-lg font-semibold">Cartesian Grid Settings</h3>
-
                     <div className="flex items-center justify-between">
                         <label className="text-sm font-medium text-gray-700">Enable Grid</label>
                         <Switch
@@ -93,7 +187,6 @@ export function ChartSettings({ chart, setChart, updateChartUI }: ChartSettingsP
                             onCheckedChange={(checked) => handleCartesianGridChange('enabled', checked)}
                         />
                     </div>
-
                     <div className={`space-y-4 ${!chart.ui.cartesianGrid?.enabled ? 'opacity-50 pointer-events-none' : ''}`}>
                         <div className="flex items-center justify-between">
                             <label className="text-sm font-medium text-gray-700">Horizontal Lines</label>
@@ -102,7 +195,6 @@ export function ChartSettings({ chart, setChart, updateChartUI }: ChartSettingsP
                                 onCheckedChange={(checked) => handleCartesianGridChange('horizontal', checked)}
                             />
                         </div>
-
                         <div className="flex items-center justify-between">
                             <label className="text-sm font-medium text-gray-700">Vertical Lines</label>
                             <Switch
@@ -110,18 +202,6 @@ export function ChartSettings({ chart, setChart, updateChartUI }: ChartSettingsP
                                 onCheckedChange={(checked) => handleCartesianGridChange('vertical', checked)}
                             />
                         </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Stroke Dash Array</label>
-                            <Input
-                                type="text"
-                                value={chart.ui.cartesianGrid?.strokeDasharray ?? ''}
-                                onChange={(e) => handleCartesianGridChange('strokeDasharray', e.target.value)}
-                                placeholder="e.g., 3 3"
-                                className="w-full"
-                            />
-                        </div>
-
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Background Fill</label>
                             <Input
@@ -131,7 +211,6 @@ export function ChartSettings({ chart, setChart, updateChartUI }: ChartSettingsP
                                 className="w-full h-10"
                             />
                         </div>
-
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Fill Opacity</label>
                             <Slider
