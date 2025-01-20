@@ -156,6 +156,16 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
+
+    //TODO: probabil nu e prea corecta treaba asta, cred ca mai bine se ia
+    // response-ul de la ultimul request si se verifica valoarea de acolo
+    if (body.chatHistory) {
+        const tokens = body.chatHistory.reduce((acc: any, msg: { content: string | any[]; }) => acc + msg.content.length, 0);
+        if (tokens > 5000) {
+            return NextResponse.json({ error: "Chat history too large" }, { status: 413 });
+        }
+    }
+
     const chart_response = await generateChart(body);
 
     // Update user's API calls
