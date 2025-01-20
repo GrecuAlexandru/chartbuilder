@@ -1,4 +1,4 @@
-import { Chart, ChartUISettings, BarChartSettings, CartesianGridSettings } from "@/types/chart";
+import { Chart } from "@/types/chart";
 import { z } from "zod";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
@@ -8,10 +8,9 @@ import { Label } from "@/components/ui/label";
 interface ChartSettingsProps {
     chart?: Chart
     setChart: (chart: Chart) => void
-    updateChartUI: (updates: Partial<ChartUISettings>) => void
 }
 
-export function ChartSettings({ chart, setChart, updateChartUI }: ChartSettingsProps) {
+export function ChartSettings({ chart, setChart }: ChartSettingsProps) {
     const handleChartTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         if (!chart) return;
         setChart({
@@ -19,59 +18,6 @@ export function ChartSettings({ chart, setChart, updateChartUI }: ChartSettingsP
             chartType: e.target.value.toLowerCase() as 'area' | 'bar' | 'line' | 'pie' | 'radar' | 'radial' | 'scatter'
         } as Chart)
     }
-
-    const handleCartesianGridChange = (key: keyof z.infer<typeof CartesianGridSettings>, value: any) => {
-        if (!chart || !chart.ui || !('cartesianGrid' in chart.ui)) return;
-
-        const currentGrid = chart.ui.cartesianGrid ?? {};
-
-        if (key === 'enabled') {
-            updateChartUI({
-                cartesianGrid: {
-                    ...currentGrid,
-                    enabled: value,
-                    horizontal: value,
-                    vertical: value,
-                    fillOpacity: 0,
-                }
-            });
-            return;
-        }
-
-        if ((key === 'horizontal' || key === 'vertical') && value === false) {
-            const otherKey = key === 'horizontal' ? 'vertical' : 'horizontal';
-            const otherValue = currentGrid[otherKey] ?? false;
-
-            updateChartUI({
-                cartesianGrid: {
-                    ...currentGrid,
-                    [key]: false,
-                    enabled: otherValue
-                }
-            });
-            return;
-        }
-
-        updateChartUI({
-            cartesianGrid: {
-                ...currentGrid,
-                [key]: value
-            }
-        });
-    };
-
-    const handleBarChartSettingChange = (key: keyof z.infer<typeof BarChartSettings>, value: any) => {
-        if (!chart || !chart.ui || !('settings' in chart.ui)) return;
-
-        const currentSettings = chart.ui.settings ?? {};
-
-        updateChartUI({
-            settings: {
-                ...currentSettings,
-                [key]: value
-            }
-        });
-    };
 
     if (!chart) return null;
 
@@ -98,7 +44,7 @@ export function ChartSettings({ chart, setChart, updateChartUI }: ChartSettingsP
                 </div>
             </div>
 
-            {chart.chartType === 'bar' && chart.ui && 'settings' in chart.ui && (
+            {/* {chart.chartType === 'bar' && chart.ui && 'settings' in chart.ui && (
                 <div className="space-y-4 mt-4">
                     <h3 className="text-lg font-semibold">Bar Chart Settings</h3>
                     <div>
@@ -227,7 +173,7 @@ export function ChartSettings({ chart, setChart, updateChartUI }: ChartSettingsP
                         </div>
                     </div>
                 </div>
-            )}
+            )} */}
         </div>
     )
 }

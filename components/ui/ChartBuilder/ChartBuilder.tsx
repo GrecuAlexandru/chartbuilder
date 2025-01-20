@@ -12,7 +12,7 @@ import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent } from "@/
 import { ChatInterface } from "./ChatInterface"
 import { ChartView } from "./ChartView"
 import { ChartSettings } from "./ChartSettings"
-import { Chart, ChartUISettings, AreaChartUISettings, BarChartUISettings, LineChartUISettings, ScatterChartUISettings, PieChartUISettings, RadarChartUISettings, RadialChartUISettings, DataRow, DataSeries } from "@/types/chart"
+import { Chart, DataRow, DataSeries } from "@/types/chart"
 
 const demoString = `{ "chartType": "bar", "data": [ { "label": "Value1", "dataSeries": [ { "dataSeriesLabel": "Category A", "dataSeriesValue": 4 } ] }, { "label": "Value2", "dataSeries": [ { "dataSeriesLabel": "Category A", "dataSeriesValue": 7 } ] }, { "label": "Value3", "dataSeries": [ { "dataSeriesLabel": "Category A", "dataSeriesValue": 2 } ] } ], "displayLegend": true, "displayLabel": true, "displayXAxis": true, "displayYAxis": true, "barChartHorizontal": false, "barChartNegative": false, "ui": { "cartesianGrid": true } }`;
 
@@ -23,75 +23,6 @@ export default function ChartBuilder() {
     const [chart, setChart] = useState<zInfer<typeof Chart>>();
     const [chartData, setChartData] = useState<{ label: string;[key: string]: any }[]>([])
     const [chartConfig, setChartConfig] = useState<ChartConfig>({})
-
-    // Helper function to update UI settings
-    const updateChartUI = (updates: Partial<ChartUISettings>) => {
-        setChart(prev => {
-            if (!prev) return prev;
-
-            // Type guard to ensure UI settings match chart type
-            switch (prev.chartType) {
-                case 'area':
-                    return {
-                        ...prev,
-                        ui: {
-                            ...prev.ui,
-                            ...(updates as AreaChartUISettings)
-                        }
-                    };
-                case 'bar':
-                    return {
-                        ...prev,
-                        ui: {
-                            ...prev.ui,
-                            ...(updates as BarChartUISettings)
-                        }
-                    };
-                case 'line':
-                    return {
-                        ...prev,
-                        ui: {
-                            ...prev.ui,
-                            ...(updates as LineChartUISettings)
-                        }
-                    };
-                case 'scatter':
-                    return {
-                        ...prev,
-                        ui: {
-                            ...prev.ui,
-                            ...(updates as ScatterChartUISettings)
-                        }
-                    };
-                case 'pie':
-                    return {
-                        ...prev,
-                        ui: {
-                            ...prev.ui,
-                            ...(updates as PieChartUISettings)
-                        }
-                    };
-                case 'radar':
-                    return {
-                        ...prev,
-                        ui: {
-                            ...prev.ui,
-                            ...(updates as RadarChartUISettings)
-                        }
-                    };
-                case 'radial':
-                    return {
-                        ...prev,
-                        ui: {
-                            ...prev.ui,
-                            ...(updates as RadialChartUISettings)
-                        }
-                    };
-                default:
-                    return prev;
-            }
-        });
-    };
 
     const handleDemo = () => {
         const data = { chart: JSON.parse(demoString) };
@@ -306,7 +237,6 @@ export default function ChartBuilder() {
                             <ChartSettings
                                 chart={chart}
                                 setChart={setChart}
-                                updateChartUI={updateChartUI}
                             />
                         </motion.div>
                     </motion.div>

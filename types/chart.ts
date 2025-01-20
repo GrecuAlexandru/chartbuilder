@@ -22,41 +22,6 @@ export const DataRow = z.object({
     dataSeries: z.array(DataSeries),
 });
 
-export const CartesianGridSettings = z.object({
-    enabled: z.boolean(),
-    horizontal: z.boolean(),
-    vertical: z.boolean(),
-    strokeDasharray: z.string(),
-    backgroundFill: z.string(),
-    fillOpacity: z.number().min(0).max(1)
-});
-
-// UI Settings for different chart types
-export const AreaChartUISettings = z.object({
-    cartesianGrid: CartesianGridSettings
-});
-
-export const BarChartUISettings = z.object({
-    cartesianGrid: CartesianGridSettings
-});
-
-export const LineChartUISettings = z.object({
-    cartesianGrid: CartesianGridSettings
-});
-
-export const ScatterChartUISettings = z.object({
-    cartesianGrid: CartesianGridSettings
-});
-
-export const PieChartUISettings = z.object({
-});
-
-export const RadarChartUISettings = z.object({
-});
-
-export const RadialChartUISettings = z.object({
-});
-
 // Main Chart Schema
 export const Chart = z.discriminatedUnion('chartType', [
     z.object({
@@ -67,7 +32,12 @@ export const Chart = z.discriminatedUnion('chartType', [
         displayXAxis: z.boolean(),
         displayYAxis: z.boolean(),
         areaChartStacked: z.boolean(),
-        ui: AreaChartUISettings
+        uiCartesianGridEnabled: z.boolean(),
+        uiCartesianGridHorizontal: z.boolean(),
+        uiCartesianGridVertical: z.boolean(),
+        uiCartesianGridStrokeDasharray: z.string(),
+        uiCartesianGridBackgroundFill: z.string(),
+        // uiCartesianGridFillOpacity: z.number().min(0).max(1)
     }),
     z.object({
         chartType: z.literal('bar'),
@@ -78,7 +48,12 @@ export const Chart = z.discriminatedUnion('chartType', [
         displayYAxis: z.boolean(),
         barChartHorizontal: z.boolean(),
         barChartNegative: z.boolean(),
-        ui: BarChartUISettings
+        uiCartesianGridEnabled: z.boolean(),
+        uiCartesianGridHorizontal: z.boolean(),
+        uiCartesianGridVertical: z.boolean(),
+        uiCartesianGridStrokeDasharray: z.string(),
+        uiCartesianGridBackgroundFill: z.string(),
+        // uiCartesianGridFillOpacity: z.number().min(0).max(1)
     }),
     z.object({
         chartType: z.literal('line'),
@@ -88,7 +63,6 @@ export const Chart = z.discriminatedUnion('chartType', [
         displayXAxis: z.boolean(),
         displayYAxis: z.boolean(),
         lineChartDots: z.boolean(),
-        ui: LineChartUISettings
     }),
     z.object({
         chartType: z.literal('scatter'),
@@ -98,7 +72,6 @@ export const Chart = z.discriminatedUnion('chartType', [
         displayXAxis: z.boolean(),
         displayYAxis: z.boolean(),
         scatterChartThreeDimensions: z.boolean(),
-        ui: ScatterChartUISettings
     }),
     z.object({
         chartType: z.literal('pie'),
@@ -106,7 +79,6 @@ export const Chart = z.discriminatedUnion('chartType', [
         displayLegend: z.boolean(),
         displayLabel: z.boolean(),
         pieChartDonut: z.boolean(),
-        ui: PieChartUISettings
     }),
     z.object({
         chartType: z.literal('radar'),
@@ -114,7 +86,6 @@ export const Chart = z.discriminatedUnion('chartType', [
         displayLegend: z.boolean(),
         displayLabel: z.boolean(),
         radarChartDots: z.boolean(),
-        ui: RadarChartUISettings
     }),
     z.object({
         chartType: z.literal('radial'),
@@ -122,27 +93,11 @@ export const Chart = z.discriminatedUnion('chartType', [
         displayLegend: z.boolean(),
         displayLabel: z.boolean(),
         radialChartText: z.boolean(),
-        ui: RadialChartUISettings
     }),
 ]);
 
-export type ChartUISettings =
-    | AreaChartUISettings
-    | BarChartUISettings
-    | LineChartUISettings
-    | ScatterChartUISettings
-    | PieChartUISettings
-    | RadarChartUISettings
-    | RadialChartUISettings;
 
 export type ChartType = z.infer<typeof ChartType>;
 export type DataSeries = z.infer<typeof DataSeries>;
 export type DataRow = z.infer<typeof DataRow>;
 export type Chart = z.infer<typeof Chart>;
-export type AreaChartUISettings = z.infer<typeof AreaChartUISettings>;
-export type BarChartUISettings = z.infer<typeof BarChartUISettings>;
-export type LineChartUISettings = z.infer<typeof LineChartUISettings>;
-export type ScatterChartUISettings = z.infer<typeof ScatterChartUISettings>;
-export type PieChartUISettings = z.infer<typeof PieChartUISettings>;
-export type RadarChartUISettings = z.infer<typeof RadarChartUISettings>;
-export type RadialChartUISettings = z.infer<typeof RadialChartUISettings>;

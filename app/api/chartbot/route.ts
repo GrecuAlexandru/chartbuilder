@@ -85,7 +85,6 @@ async function generateChart(body: any) {
     // const examplePromptSimple = `Example data of chart with 2 values: "data":[{"label":"Label1","dataSeries":[{"dataSeriesLabel":"Desktop","dataSeriesValue":1}]},{"label":"Label2","dataSeries":[{"dataSeriesLabel":"Desktop","dataSeriesValue":5}]}].`;
     const explanation = `DataRow's label represents the name or value of the point on the X axis (e.g. "January", "February", "March" or 1, 2, 3). DataRow's dataSeries can represent multiple Categories (e.g. "Desktop users", "Mobile users") for drawing different lines/bars/etc on the chart. Each dataSeriesLabel represents the name of the Category and dataSeriesValue represents the value of the point on the Y axis.`;
     const responseFormat = zodResponseFormat(ChartResponse, "chart_response");
-    console.log('Response Format:', JSON.stringify(responseFormat, null, 2));
     const completion = await openai.beta.chat.completions.parse({
         model: "gpt-4o-mini",
         messages: [
