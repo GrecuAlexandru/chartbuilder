@@ -8,47 +8,6 @@ import { Chart, ChartType, DataSeries, DataRow } from '@/types/chart';
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-// const ChartType = z.enum([
-//     "area",
-//     "bar",
-//     "line",
-//     "pie",
-//     "radar",
-//     "radial",
-//     "scatter",
-// ]);
-
-// const DataSeries = z.object({
-//     dataSeriesLabel: z.string(),
-//     dataSeriesValue: z.number(),
-// })
-
-// const DataRow = z.object({
-//     label: z.string(),
-//     dataSeries: z.array(DataSeries),
-// });
-
-// const Chart = z.object({
-//     chartType: ChartType,
-//     data: z.array(DataRow),
-//     displayLegend: z.boolean().optional(),
-//     displayLabel: z.boolean().optional(),
-//     displayXAxis: z.boolean().optional(),
-//     displayYAxis: z.boolean().optional(),
-//     areaChartStacked: z.boolean().optional(),
-//     barChartHorizontal: z.boolean().optional(),
-//     barChartNegative: z.boolean().optional(),
-//     line_chart_linear: z.boolean().optional(),
-//     lineChartDots: z.boolean().optional(),
-//     pie_chart_labels: z.boolean().optional(),
-//     pieChartDonut: z.boolean().optional(),
-//     pieChartDonut_with_text: z.boolean().optional(),
-//     radarChartDots: z.boolean().optional(),
-//     radial_chart_grid: z.boolean().optional(),
-//     radialChartText: z.boolean().optional(),
-//     scatterChartThreeDimensions: z.boolean().optional(),
-// });
-
 const ChartResponse = z.object({
     chart: Chart,
 });
@@ -78,12 +37,58 @@ const ChartResponseNoData = z.object({
     chart: ChartNoData,
 });
 
-//"data":[{"name":"Value1","data_points":[{"name":"Desktop","value":1},{"name":"Mobile","value":3}]},{"name":"Value2","data_points":[{"name":"Desktop","value":5},{"name":"Mobile","value":8}]},{"name":"Value3","data_points":[{"name":"Desktop","value":10},{"name":"Mobile","value":5}]}]
+function countPropsAndDepth(obj: any, depth = 1): { totalProps: number; maxDepth: number } {
+    if (obj === null || typeof obj !== "object") {
+        return { totalProps: 0, maxDepth: depth };
+    }
+    let totalProps = 0;
+    let maxDepth = depth;
+    for (const key in obj) {
+        totalProps++;
+        const { totalProps: nestedProps, maxDepth: nestedDepth } = countPropsAndDepth(obj[key], depth + 1);
+        totalProps += nestedProps;
+        maxDepth = Math.max(maxDepth, nestedDepth);
+    }
+    return { totalProps, maxDepth };
+}
+
+// function removeOptionalFields(schema: z.ZodTypeAny): z.ZodTypeAny {
+//     if (schema instanceof z.ZodObject) {
+//         const shape = {};
+//         for (const [key, value] of Object.entries(schema.shape)) {
+//             if (!isOptional(value)) {
+//                 if (value instanceof z.ZodObject) {
+//                     shape[key] = removeOptionalFields(value);
+//                 } else {
+//                     shape[key] = value;
+//                 }
+//             }
+//         }
+//         return z.object(shape);
+//     }
+//     if (schema instanceof z.ZodDiscriminatedUnion) {
+//         const newOptions = schema.options.map(option => {
+//             if (option instanceof z.ZodObject) {
+//                 return removeOptionalFields(option);
+//             }
+//             return option;
+//         });
+//         return z.discriminatedUnion(schema.discriminator, newOptions);
+//     }
+//     return schema;
+// }
+
+// function isOptional(schema: z.ZodTypeAny): boolean {
+//     if (schema instanceof z.ZodOptional) return true;
+//     if (schema instanceof z.ZodObject) {
+//         return Object.values(schema.shape as Record<string, z.ZodTypeAny>).some((field) => isOptional(field));
+//     }
+//     return false;
+// }
+
 
 async function generateChart(body: { text: string, history?: { role: string, content: string }[] }) {
     const systemPrompt = `You are a detail-oriented data visualization assistant for creating charts based on user prompts. Analyze user requests and generate accurate, structured, and schema-compliant chart configurations. Always ensure you are extracting the data series correctly and entirely. Make sure you do not add more data series than asked.`;
-    // const examplePromptComplex = `Example data of chart with 2 different categories and 3 values for each category: "data":[{"label":"Label1","dataSeries":[{"dataSeriesLabel":"Desktop","dataSeriesValue":1},{"dataSeriesLabel":"Mobile","dataSeriesValue":3}]},{"label":"Label2","dataSeries":[{"dataSeriesLabel":"Desktop","dataSeriesValue":5},{"dataSeriesLabel":"Mobile","dataSeriesValue":8}]},{"label":"Label3","dataSeries":[{"dataSeriesLabel":"Desktop","dataSeriesValue":10},{"dataSeriesLabel":"Mobile","dataSeriesValue":5}]}].`;
-    // const examplePromptSimple = `Example data of chart with 2 values: "data":[{"label":"Label1","dataSeries":[{"dataSeriesLabel":"Desktop","dataSeriesValue":1}]},{"label":"Label2","dataSeries":[{"dataSeriesLabel":"Desktop","dataSeriesValue":5}]}].`;
     const explanation = `DataRow's label represents the name or value of the point on the X axis (e.g. "January", "February", "March" or 1, 2, 3). DataRow's dataSeries can represent multiple Categories (e.g. "Desktop users", "Mobile users") for drawing different lines/bars/etc on the chart. Each dataSeriesLabel represents the name of the Category and dataSeriesValue represents the value of the point on the Y axis.`;
     const messages: ChatCompletionMessageParam[] = [
         { role: "system", content: systemPrompt },
@@ -99,10 +104,11 @@ async function generateChart(body: { text: string, history?: { role: string, con
         messages.push(...(body.history as ChatCompletionMessageParam[]));
     }
 
+
     // Add current message
     messages.push({ role: "user", content: body.text });
 
-    console.log(messages);
+    // const cleanedSchema = removeOptionalFields(ChartResponse);
 
     const completion = await openai.beta.chat.completions.parse({
         model: "gpt-4o-mini",
@@ -110,7 +116,9 @@ async function generateChart(body: { text: string, history?: { role: string, con
         response_format: zodResponseFormat(ChartResponse, "chart_response"),
     });
 
-    // console.log(completion.usage);
+    const { totalProps, maxDepth } = countPropsAndDepth(completion.choices[0].message.parsed);
+    console.log("Properties:", totalProps, "Levels:", maxDepth);
+
 
     return completion.choices[0].message.parsed;
 }

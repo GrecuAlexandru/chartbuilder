@@ -17,7 +17,7 @@ export default function Navlinks({ user }: NavlinksProps) {
   return (
     <header className="sticky top-0 border-b border-opacity-0 bg-background/30 backdrop-blur-md">
       <div className="mx-auto max-w-screen-2xl sm:px-16 lg:px-18">
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex h-[calc(4rem-1px)] items-center justify-between">
           <nav className="flex items-center gap-6 text-lg font-medium md:gap-5 md:text-sm lg:gap-8">
             <Link
               href="/"

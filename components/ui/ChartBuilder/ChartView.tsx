@@ -9,10 +9,11 @@ import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent } from "@/components/ui/card"
 import PrismLoader from "@/components/ui/CustomUI/prism-loader";
+import { Chart } from "@/types/chart"
 
 
 interface ChartViewProps {
-    chart: any
+    chart?: Chart
     chartData: any[]
     chartConfig: any
 }
@@ -43,6 +44,8 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
         }
     }, [chartCode]);
 
+    console.log(chart);
+
     const renderChart = () => {
         if (!chart) return <div>Loading...</div>;
 
@@ -51,22 +54,54 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                 const BarChart = dynamic(() => import("recharts").then(mod => mod.BarChart));
                 return (
                     <ChartContainer ref={ref} config={chartConfig} className="w-full p-4 pb-8 bg-white">
-                        <BarChart accessibilityLayer data={chartData}>
-                            {chart.ui?.cartesianGrid?.enabled && (
+                        <BarChart
+                            accessibilityLayer
+                            data={chartData}
+                            layout={chart.uiBarChartLayout}
+                            barCategoryGap={chart.uiBarChartBarCategoryGap}
+                            barGap={chart.uiBarChartBarGap}
+                            barSize={chart.uiBarChartBarSize}
+                            stackOffset={chart.uiBarChartStackOffset}
+                            reverseStackOrder={chart.uiBarChartReverseStackOrder}
+                        >
+                            {chart.cartesianGrid.enabled && (
                                 <CartesianGrid
-                                    horizontal={chart.ui.cartesianGrid.horizontal ?? true}
-                                    vertical={chart.ui.cartesianGrid.vertical ?? true}
-                                    strokeDasharray={chart.ui.cartesianGrid.strokeDasharray}
-                                    fill={chart.ui.cartesianGrid.backgroundFill}
-                                    fillOpacity={chart.ui.cartesianGrid.fillOpacity}
+                                    horizontal={chart.cartesianGrid.horizontal ?? true}
+                                    vertical={chart.cartesianGrid.vertical ?? true}
+                                    fill={chart.cartesianGrid.backgroundFill}
+                                    fillOpacity={chart.cartesianGrid.fillOpacity}
                                 />
                             )}
-                            {chart.displayXAxis && <XAxis dataKey="label" />}
-                            {chart.displayYAxis && <YAxis stroke="#333" />}
+                            {chart.xAxis.enabled && chart.uiBarChartLayout == 'horizontal' && (
+                                <XAxis
+                                    dataKey="label"
+                                    type="category"
+                                    stroke="#333"
+                                />
+                            )}
+                            {chart.yAxis.enabled && chart.uiBarChartLayout == 'horizontal' && (
+                                <YAxis
+                                    type="number"
+                                    stroke="#333"
+                                />
+                            )}
+                            {chart.xAxis.enabled && chart.uiBarChartLayout == 'vertical' && (
+                                <XAxis
+                                    type="number"
+                                    stroke="#333"
+                                />
+                            )}
+                            {chart.yAxis.enabled && chart.uiBarChartLayout == 'vertical' && (
+                                <YAxis
+                                    dataKey="label"
+                                    type="category"
+                                    stroke="#333"
+                                />
+                            )}
                             {Object.keys(chartConfig).map((key, index) => (
                                 <Bar key={index} dataKey={key} fill={chartConfig[key].color} />
                             ))}
-                            {chart.displayLegend && <ChartLegend content={<ChartLegendContent />} />}
+                            {chart.display.displayLegend && <ChartLegend content={<ChartLegendContent />} />}
                         </BarChart>
                     </ChartContainer>
                 );
@@ -75,12 +110,12 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                 return (
                     <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
                         <AreaChart accessibilityLayer data={chartData}>
-                            {chart.displayXAxis && <XAxis dataKey="label" />}
-                            {chart.displayYAxis && <YAxis stroke="#333" />}
+                            {chart.xAxis.enabled && <XAxis dataKey="label" />}
+                            {chart.yAxis.enabled && <YAxis stroke="#333" />}
                             {Object.keys(chartConfig).map((key, index) => (
                                 <Area key={index} dataKey={key} fill={chartConfig[key].color} />
                             ))}
-                            {chart.displayLegend && <ChartLegend content={<ChartLegendContent />} />}
+                            {chart.display.displayLegend && <ChartLegend content={<ChartLegendContent />} />}
                         </AreaChart>
                     </ChartContainer>
                 );
@@ -89,12 +124,12 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                 return (
                     <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
                         <LineChart accessibilityLayer data={chartData}>
-                            {chart.displayXAxis && <XAxis dataKey="label" />}
-                            {chart.displayYAxis && <YAxis stroke="#333" />}
+                            {chart.xAxis.enabled && <XAxis dataKey="label" />}
+                            {chart.yAxis.enabled && <YAxis stroke="#333" />}
                             {Object.keys(chartConfig).map((key, index) => (
                                 <Line key={index} dataKey={key} stroke={chartConfig[key].color} />
                             ))}
-                            {chart.displayLegend && <ChartLegend content={<ChartLegendContent />} />}
+                            {chart.display.displayLegend && <ChartLegend content={<ChartLegendContent />} />}
                         </LineChart>
                     </ChartContainer>
                 );
@@ -104,7 +139,7 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                     <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
                         <PieChart accessibilityLayer>
                             <Pie data={chartData} dataKey={chart.data[0].dataSeries[0].dataSeriesLabel} />
-                            {chart.displayLegend && (
+                            {chart.display.displayLegend && (
                                 <ChartLegend
                                     content={<ChartLegendContent nameKey="label" />}
                                     className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
@@ -118,7 +153,7 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                 return (
                     <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
                         <RadarChart accessibilityLayer data={chartData}>
-                            {chart.displayLegend && <ChartLegend content={<ChartLegendContent />} />}
+                            {chart.display.displayLegend && <ChartLegend content={<ChartLegendContent />} />}
                             <Radar dataKey={chart.data[0].dataSeries[0].dataSeriesLabel} fill={`var(--color-${chart.data[0].dataSeries[0].dataSeriesLabel})`} />
                         </RadarChart>
                     </ChartContainer>
@@ -129,7 +164,7 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                 return (
                     <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
                         <RadialBarChart accessibilityLayer data={chartData}>
-                            {chart.displayLegend && <ChartLegend content={<ChartLegendContent />} />}
+                            {chart.display.displayLegend && <ChartLegend content={<ChartLegendContent />} />}
                             <RadialBar dataKey={chart.data[0].dataSeries[0].dataSeriesLabel} fill={`var(--color-${chart.data[0].dataSeries[0].dataSeriesLabel})`}>
                                 <LabelList
                                     position="insideStart"
@@ -147,6 +182,8 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
     };
 
     const generateChartCode = () => {
+        if (!chart) return '';
+
         const chartComponent = chart.chartType.charAt(0).toUpperCase() + chart.chartType.slice(1) + 'Chart';
         const chartElement = chart.chartType === 'pie' ? 'Pie' :
             (chart.chartType === 'radar' ? 'Radar' :
@@ -154,15 +191,15 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                     chart.chartType.charAt(0).toUpperCase() + chart.chartType.slice(1)));
 
         const additionalImports = [
-            chart.displayXAxis ? 'XAxis' : '',
-            chart.displayYAxis ? 'YAxis' : '',
+            (chart.chartType !== 'pie' && chart.chartType !== 'radar' && chart.chartType !== 'radial' && chart.xAxis.enabled) ? 'XAxis' : '',
+            (chart.chartType !== 'pie' && chart.chartType !== 'radar' && chart.chartType !== 'radial' && chart.yAxis.enabled) ? 'YAxis' : '',
         ].filter(Boolean);
 
         const imports = additionalImports.length > 0 ?
             `import { ${chartComponent}, ${chartElement}, ${additionalImports.join(', ')} } from "recharts"` :
             `import { ${chartComponent}, ${chartElement} } from "recharts"`;
 
-        const chartImports = chart.displayLegend ?
+        const chartImports = chart.display.displayLegend ?
             `import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent } from "@/components/ui/chart"` :
             `import { ChartConfig, ChartContainer } from "@/components/ui/chart"`;
 
@@ -184,9 +221,9 @@ export default function Component() {
             `<${chartElement} dataKey="${key}" ${chart.chartType === 'line' ? 'stroke' : 'fill'
             }="var(--color-${key})" radius={4} />`
         ).join('\n        ')}
-        ${chart.displayXAxis ? '<XAxis dataKey="label" />' : ''}
-        ${chart.displayYAxis ? '<YAxis stroke="#333" />' : ''}
-        ${chart.displayLegend ? '<ChartLegend content={<ChartLegendContent />} />' : ''}
+        ${(chart.chartType !== 'pie' && chart.chartType !== 'radar' && chart.chartType !== 'radial' && 'displayXAxis' in chart && chart.displayXAxis) ? '<XAxis dataKey="label" />' : ''}
+        ${(chart.chartType !== 'pie' && chart.chartType !== 'radar' && chart.chartType !== 'radial' && 'displayYAxis' in chart && chart.displayYAxis) ? '<YAxis stroke="#333" />' : ''}
+        ${chart.display.displayLegend ? '<ChartLegend content={<ChartLegendContent />} />' : ''}
       </${chartComponent}>
     </ChartContainer>
   )

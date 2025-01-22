@@ -14,7 +14,7 @@ import { ChartView } from "./ChartView"
 import { ChartSettings } from "./ChartSettings"
 import { Chart, DataRow, DataSeries } from "@/types/chart"
 
-const demoString = `{ "chartType": "bar", "data": [ { "label": "Value1", "dataSeries": [ { "dataSeriesLabel": "Category A", "dataSeriesValue": 4 } ] }, { "label": "Value2", "dataSeries": [ { "dataSeriesLabel": "Category A", "dataSeriesValue": 7 } ] }, { "label": "Value3", "dataSeries": [ { "dataSeriesLabel": "Category A", "dataSeriesValue": 2 } ] } ], "displayLegend": true, "displayLabel": true, "displayXAxis": true, "displayYAxis": true, "barChartHorizontal": false, "barChartNegative": false, "ui": { "cartesianGrid": true } }`;
+const demoString = `{ "chartType": "bar", "data": [ { "label": "Value 1", "dataSeries": [ { "dataSeriesLabel": "Category 1", "dataSeriesValue": 4 } ] }, { "label": "Value 2", "dataSeries": [ { "dataSeriesLabel": "Category 1", "dataSeriesValue": 7 } ] }, { "label": "Value 3", "dataSeries": [ { "dataSeriesLabel": "Category 1", "dataSeriesValue": 2 } ] } ], "display.displayLegend": true, "displayLabel": true, "displayXAxis": true, "displayYAxis": true, "barChartHorizontal": false, "barChartNegative": false, "uiBarChartLayout": "vertical", "uiBarChartBarCategoryGap": 10, "uiBarChartBarGap": 5, "uiBarChartBarSize": 20, "uiBarChartStackOffset": "none", "uiBarChartReverseStackOrder": false, "cartesianGrid.enabled": true, "cartesianGrid.horizontal": true, "cartesianGrid.vertical": true, "cartesianGrid.backgroundFill": "#f0f0f0", "cartesianGrid.fillOpacity": 0.5 }`;
 
 export default function ChartBuilder() {
     const [message, setMessage] = useState('')
@@ -90,13 +90,15 @@ export default function ChartBuilder() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        if (message.trim()) {
+        const msg = message;
+        setMessage('');
+        if (msg.trim()) {
             const oldHistory = chatHistory;
-            const newHistory = [...chatHistory, { role: 'user', content: message }];
+            const newHistory = [...chatHistory, { role: 'user', content: msg }];
             setChatHistory(newHistory);
             try {
 
-                console.log(message);
+                console.log(msg);
 
                 const response = await fetch('/api/chartbot', {
                     method: 'POST',
@@ -104,7 +106,7 @@ export default function ChartBuilder() {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        text: message,
+                        text: msg,
                         history: oldHistory // Send existing chat history
                     }),
                 });
@@ -170,8 +172,6 @@ export default function ChartBuilder() {
                 console.error('Error:', error);
             }
 
-            setMessage('')
-
             // Simulate agent response after 1 second
             setTimeout(() => {
                 setIsFullScreen(false)
@@ -213,7 +213,7 @@ export default function ChartBuilder() {
                             initial={{ width: '20%', opacity: 0 }}
                             animate={{ width: '20%', opacity: 1 }}
                             transition={{ duration: 0.3 }}
-                            className="p-4 border-r"
+                            className="border-r"
                         >
                             <ChatInterface
                                 chatHistory={chatHistory}
@@ -239,7 +239,6 @@ export default function ChartBuilder() {
                             initial={{ width: 0 }}
                             animate={{ width: '20%' }}
                             transition={{ duration: 0.5 }}
-                            className="p-4"
                         >
                             <ChartSettings
                                 chart={chart}

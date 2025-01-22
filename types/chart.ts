@@ -22,76 +22,105 @@ export const DataRow = z.object({
     dataSeries: z.array(DataSeries),
 });
 
+const AxisSettings = z.object({
+    enabled: z.boolean(),
+    height: z.number(),
+    orientation: z.enum(['top', 'bottom']),
+    type: z.enum(['number', 'category']),
+    allowDecimals: z.boolean(),
+    tickCount: z.number(),
+    paddingLeft: z.number(),
+    paddingRight: z.number(),
+    tickSize: z.number(),
+    mirror: z.boolean(),
+    reversed: z.boolean(),
+});
+
+const CartesianGridSettings = z.object({
+    enabled: z.boolean(),
+    horizontal: z.boolean(),
+    vertical: z.boolean(),
+    backgroundFill: z.string(),
+    fillOpacity: z.number(),
+});
+
+const DisplaySettings = z.object({
+    displayLegend: z.boolean(),
+    displayLabel: z.boolean(),
+});
+
 // Main Chart Schema
 export const Chart = z.discriminatedUnion('chartType', [
     z.object({
         chartType: z.literal('area'),
         data: z.array(DataRow),
-        displayLegend: z.boolean(),
-        displayLabel: z.boolean(),
-        displayXAxis: z.boolean(),
-        displayYAxis: z.boolean(),
         areaChartStacked: z.boolean(),
-        uiCartesianGridEnabled: z.boolean(),
-        uiCartesianGridHorizontal: z.boolean(),
-        uiCartesianGridVertical: z.boolean(),
-        uiCartesianGridStrokeDasharray: z.string(),
-        uiCartesianGridBackgroundFill: z.string(),
-        // uiCartesianGridFillOpacity: z.number().min(0).max(1)
+        xAxis: AxisSettings,
+        yAxis: AxisSettings,
+        cartesianGrid: CartesianGridSettings,
+        display: DisplaySettings,
     }),
     z.object({
         chartType: z.literal('bar'),
         data: z.array(DataRow),
-        displayLegend: z.boolean(),
-        displayLabel: z.boolean(),
-        displayXAxis: z.boolean(),
-        displayYAxis: z.boolean(),
+        display: DisplaySettings,
         barChartHorizontal: z.boolean(),
-        barChartNegative: z.boolean(),
-        uiCartesianGridEnabled: z.boolean(),
-        uiCartesianGridHorizontal: z.boolean(),
-        uiCartesianGridVertical: z.boolean(),
-        uiCartesianGridStrokeDasharray: z.string(),
-        uiCartesianGridBackgroundFill: z.string(),
-        // uiCartesianGridFillOpacity: z.number().min(0).max(1)
+        barChartNegative: z.boolean().optional(),
+
+        // UI Settings
+
+        // Bar Chart
+        uiBarChartLayout: z.enum(['vertical', 'horizontal']),
+        uiBarChartBarCategoryGap: z.number(),
+        uiBarChartBarGap: z.number(),
+        uiBarChartBarSize: z.number(),
+        uiBarChartStackOffset: z.enum(['expand', 'none', 'wiggle', 'silhouette', 'sign']),
+        uiBarChartReverseStackOrder: z.boolean(),
+
+        xAxis: AxisSettings,
+        yAxis: AxisSettings,
+        cartesianGrid: CartesianGridSettings,
     }),
     z.object({
         chartType: z.literal('line'),
         data: z.array(DataRow),
-        displayLegend: z.boolean(),
-        displayLabel: z.boolean(),
-        displayXAxis: z.boolean(),
-        displayYAxis: z.boolean(),
+        display: DisplaySettings,
         lineChartDots: z.boolean(),
+
+        // UI Settings
+
+        xAxis: AxisSettings,
+        yAxis: AxisSettings,
+        cartesianGrid: CartesianGridSettings,
     }),
     z.object({
         chartType: z.literal('scatter'),
         data: z.array(DataRow),
-        displayLegend: z.boolean(),
-        displayLabel: z.boolean(),
-        displayXAxis: z.boolean(),
-        displayYAxis: z.boolean(),
+        display: DisplaySettings,
         scatterChartThreeDimensions: z.boolean(),
+
+        // UI Settings
+
+        xAxis: AxisSettings,
+        yAxis: AxisSettings,
+        cartesianGrid: CartesianGridSettings,
     }),
     z.object({
         chartType: z.literal('pie'),
         data: z.array(DataRow),
-        displayLegend: z.boolean(),
-        displayLabel: z.boolean(),
+        display: DisplaySettings,
         pieChartDonut: z.boolean(),
     }),
     z.object({
         chartType: z.literal('radar'),
         data: z.array(DataRow),
-        displayLegend: z.boolean(),
-        displayLabel: z.boolean(),
+        display: DisplaySettings,
         radarChartDots: z.boolean(),
     }),
     z.object({
         chartType: z.literal('radial'),
         data: z.array(DataRow),
-        displayLegend: z.boolean(),
-        displayLabel: z.boolean(),
+        display: DisplaySettings,
         radialChartText: z.boolean(),
     }),
 ]);
