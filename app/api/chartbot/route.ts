@@ -52,40 +52,65 @@ function countPropsAndDepth(obj: any, depth = 1): { totalProps: number; maxDepth
     return { totalProps, maxDepth };
 }
 
-// function removeOptionalFields(schema: z.ZodTypeAny): z.ZodTypeAny {
-//     if (schema instanceof z.ZodObject) {
-//         const shape = {};
-//         for (const [key, value] of Object.entries(schema.shape)) {
-//             if (!isOptional(value)) {
-//                 if (value instanceof z.ZodObject) {
-//                     shape[key] = removeOptionalFields(value);
-//                 } else {
-//                     shape[key] = value;
-//                 }
-//             }
-//         }
-//         return z.object(shape);
-//     }
-//     if (schema instanceof z.ZodDiscriminatedUnion) {
-//         const newOptions = schema.options.map(option => {
-//             if (option instanceof z.ZodObject) {
-//                 return removeOptionalFields(option);
-//             }
-//             return option;
-//         });
-//         return z.discriminatedUnion(schema.discriminator, newOptions);
-//     }
-//     return schema;
-// }
+function removeAllOptionalFields(
+    schema: z.ZodTypeAny,
+    visited = new WeakMap<z.ZodTypeAny, z.ZodTypeAny>()
+): z.ZodTypeAny {
+    if (visited.has(schema)) {
+        return visited.get(schema)!;
+    }
 
-// function isOptional(schema: z.ZodTypeAny): boolean {
-//     if (schema instanceof z.ZodOptional) return true;
-//     if (schema instanceof z.ZodObject) {
-//         return Object.values(schema.shape as Record<string, z.ZodTypeAny>).some((field) => isOptional(field));
-//     }
-//     return false;
-// }
+    // If it's an optional or default, unwrap to its inner type.
+    if (schema instanceof z.ZodOptional || schema instanceof z.ZodDefault) {
+        const unwrapped = removeAllOptionalFields(schema._def.innerType, visited);
+        visited.set(schema, unwrapped);
+        return unwrapped;
+    }
 
+    // Remove optional properties from object shapes altogether.
+    if (schema instanceof z.ZodObject) {
+        const shape: Record<string, z.ZodTypeAny> = {};
+        for (const [key, propSchema] of Object.entries(schema.shape)) {
+            // Skip this property if it is optional at the top level
+            if (propSchema instanceof z.ZodOptional || propSchema instanceof z.ZodDefault) {
+                continue;
+            }
+            shape[key] = removeAllOptionalFields(propSchema as z.ZodTypeAny, visited);
+        }
+        const newObj = z.object(shape);
+        visited.set(schema, newObj);
+        return newObj;
+    }
+
+    // Recurse on arrays.
+    if (schema instanceof z.ZodArray) {
+        const arr = z.array(removeAllOptionalFields(schema._def.type, visited));
+        visited.set(schema, arr);
+        return arr;
+    }
+
+    // Recurse on unions.
+    if (schema instanceof z.ZodUnion) {
+        const union = z.union(
+            schema._def.options.map((option: z.ZodTypeAny) => removeAllOptionalFields(option, visited))
+        );
+        visited.set(schema, union);
+        return union;
+    }
+
+    // Recurse on discriminated unions.
+    if (schema instanceof z.ZodDiscriminatedUnion) {
+        const newOptions = schema._def.options.map((option: z.ZodTypeAny) =>
+            removeAllOptionalFields(option, visited)
+        );
+        const newDUnion = z.discriminatedUnion(schema._def.discriminator, newOptions);
+        visited.set(schema, newDUnion);
+        return newDUnion;
+    }
+
+    visited.set(schema, schema);
+    return schema;
+}
 
 async function generateChart(body: { text: string, history?: { role: string, content: string }[] }) {
     const systemPrompt = `You are a detail-oriented data visualization assistant for creating charts based on user prompts. Analyze user requests and generate accurate, structured, and schema-compliant chart configurations. Always ensure you are extracting the data series correctly and entirely. Make sure you do not add more data series than asked.`;
@@ -104,16 +129,13 @@ async function generateChart(body: { text: string, history?: { role: string, con
         messages.push(...(body.history as ChatCompletionMessageParam[]));
     }
 
-
     // Add current message
     messages.push({ role: "user", content: body.text });
-
-    // const cleanedSchema = removeOptionalFields(ChartResponse);
 
     const completion = await openai.beta.chat.completions.parse({
         model: "gpt-4o-mini",
         messages: messages,
-        response_format: zodResponseFormat(ChartResponse, "chart_response"),
+        response_format: zodResponseFormat(removeAllOptionalFields(ChartResponse), "chart_response"),
     });
 
     const { totalProps, maxDepth } = countPropsAndDepth(completion.choices[0].message.parsed);

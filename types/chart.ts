@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-// Chart Types
 export const ChartType = z.enum([
     "area",
     "bar",
@@ -11,7 +10,6 @@ export const ChartType = z.enum([
     "scatter",
 ]);
 
-// Data Structure
 export const DataSeries = z.object({
     dataSeriesLabel: z.string(),
     dataSeriesValue: z.number(),
@@ -23,23 +21,23 @@ export const DataRow = z.object({
 });
 
 const AxisSettings = z.object({
-    enabled: z.boolean(),
-    height: z.number(),
-    orientation: z.enum(['top', 'bottom']),
-    type: z.enum(['number', 'category']),
-    allowDecimals: z.boolean(),
-    tickCount: z.number(),
-    paddingLeft: z.number(),
-    paddingRight: z.number(),
-    tickSize: z.number(),
-    mirror: z.boolean(),
-    reversed: z.boolean(),
+    enabled: z.boolean().default(true),
+    height: z.number().optional(),
+    orientation: z.enum(['top', 'bottom']).optional().default('bottom'),
+    type: z.enum(['number', 'category']).optional().default('category'),
+    allowDecimals: z.boolean().optional().default(true),
+    tickCount: z.number().optional(),
+    paddingLeft: z.number().optional(),
+    paddingRight: z.number().optional(),
+    tickSize: z.number().optional(),
+    mirror: z.boolean().optional().default(false),
+    reversed: z.boolean().optional().default(false),
 });
 
 const CartesianGridSettings = z.object({
     enabled: z.boolean(),
-    horizontal: z.boolean(),
-    vertical: z.boolean(),
+    horizontal: z.boolean().optional(),
+    vertical: z.boolean().optional(),
     backgroundFill: z.string(),
     fillOpacity: z.number(),
 });
@@ -70,12 +68,12 @@ export const Chart = z.discriminatedUnion('chartType', [
         // UI Settings
 
         // Bar Chart
-        uiBarChartLayout: z.enum(['vertical', 'horizontal']),
-        uiBarChartBarCategoryGap: z.number(),
-        uiBarChartBarGap: z.number(),
-        uiBarChartBarSize: z.number(),
-        uiBarChartStackOffset: z.enum(['expand', 'none', 'wiggle', 'silhouette', 'sign']),
-        uiBarChartReverseStackOrder: z.boolean(),
+        uiBarChartLayout: z.enum(['vertical', 'horizontal']).optional(),
+        uiBarChartBarCategoryGap: z.number().optional(),
+        uiBarChartBarGap: z.number().optional(),
+        uiBarChartBarSize: z.number().optional(),
+        uiBarChartStackOffset: z.enum(['expand', 'none', 'wiggle', 'silhouette', 'sign']).optional(),
+        uiBarChartReverseStackOrder: z.boolean().optional(),
 
         xAxis: AxisSettings,
         yAxis: AxisSettings,
