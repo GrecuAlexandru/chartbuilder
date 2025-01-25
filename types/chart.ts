@@ -35,16 +35,16 @@ const AxisSettings = z.object({
 });
 
 const CartesianGridSettings = z.object({
-    enabled: z.boolean(),
-    horizontal: z.boolean().optional(),
-    vertical: z.boolean().optional(),
+    enabled: z.boolean().default(true),
+    horizontal: z.boolean().optional().default(true),
+    vertical: z.boolean().optional().default(true),
     backgroundFill: z.string(),
     fillOpacity: z.number(),
 });
 
 const DisplaySettings = z.object({
-    displayLegend: z.boolean(),
-    displayLabel: z.boolean(),
+    displayLegend: z.boolean().default(true),
+    displayLabel: z.boolean().default(true),
 });
 
 // Main Chart Schema
@@ -68,12 +68,12 @@ export const Chart = z.discriminatedUnion('chartType', [
         // UI Settings
 
         // Bar Chart
-        uiBarChartLayout: z.enum(['vertical', 'horizontal']).optional(),
+        uiBarChartLayout: z.enum(['vertical', 'horizontal']).optional().default('vertical'),
         uiBarChartBarCategoryGap: z.number().optional(),
         uiBarChartBarGap: z.number().optional(),
         uiBarChartBarSize: z.number().optional(),
-        uiBarChartStackOffset: z.enum(['expand', 'none', 'wiggle', 'silhouette', 'sign']).optional(),
-        uiBarChartReverseStackOrder: z.boolean().optional(),
+        uiBarChartStackOffset: z.enum(['expand', 'none', 'wiggle', 'silhouette', 'sign']).optional().default('none'),
+        uiBarChartReverseStackOrder: z.boolean().optional().default(false),
 
         xAxis: AxisSettings,
         yAxis: AxisSettings,
@@ -83,7 +83,7 @@ export const Chart = z.discriminatedUnion('chartType', [
         chartType: z.literal('line'),
         data: z.array(DataRow),
         display: DisplaySettings,
-        lineChartDots: z.boolean(),
+        lineChartDots: z.boolean().default(false),
 
         // UI Settings
 
@@ -95,7 +95,7 @@ export const Chart = z.discriminatedUnion('chartType', [
         chartType: z.literal('scatter'),
         data: z.array(DataRow),
         display: DisplaySettings,
-        scatterChartThreeDimensions: z.boolean(),
+        scatterChartThreeDimensions: z.boolean().default(false),
 
         // UI Settings
 
@@ -107,19 +107,19 @@ export const Chart = z.discriminatedUnion('chartType', [
         chartType: z.literal('pie'),
         data: z.array(DataRow),
         display: DisplaySettings,
-        pieChartDonut: z.boolean(),
+        pieChartDonut: z.boolean().default(false),
     }),
     z.object({
         chartType: z.literal('radar'),
         data: z.array(DataRow),
         display: DisplaySettings,
-        radarChartDots: z.boolean(),
+        radarChartDots: z.boolean().default(false),
     }),
     z.object({
         chartType: z.literal('radial'),
         data: z.array(DataRow),
         display: DisplaySettings,
-        radialChartText: z.boolean(),
+        radialChartText: z.boolean().default(false),
     }),
 ]);
 
