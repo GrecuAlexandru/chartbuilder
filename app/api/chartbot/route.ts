@@ -4,12 +4,12 @@ import { zodResponseFormat } from "openai/helpers/zod";
 import { NextRequest, NextResponse } from 'next/server';
 import { ChatCompletionMessageParam } from "openai/resources/chat";
 import { createClient } from '@/utils/supabase/server';
-import { Chart, ChartType, DataSeries, DataRow } from '@/types/chart';
+import { ApiChart, ChartType } from "@/types/apichart";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const ChartResponse = z.object({
-    chart: Chart,
+    chart: ApiChart,
 });
 
 const ChartNoData = z.object({
@@ -141,6 +141,8 @@ async function generateChart(body: { text: string, history?: { role: string, con
     const { totalProps, maxDepth } = countPropsAndDepth(completion.choices[0].message.parsed);
     console.log("Properties:", totalProps, "Levels:", maxDepth);
 
+
+    console.log(completion.usage);
 
     return completion.choices[0].message.parsed;
 }

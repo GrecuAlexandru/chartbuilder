@@ -60,7 +60,6 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                             layout={chart.uiBarChartLayout}
                             barCategoryGap={chart.uiBarChartBarCategoryGap}
                             barGap={chart.uiBarChartBarGap}
-                            barSize={chart.uiBarChartBarSize}
                             stackOffset={chart.uiBarChartStackOffset}
                             reverseStackOrder={chart.uiBarChartReverseStackOrder}
                         >

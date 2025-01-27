@@ -1,5 +1,7 @@
-/* Chart with default values */
-
+/*
+    Chart without default values. It doesn't work otherwise.
+    The API doesn't replace values that have `.default()`.
+*/
 
 import { z } from "zod";
 
@@ -24,34 +26,34 @@ export const DataRow = z.object({
 });
 
 const AxisSettings = z.object({
-    enabled: z.boolean().default(true),
-    height: z.number().optional().default(30),
-    orientation: z.enum(['top', 'bottom']).optional().default('bottom'),
-    type: z.enum(['number', 'category']).optional().default('category'),
-    allowDecimals: z.boolean().optional().default(true),
-    tickCount: z.number().optional().default(5),
-    paddingLeft: z.number().optional().default(0),
-    paddingRight: z.number().optional().default(0),
-    tickSize: z.number().optional().default(6),
-    mirror: z.boolean().optional().default(false),
-    reversed: z.boolean().optional().default(false),
+    enabled: z.boolean(),
+    height: z.number().optional(),
+    orientation: z.enum(['top', 'bottom']).optional(),
+    type: z.enum(['number', 'category']).optional(),
+    allowDecimals: z.boolean().optional(),
+    tickCount: z.number().optional(),
+    paddingLeft: z.number().optional(),
+    paddingRight: z.number().optional(),
+    tickSize: z.number().optional(),
+    mirror: z.boolean().optional(),
+    reversed: z.boolean().optional(),
 });
 
 const CartesianGridSettings = z.object({
-    enabled: z.boolean().default(true),
-    horizontal: z.boolean().optional().default(true),
-    vertical: z.boolean().optional().default(true),
-    backgroundFill: z.string().default('#fff'),
-    fillOpacity: z.number().optional().default(1),
+    enabled: z.boolean(),
+    horizontal: z.boolean().optional(),
+    vertical: z.boolean().optional(),
+    backgroundFill: z.string(),
+    fillOpacity: z.number().optional(),
 });
 
 const DisplaySettings = z.object({
-    displayLegend: z.boolean().default(true),
-    displayLabel: z.boolean().default(true),
+    displayLegend: z.boolean(),
+    displayLabel: z.boolean(),
 });
 
 // Main Chart Schema
-export const Chart = z.discriminatedUnion('chartType', [
+export const ApiChart = z.discriminatedUnion('chartType', [
     z.object({
         chartType: z.literal('area'),
         data: z.array(DataRow),
@@ -71,11 +73,11 @@ export const Chart = z.discriminatedUnion('chartType', [
         // UI Settings
 
         // Bar Chart
-        uiBarChartLayout: z.enum(['vertical', 'horizontal']).optional().default('horizontal'),
-        uiBarChartBarCategoryGap: z.number().optional().default(10),
-        uiBarChartBarGap: z.number().optional().default(4),
-        uiBarChartStackOffset: z.enum(['expand', 'none', 'wiggle', 'silhouette', 'sign']).optional().default('none'),
-        uiBarChartReverseStackOrder: z.boolean().optional().default(false),
+        uiBarChartLayout: z.enum(['vertical', 'horizontal']).optional(),
+        uiBarChartBarCategoryGap: z.number().optional(),
+        uiBarChartBarGap: z.number().optional(),
+        uiBarChartStackOffset: z.enum(['expand', 'none', 'wiggle', 'silhouette', 'sign']).optional(),
+        uiBarChartReverseStackOrder: z.boolean().optional(),
 
         xAxis: AxisSettings,
         yAxis: AxisSettings,
@@ -85,7 +87,7 @@ export const Chart = z.discriminatedUnion('chartType', [
         chartType: z.literal('line'),
         data: z.array(DataRow),
         display: DisplaySettings,
-        lineChartDots: z.boolean().default(false),
+        lineChartDots: z.boolean(),
 
         // UI Settings
 
@@ -97,7 +99,7 @@ export const Chart = z.discriminatedUnion('chartType', [
         chartType: z.literal('scatter'),
         data: z.array(DataRow),
         display: DisplaySettings,
-        scatterChartThreeDimensions: z.boolean().default(false),
+        scatterChartThreeDimensions: z.boolean(),
 
         // UI Settings
 
@@ -109,23 +111,24 @@ export const Chart = z.discriminatedUnion('chartType', [
         chartType: z.literal('pie'),
         data: z.array(DataRow),
         display: DisplaySettings,
-        pieChartDonut: z.boolean().default(false),
+        pieChartDonut: z.boolean(),
     }),
     z.object({
         chartType: z.literal('radar'),
         data: z.array(DataRow),
         display: DisplaySettings,
-        radarChartDots: z.boolean().default(false),
+        radarChartDots: z.boolean(),
     }),
     z.object({
         chartType: z.literal('radial'),
         data: z.array(DataRow),
         display: DisplaySettings,
-        radialChartText: z.boolean().default(false),
+        radialChartText: z.boolean(),
     }),
 ]);
+
 
 export type ChartType = z.infer<typeof ChartType>;
 export type DataSeries = z.infer<typeof DataSeries>;
 export type DataRow = z.infer<typeof DataRow>;
-export type Chart = z.infer<typeof Chart>;
+export type ApiChart = z.infer<typeof ApiChart>;

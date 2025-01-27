@@ -80,16 +80,6 @@ export function ChartSettings({ chart, setChart }: ChartSettingsProps) {
                         />
                     </div>
                     <div>
-                        <Label htmlFor="barSize">Bar Size</Label>
-                        <Input
-                            id="barSize"
-                            type="text"
-                            value={chart.uiBarChartBarSize ?? ''}
-                            onChange={(e) => setChart({ ...chart, uiBarChartBarSize: parseInt(e.target.value) })}
-                            className="w-full"
-                        />
-                    </div>
-                    <div>
                         <Label htmlFor="stackOffset">Stack Offset</Label>
                         <select
                             id="stackOffset"

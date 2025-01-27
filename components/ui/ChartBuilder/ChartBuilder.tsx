@@ -26,7 +26,8 @@ export default function ChartBuilder() {
 
     const handleDemo = () => {
         const data = { chart: JSON.parse(demoString) };
-        setChart(data.chart);
+        const validatedChart = Chart.parse(data.chart);
+        setChart(validatedChart);
 
         if (data.chart.chartType === 'pie') {
             const chData: { label: string;[key: string]: any }[] = data.chart.data.map((row: zInfer<typeof DataRow>) => {
@@ -112,7 +113,8 @@ export default function ChartBuilder() {
                 });
 
                 const data = await response.json();
-                setChart(data.chart);
+                const validatedChart = Chart.parse(data.chart);
+                setChart(validatedChart);
                 console.log(data);
 
 
