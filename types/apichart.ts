@@ -79,6 +79,9 @@ export const ApiChart = z.discriminatedUnion('chartType', [
         uiBarChartStackOffset: z.enum(['expand', 'none', 'wiggle', 'silhouette', 'sign']).optional(),
         uiBarChartReverseStackOrder: z.boolean().optional(),
 
+        // Bar
+        uiBarBackgroundFill: z.string().optional(),
+
         xAxis: AxisSettings,
         yAxis: AxisSettings,
         cartesianGrid: CartesianGridSettings,

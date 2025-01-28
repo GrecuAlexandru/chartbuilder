@@ -81,6 +81,9 @@ export const Chart = z.discriminatedUnion('chartType', [
         uiBarChartStackOffset: z.enum(['expand', 'none', 'wiggle', 'silhouette', 'sign']).optional().default('none'),
         uiBarChartReverseStackOrder: z.boolean().optional().default(false),
 
+        // Bar
+        uiBarBackgroundFill: z.string().optional().default('false'),
+
         xAxis: AxisSettings.default({
             type: 'category'
         }),

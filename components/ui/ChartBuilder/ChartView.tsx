@@ -49,10 +49,30 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
     const renderChart = () => {
         if (!chart) return <div>Loading...</div>;
 
+        const firstLabel = chartData[0]?.label;
+        if (['bar', 'area', 'line', 'scatter'].includes(chart.chartType) && 'xAxis' in chart && 'yAxis' in chart) {
+            if (Number.isInteger(Number(firstLabel))) {
+                if (chart.chartType === 'bar' && chart.uiBarChartLayout === 'horizontal') {
+                    chart.xAxis.type = 'number';
+                    chart.yAxis.type = 'category';
+                } else if (chart.chartType === 'bar' && chart.uiBarChartLayout === 'vertical') {
+                    chart.xAxis.type = 'category';
+                    chart.yAxis.type = 'number';
+                }
+            } else {
+                if (chart.chartType === 'bar' && chart.uiBarChartLayout === 'horizontal') {
+                    chart.xAxis.type = 'category';
+                    chart.yAxis.type = 'number';
+                } else if (chart.chartType === 'bar' && chart.uiBarChartLayout === 'vertical') {
+                    chart.xAxis.type = 'number';
+                    chart.yAxis.type = 'category';
+                }
+            }
+        }
+
         switch (chart.chartType) {
             case 'bar':
                 const BarChart = dynamic(() => import("recharts").then(mod => mod.BarChart));
-                const isHorizontal = chart.uiBarChartLayout === 'horizontal';
                 return (
                     <ChartContainer ref={ref} config={chartConfig} className="w-full p-4 pb-8 bg-white">
                         <BarChart
@@ -107,11 +127,11 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                             {chart.xAxis.enabled && chart.uiBarChartLayout == 'vertical' && (
                                 <XAxis
                                     // type="number"
+                                    type={chart.xAxis.type}
                                     stroke="#333"
 
                                     width={chart.yAxis.height}
                                     orientation={chart.xAxis.orientation}
-                                    type={chart.xAxis.type}
                                     allowDecimals={chart.xAxis.allowDecimals}
                                     tickCount={chart.xAxis.tickCount}
                                     padding={{ left: chart.xAxis.paddingLeft, right: chart.xAxis.paddingRight }}
@@ -123,12 +143,12 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                             {chart.yAxis.enabled && chart.uiBarChartLayout == 'vertical' && (
                                 <YAxis
                                     dataKey="label"
+                                    type={chart.yAxis.type}
                                     // type="category"
                                     stroke="#333"
 
                                     width={chart.yAxis.height}
                                     orientation={chart.yAxis.orientation == 'bottom' ? 'left' : 'right'}
-                                    type={chart.yAxis.type}
                                     allowDecimals={chart.yAxis.allowDecimals}
                                     tickCount={chart.yAxis.tickCount}
                                     padding={{ top: chart.yAxis.paddingLeft, bottom: chart.yAxis.paddingRight }}
@@ -138,7 +158,13 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                 />
                             )}
                             {Object.keys(chartConfig).map((key, index) => (
-                                <Bar isAnimationActive={false} key={index} dataKey={key} fill={chartConfig[key].color} />
+                                <Bar
+                                    key={index}
+                                    dataKey={key}
+                                    fill={chartConfig[key].color}
+                                    isAnimationActive={false}
+                                    background={chart.uiBarBackgroundFill == 'false' ? false : { fill: chart.uiBarBackgroundFill }}
+                                />
                             ))}
                             {chart.display.displayLegend && <ChartLegend content={<ChartLegendContent />} />}
                         </BarChart>

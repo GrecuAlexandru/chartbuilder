@@ -187,17 +187,6 @@ export function ChartSettings({ chart, setChart }: ChartSettingsProps) {
                                 <option value="bottom">Bottom</option>
                             </select>
                         </div>
-                        <div>
-                            <Label>Type</Label>
-                            <select
-                                value={chart.xAxis.type ?? 'category'}
-                                onChange={(e) => setChart({ ...chart, xAxis: { ...chart.xAxis, type: e.target.value as 'number' | 'category' } })}
-                                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                            >
-                                <option value="number">Number</option>
-                                <option value="category">Category</option>
-                            </select>
-                        </div>
                         <div className="flex items-center justify-between">
                             <Label>Allow Decimals</Label>
                             <Switch
@@ -285,17 +274,6 @@ export function ChartSettings({ chart, setChart }: ChartSettingsProps) {
                                 <option value="bottom">Left</option>
                             </select>
                         </div>
-                        <div>
-                            <Label>Type</Label>
-                            <select
-                                value={chart.yAxis.type ?? 'category'}
-                                onChange={(e) => setChart({ ...chart, yAxis: { ...chart.yAxis, type: e.target.value as 'number' | 'category' } })}
-                                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                            >
-                                <option value="number">Number</option>
-                                <option value="category">Category</option>
-                            </select>
-                        </div>
                         <div className="flex items-center justify-between">
                             <Label>Allow Decimals</Label>
                             <Switch
@@ -349,6 +327,21 @@ export function ChartSettings({ chart, setChart }: ChartSettingsProps) {
                                 onCheckedChange={(checked) => setChart({ ...chart, yAxis: { ...chart.yAxis, reversed: checked } })}
                             />
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {chart.chartType === 'bar' && (
+                <div className="space-y-4 mb-8">
+                    <h3 className="text-lg font-semibold">Bar Settings</h3>
+                    <div>
+                        <Label>Background Fill</Label>
+                        <Input
+                            type="color"
+                            value={chart.uiBarBackgroundFill ?? '#ffffff'}
+                            onChange={(e) => setChart({ ...chart, uiBarBackgroundFill: e.target.value })}
+                            className="w-full h-10"
+                        />
                     </div>
                 </div>
             )}
