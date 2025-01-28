@@ -9,6 +9,7 @@ interface ChatInterfaceProps {
     setMessage: (message: string) => void
     handleSubmit: (e: React.FormEvent) => void
     handleDemo: () => void;
+    handleDemoRequest: () => void;
 }
 
 export function ChatInterface({
@@ -16,7 +17,8 @@ export function ChatInterface({
     message,
     setMessage,
     handleSubmit,
-    handleDemo
+    handleDemo,
+    handleDemoRequest
 }: ChatInterfaceProps) {
     return (
         <div className="flex flex-col h-full">
@@ -41,9 +43,14 @@ export function ChatInterface({
                     <Send className="h-4 w-4" />
                 </Button>
                 {chatHistory.length === 0 && (
-                    <Button type="button" onClick={handleDemo} variant="outline">
-                        Demo
-                    </Button>
+                    <div className="text-center text-sm text-gray-500">
+                        <Button type="button" className="ml-4 mr-2" onClick={handleDemo} variant="outline">
+                            Demo
+                        </Button>
+                        <Button type="button" className="ml-2" onClick={handleDemoRequest} variant="outline">
+                            Demo Request
+                        </Button>
+                    </div>
                 )}
             </form>
         </div>

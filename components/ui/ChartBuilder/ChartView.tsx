@@ -52,6 +52,7 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
         switch (chart.chartType) {
             case 'bar':
                 const BarChart = dynamic(() => import("recharts").then(mod => mod.BarChart));
+                const isHorizontal = chart.uiBarChartLayout === 'horizontal';
                 return (
                     <ChartContainer ref={ref} config={chartConfig} className="w-full p-4 pb-8 bg-white">
                         <BarChart
@@ -74,31 +75,70 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                             {chart.xAxis.enabled && chart.uiBarChartLayout == 'horizontal' && (
                                 <XAxis
                                     dataKey="label"
-                                    type="category"
                                     stroke="#333"
+
+                                    height={chart.xAxis.height}
+                                    orientation={chart.xAxis.orientation}
+                                    type={chart.xAxis.type}
+                                    allowDecimals={chart.xAxis.allowDecimals}
+                                    tickCount={chart.xAxis.tickCount}
+                                    padding={{ left: chart.xAxis.paddingLeft, right: chart.xAxis.paddingRight }}
+                                    tickSize={chart.xAxis.tickSize}
+                                    mirror={chart.xAxis.mirror}
+                                    reversed={chart.xAxis.reversed}
                                 />
                             )}
                             {chart.yAxis.enabled && chart.uiBarChartLayout == 'horizontal' && (
                                 <YAxis
-                                    type="number"
+                                    // type="number"
                                     stroke="#333"
+
+                                    width={chart.yAxis.height}
+                                    orientation={chart.yAxis.orientation == 'bottom' ? 'left' : 'right'}
+                                    type={chart.yAxis.type}
+                                    allowDecimals={chart.yAxis.allowDecimals}
+                                    tickCount={chart.yAxis.tickCount}
+                                    padding={{ top: chart.yAxis.paddingLeft, bottom: chart.yAxis.paddingRight }}
+                                    tickSize={chart.yAxis.tickSize}
+                                    mirror={chart.yAxis.mirror}
+                                    reversed={chart.yAxis.reversed}
                                 />
                             )}
                             {chart.xAxis.enabled && chart.uiBarChartLayout == 'vertical' && (
                                 <XAxis
-                                    type="number"
+                                    // type="number"
                                     stroke="#333"
+
+                                    width={chart.yAxis.height}
+                                    orientation={chart.xAxis.orientation}
+                                    type={chart.xAxis.type}
+                                    allowDecimals={chart.xAxis.allowDecimals}
+                                    tickCount={chart.xAxis.tickCount}
+                                    padding={{ left: chart.xAxis.paddingLeft, right: chart.xAxis.paddingRight }}
+                                    tickSize={chart.xAxis.tickSize}
+                                    mirror={chart.xAxis.mirror}
+                                    reversed={chart.xAxis.reversed}
                                 />
                             )}
                             {chart.yAxis.enabled && chart.uiBarChartLayout == 'vertical' && (
                                 <YAxis
                                     dataKey="label"
-                                    type="category"
+                                    // type="category"
                                     stroke="#333"
+
+                                    width={chart.yAxis.height}
+                                    orientation={chart.yAxis.orientation == 'bottom' ? 'left' : 'right'}
+                                    type={chart.yAxis.type}
+                                    allowDecimals={chart.yAxis.allowDecimals}
+                                    tickCount={chart.yAxis.tickCount}
+                                    padding={{ top: chart.yAxis.paddingLeft, bottom: chart.yAxis.paddingRight }}
+                                    tickSize={chart.yAxis.tickSize}
+                                    mirror={chart.yAxis.mirror}
+                                    reversed={chart.yAxis.reversed}
                                 />
                             )}
                             {Object.keys(chartConfig).map((key, index) => (
-                                <Bar key={index} dataKey={key} fill={chartConfig[key].color} />
+                                <Bar isAnimationActive={false} key={index} dataKey={key} fill={chartConfig[key].color} />
                             ))}
                             {chart.display.displayLegend && <ChartLegend content={<ChartLegendContent />} />}
                         </BarChart>

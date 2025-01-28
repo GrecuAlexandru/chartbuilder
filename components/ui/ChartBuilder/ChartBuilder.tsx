@@ -24,6 +24,21 @@ export default function ChartBuilder() {
     const [chartData, setChartData] = useState<{ label: string;[key: string]: any }[]>([])
     const [chartConfig, setChartConfig] = useState<ChartConfig>({})
 
+    console.log(Chart);
+
+    const handleDemoRequest = () => {
+        const demoMessage = 'Bar chart with 3 random values';
+        setMessage(demoMessage);
+
+        const event = {
+            preventDefault: () => { },
+        } as React.FormEvent;
+
+        // Pass message directly instead of relying on state
+        handleSubmit(event, demoMessage);
+    }
+
+
     const handleDemo = () => {
         const data = { chart: JSON.parse(demoString) };
         const validatedChart = Chart.parse(data.chart);
@@ -89,9 +104,14 @@ export default function ChartBuilder() {
         }, 1000)
     }
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        const msg = message;
+    const handleSubmit = async (e: React.FormEvent, forcedMessage?: string) => {
+        e.preventDefault();
+        const messageToUse = forcedMessage || message;
+
+        if (!messageToUse.trim()) return;
+
+        const msg = messageToUse;
+        console.log("msg", msg);
         setMessage('');
         if (msg.trim()) {
             const oldHistory = chatHistory;
@@ -201,6 +221,7 @@ export default function ChartBuilder() {
                             setMessage={setMessage}
                             handleSubmit={handleSubmit}
                             handleDemo={handleDemo}
+                            handleDemoRequest={handleDemoRequest}
                         />
                     </div>
                 )}
@@ -223,6 +244,7 @@ export default function ChartBuilder() {
                                 setMessage={setMessage}
                                 handleSubmit={handleSubmit}
                                 handleDemo={handleDemo}
+                                handleDemoRequest={handleDemoRequest}
                             />
                         </motion.div>
                         <motion.div

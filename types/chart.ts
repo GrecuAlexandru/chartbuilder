@@ -27,7 +27,7 @@ const AxisSettings = z.object({
     enabled: z.boolean().default(true),
     height: z.number().optional().default(30),
     orientation: z.enum(['top', 'bottom']).optional().default('bottom'),
-    type: z.enum(['number', 'category']).optional().default('category'),
+    type: z.enum(['number', 'category']).optional(),
     allowDecimals: z.boolean().optional().default(true),
     tickCount: z.number().optional().default(5),
     paddingLeft: z.number().optional().default(0),
@@ -56,8 +56,12 @@ export const Chart = z.discriminatedUnion('chartType', [
         chartType: z.literal('area'),
         data: z.array(DataRow),
         areaChartStacked: z.boolean(),
-        xAxis: AxisSettings,
-        yAxis: AxisSettings,
+        xAxis: AxisSettings.default({
+            type: 'category'
+        }),
+        yAxis: AxisSettings.default({
+            type: 'number'
+        }),
         cartesianGrid: CartesianGridSettings,
         display: DisplaySettings,
     }),
@@ -77,8 +81,12 @@ export const Chart = z.discriminatedUnion('chartType', [
         uiBarChartStackOffset: z.enum(['expand', 'none', 'wiggle', 'silhouette', 'sign']).optional().default('none'),
         uiBarChartReverseStackOrder: z.boolean().optional().default(false),
 
-        xAxis: AxisSettings,
-        yAxis: AxisSettings,
+        xAxis: AxisSettings.default({
+            type: 'category'
+        }),
+        yAxis: AxisSettings.default({
+            type: 'number'
+        }),
         cartesianGrid: CartesianGridSettings,
     }),
     z.object({
@@ -89,8 +97,12 @@ export const Chart = z.discriminatedUnion('chartType', [
 
         // UI Settings
 
-        xAxis: AxisSettings,
-        yAxis: AxisSettings,
+        xAxis: AxisSettings.default({
+            type: 'category'
+        }),
+        yAxis: AxisSettings.default({
+            type: 'number'
+        }),
         cartesianGrid: CartesianGridSettings,
     }),
     z.object({
@@ -101,8 +113,12 @@ export const Chart = z.discriminatedUnion('chartType', [
 
         // UI Settings
 
-        xAxis: AxisSettings,
-        yAxis: AxisSettings,
+        xAxis: AxisSettings.default({
+            type: 'category'
+        }),
+        yAxis: AxisSettings.default({
+            type: 'number'
+        }),
         cartesianGrid: CartesianGridSettings,
     }),
     z.object({
