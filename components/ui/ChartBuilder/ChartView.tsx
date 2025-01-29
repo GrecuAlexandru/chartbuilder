@@ -183,11 +183,62 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                 const AreaChart = dynamic(() => import("recharts").then(mod => mod.AreaChart));
                 return (
                     <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
-                        <AreaChart accessibilityLayer data={chartData}>
-                            {chart.xAxis.enabled && <XAxis dataKey="label" />}
-                            {chart.yAxis.enabled && <YAxis stroke="#333" />}
+                        <AreaChart
+                            accessibilityLayer
+                            data={chartData}
+                            stackOffset={chart.uiAreaChartStackOffset}
+                        >
+                            {chart.cartesianGrid.enabled && (
+                                <CartesianGrid
+                                    horizontal={chart.cartesianGrid.horizontal ?? true}
+                                    vertical={chart.cartesianGrid.vertical ?? true}
+                                    fill={chart.cartesianGrid.backgroundFill}
+                                    fillOpacity={chart.cartesianGrid.fillOpacity}
+                                />
+                            )}
+                            {chart.xAxis.enabled && (
+                                <XAxis
+                                    dataKey="label"
+                                    stroke="#333"
+
+                                    height={chart.xAxis.height}
+                                    orientation={chart.xAxis.orientation}
+                                    type={chart.xAxis.type}
+                                    allowDecimals={chart.xAxis.allowDecimals}
+                                    tickCount={chart.xAxis.tickCount}
+                                    padding={{ left: chart.xAxis.paddingLeft, right: chart.xAxis.paddingRight }}
+                                    tickSize={chart.xAxis.tickSize}
+                                    mirror={chart.xAxis.mirror}
+                                    reversed={chart.xAxis.reversed}
+                                />
+                            )}
+                            {chart.yAxis.enabled && (
+                                <YAxis
+                                    // type="number"
+                                    stroke="#333"
+
+                                    width={chart.yAxis.height}
+                                    orientation={chart.yAxis.orientation == 'bottom' ? 'left' : 'right'}
+                                    type={chart.yAxis.type}
+                                    allowDecimals={chart.yAxis.allowDecimals}
+                                    tickCount={chart.yAxis.tickCount}
+                                    padding={{ top: chart.yAxis.paddingLeft, bottom: chart.yAxis.paddingRight }}
+                                    tickSize={chart.yAxis.tickSize}
+                                    mirror={chart.yAxis.mirror}
+                                    reversed={chart.yAxis.reversed}
+                                />
+                            )}
                             {Object.keys(chartConfig).map((key, index) => (
-                                <Area key={index} dataKey={key} fill={chartConfig[key].color} />
+                                <Area
+                                    key={index}
+                                    dataKey={key}
+                                    fill={chartConfig[key].color}
+                                    isAnimationActive={false}
+                                    type={chart.uiAreaType}
+                                    stroke={chart.uiAreaStroke}
+                                    strokeWidth={chart.uiAreaStrokeWidth}
+                                    connectNulls={chart.uiAreaConnectNulls}
+                                />
                             ))}
                             {chart.legend.enabled &&
                                 <ChartLegend

@@ -45,9 +45,69 @@ export function ChartSettings({ chart, setChart }: ChartSettingsProps) {
                 </div>
             </div>
 
+            {chart.chartType === 'area' && (
+                <div className="space-y-4 mt-4 mb-8">
+                    <h1 className="text-2xl font-semibold">Area Chart Settings</h1>
+                    <div>
+                        <Label htmlFor="stackOffset">Stack Offset</Label>
+                        <select
+                            id="stackOffset"
+                            value={chart.uiAreaChartStackOffset ?? 'none'}
+                            onChange={(e) => setChart({ ...chart, uiAreaChartStackOffset: e.target.value as any })}
+                            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                        >
+                            <option value="expand">Expand</option>
+                            <option value="none">None</option>
+                            <option value="wiggle">Wiggle</option>
+                            <option value="silhouette">Silhouette</option>
+                        </select>
+                    </div>
+                    <div>
+                        <Label htmlFor="areaType">Area Type</Label>
+                        <select
+                            id="areaType"
+                            value={chart.uiAreaType ?? 'linear'}
+                            onChange={(e) => setChart({ ...chart, uiAreaType: e.target.value as any })}
+                            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                        >
+                            {['basis', 'basisClosed', 'basisOpen', 'bumpX', 'bumpY', 'bump', 'linear', 'linearClosed', 'natural', 'monotoneX', 'monotoneY', 'monotone', 'step', 'stepBefore', 'stepAfter'].map(type => (
+                                <option key={type} value={type}>{type}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div>
+                        <Label htmlFor="areaStroke">Stroke Color</Label>
+                        <Input
+                            id="areaStroke"
+                            type="color"
+                            value={chart.uiAreaStroke ?? '#000000'}
+                            onChange={(e) => setChart({ ...chart, uiAreaStroke: e.target.value })}
+                            className="w-full h-10"
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="strokeWidth">Stroke Width</Label>
+                        <Input
+                            id="strokeWidth"
+                            type="number"
+                            value={chart.uiAreaStrokeWidth ?? 1}
+                            onChange={(e) => setChart({ ...chart, uiAreaStrokeWidth: parseInt(e.target.value) })}
+                        />
+                    </div>
+                    <div className="flex items-center justify-between">
+                        <Label htmlFor="connectNulls">Connect Nulls</Label>
+                        <Switch
+                            id="connectNulls"
+                            checked={chart.uiAreaConnectNulls ?? false}
+                            onCheckedChange={(checked) => setChart({ ...chart, uiAreaConnectNulls: checked })}
+                        />
+                    </div>
+                </div>
+            )}
+
             {chart.chartType === 'bar' && (
                 <div className="space-y-4 mt-4 mb-8">
-                    <h3 className="text-lg font-semibold">Bar Chart Settings</h3>
+                    <h1 className="text-2xl font-semibold">Bar Chart Settings</h1>
                     <div>
                         <Label htmlFor="layout">Layout</Label>
                         <select
@@ -108,7 +168,7 @@ export function ChartSettings({ chart, setChart }: ChartSettingsProps) {
 
             {chart.chartType == 'bar' && (
                 <div className="space-y-4 mb-8">
-                    <h3 className="text-lg font-semibold">Cartesian Grid Settings</h3>
+                    <h1 className="text-2xl font-semibold">Cartesian Grid Settings</h1>
                     <div className="flex items-center justify-between">
                         <label className="text-sm font-medium text-gray-700">Enable Grid</label>
                         <Switch
@@ -158,9 +218,9 @@ export function ChartSettings({ chart, setChart }: ChartSettingsProps) {
                 </div>
             )}
 
-            {chart.chartType === 'bar' && (
+            {chart.chartType === 'bar' || chart.chartType === 'area' && (
                 <div className="space-y-4 mb-8">
-                    <h3 className="text-lg font-semibold">X Axis Settings</h3>
+                    <h1 className="text-2xl font-semibold">X Axis Settings</h1>
                     <div className="flex items-center justify-between">
                         <Label>Enable X Axis</Label>
                         <Switch
@@ -247,7 +307,23 @@ export function ChartSettings({ chart, setChart }: ChartSettingsProps) {
 
             {chart.chartType === 'bar' && (
                 <div className="space-y-4 mb-8">
-                    <h3 className="text-lg font-semibold">Y Axis Settings</h3>
+                    <h1 className="text-2xl font-semibold">Bar Settings</h1>
+                    <div>
+                        <Label>Background Fill</Label>
+                        <Input
+                            type="color"
+                            value={chart.uiBarBackgroundFill ?? chart.cartesianGrid.backgroundFill ?? '#ffffff'}
+                            onChange={(e) => setChart({ ...chart, uiBarBackgroundFill: e.target.value })}
+                            className="w-full h-10"
+                        />
+                        <Button onClick={() => setChart({ ...chart, uiBarBackgroundFill: chart.cartesianGrid.backgroundFill ?? '#ffffff' })} className="mt-2">Clear</Button>
+                    </div>
+                </div>
+            )}
+
+            {chart.chartType === 'bar' || chart.chartType === 'area' && (
+                <div className="space-y-4 mb-8">
+                    <h1 className="text-2xl font-semibold">Y Axis Settings</h1>
                     <div className="flex items-center justify-between">
                         <Label>Enable Y Axis</Label>
                         <Switch
@@ -332,23 +408,8 @@ export function ChartSettings({ chart, setChart }: ChartSettingsProps) {
                 </div>
             )}
 
-            {chart.chartType === 'bar' && (
-                <div className="space-y-4 mb-8">
-                    <h3 className="text-lg font-semibold">Bar Settings</h3>
-                    <div>
-                        <Label>Background Fill</Label>
-                        <Input
-                            type="color"
-                            value={chart.uiBarBackgroundFill ?? chart.cartesianGrid.backgroundFill ?? '#ffffff'}
-                            onChange={(e) => setChart({ ...chart, uiBarBackgroundFill: e.target.value })}
-                            className="w-full h-10"
-                        />
-                        <Button onClick={() => setChart({ ...chart, uiBarBackgroundFill: chart.cartesianGrid.backgroundFill ?? '#ffffff' })} className="mt-2">Clear</Button>
-                    </div>
-                </div>
-            )}
             <div className="space-y-4 mb-8">
-                <h3 className="text-lg font-semibold">Legend Settings</h3>
+                <h1 className="text-2xl font-semibold">Legend Settings</h1>
                 <div className="flex items-center justify-between">
                     <Label>Enable Legend</Label>
                     <Switch

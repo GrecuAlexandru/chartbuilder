@@ -59,7 +59,6 @@ export const Chart = z.discriminatedUnion('chartType', [
     z.object({
         chartType: z.literal('area'),
         data: z.array(DataRow),
-        areaChartStacked: z.boolean(),
         xAxis: AxisSettings.default({
             type: 'category'
         }),
@@ -68,15 +67,27 @@ export const Chart = z.discriminatedUnion('chartType', [
         }),
         cartesianGrid: CartesianGridSettings,
         legend: LegendSettings,
+
+        // Area Chart
+        uiAreaChartStackOffset: z.enum(['expand', 'none', 'wiggle', 'silhouette']).optional().default('none'),
+
+        // Area
+        uiAreaType: z.enum(['basis', 'basisClosed', 'basisOpen', 'bumpX', 'bumpY', 'bump', 'linear', 'linearClosed', 'natural', 'monotoneX', 'monotoneY', 'monotone', 'step', 'stepBefore', 'stepAfter']).optional().default('linear'),
+        uiAreaStroke: z.string().optional().default('#3182bd'),
+        uiAreaStrokeWidth: z.number().optional().default(1),
+        uiAreaConnectNulls: z.boolean().optional().default(false),
     }),
     z.object({
         chartType: z.literal('bar'),
         data: z.array(DataRow),
+        xAxis: AxisSettings.default({
+            type: 'category'
+        }),
+        yAxis: AxisSettings.default({
+            type: 'number'
+        }),
+        cartesianGrid: CartesianGridSettings,
         legend: LegendSettings,
-        barChartHorizontal: z.boolean(),
-        barChartNegative: z.boolean().optional(),
-
-        // UI Settings
 
         // Bar Chart
         uiBarChartLayout: z.enum(['vertical', 'horizontal']).optional().default('horizontal'),
@@ -87,14 +98,6 @@ export const Chart = z.discriminatedUnion('chartType', [
 
         // Bar
         uiBarBackgroundFill: z.string().optional().default('false'),
-
-        xAxis: AxisSettings.default({
-            type: 'category'
-        }),
-        yAxis: AxisSettings.default({
-            type: 'number'
-        }),
-        cartesianGrid: CartesianGridSettings,
     }),
     z.object({
         chartType: z.literal('line'),

@@ -62,20 +62,27 @@ export const ApiChart = z.discriminatedUnion('chartType', [
     z.object({
         chartType: z.literal('area'),
         data: z.array(DataRow),
-        areaChartStacked: z.boolean(),
         xAxis: AxisSettings,
         yAxis: AxisSettings,
         cartesianGrid: CartesianGridSettings,
         legend: LegendSettings,
+
+        // Area Chart
+        uiAreaChartStackOffset: z.enum(['expand', 'none', 'wiggle', 'silhouette']).optional(),
+
+        // Area
+        uiAreaType: z.enum(['basis', 'basisClosed', 'basisOpen', 'bumpX', 'bumpY', 'bump', 'linear', 'linearClosed', 'natural', 'monotoneX', 'monotoneY', 'monotone', 'step', 'stepBefore', 'stepAfter']).optional(),
+        uiAreaStroke: z.string().optional(),
+        uiAreaStrokeWidth: z.number().optional(),
+        uiAreaConnectNulls: z.boolean().optional(),
     }),
     z.object({
         chartType: z.literal('bar'),
         data: z.array(DataRow),
+        xAxis: AxisSettings,
+        yAxis: AxisSettings,
+        cartesianGrid: CartesianGridSettings,
         legend: LegendSettings,
-        barChartHorizontal: z.boolean(),
-        barChartNegative: z.boolean().optional(),
-
-        // UI Settings
 
         // Bar Chart
         uiBarChartLayout: z.enum(['vertical', 'horizontal']).optional(),
@@ -86,10 +93,6 @@ export const ApiChart = z.discriminatedUnion('chartType', [
 
         // Bar
         uiBarBackgroundFill: z.string().optional(),
-
-        xAxis: AxisSettings,
-        yAxis: AxisSettings,
-        cartesianGrid: CartesianGridSettings,
     }),
     z.object({
         chartType: z.literal('line'),
