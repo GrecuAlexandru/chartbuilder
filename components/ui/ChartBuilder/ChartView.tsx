@@ -3,7 +3,7 @@
 import React, { useEffect } from "react"
 import dynamic from "next/dynamic"
 import { ChartContainer, ChartLegend, ChartLegendContent } from "@/components/ui/chart"
-import { Bar, Area, Pie, Radar, RadialBar, Line, XAxis, YAxis, CartesianGrid } from "recharts"
+import { Bar, Area, Pie, Radar, RadialBar, Line, XAxis, YAxis, CartesianGrid, Legend } from "recharts"
 import { useToPng } from '@hugocxl/react-to-image'
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -166,7 +166,16 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                     background={chart.uiBarBackgroundFill == 'false' ? false : { fill: chart.uiBarBackgroundFill }}
                                 />
                             ))}
-                            {chart.display.displayLegend && <ChartLegend content={<ChartLegendContent />} />}
+                            {chart.legend.enabled &&
+                                <ChartLegend
+                                    // content={<ChartLegendContent />}
+                                    layout={chart.legend.layout}
+                                    align={chart.legend.align}
+                                    verticalAlign={chart.legend.verticalAlign}
+                                    iconSize={chart.legend.iconSize}
+                                    iconType={chart.legend.iconType}
+                                />
+                            }
                         </BarChart>
                     </ChartContainer>
                 );
@@ -180,7 +189,16 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                             {Object.keys(chartConfig).map((key, index) => (
                                 <Area key={index} dataKey={key} fill={chartConfig[key].color} />
                             ))}
-                            {chart.display.displayLegend && <ChartLegend content={<ChartLegendContent />} />}
+                            {chart.legend.enabled &&
+                                <ChartLegend
+                                    // content={<ChartLegendContent />}
+                                    layout={chart.legend.layout}
+                                    align={chart.legend.align}
+                                    verticalAlign={chart.legend.verticalAlign}
+                                    iconSize={chart.legend.iconSize}
+                                    iconType={chart.legend.iconType}
+                                />
+                            }
                         </AreaChart>
                     </ChartContainer>
                 );
@@ -194,7 +212,16 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                             {Object.keys(chartConfig).map((key, index) => (
                                 <Line key={index} dataKey={key} stroke={chartConfig[key].color} />
                             ))}
-                            {chart.display.displayLegend && <ChartLegend content={<ChartLegendContent />} />}
+                            {chart.legend.enabled &&
+                                <ChartLegend
+                                    // content={<ChartLegendContent />}
+                                    layout={chart.legend.layout}
+                                    align={chart.legend.align}
+                                    verticalAlign={chart.legend.verticalAlign}
+                                    iconSize={chart.legend.iconSize}
+                                    iconType={chart.legend.iconType}
+                                />
+                            }
                         </LineChart>
                     </ChartContainer>
                 );
@@ -204,12 +231,17 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                     <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
                         <PieChart accessibilityLayer>
                             <Pie data={chartData} dataKey={chart.data[0].dataSeries[0].dataSeriesLabel} />
-                            {chart.display.displayLegend && (
+                            {chart.legend.enabled &&
                                 <ChartLegend
                                     content={<ChartLegendContent nameKey="label" />}
                                     className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
+                                    layout={chart.legend.layout}
+                                    align={chart.legend.align}
+                                    verticalAlign={chart.legend.verticalAlign}
+                                    iconSize={chart.legend.iconSize}
+                                    iconType={chart.legend.iconType}
                                 />
-                            )}
+                            }
                         </PieChart>
                     </ChartContainer>
                 );
@@ -218,7 +250,16 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                 return (
                     <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
                         <RadarChart accessibilityLayer data={chartData}>
-                            {chart.display.displayLegend && <ChartLegend content={<ChartLegendContent />} />}
+                            {chart.legend.enabled &&
+                                <ChartLegend
+                                    content={<ChartLegendContent />}
+                                    layout={chart.legend.layout}
+                                    align={chart.legend.align}
+                                    verticalAlign={chart.legend.verticalAlign}
+                                    iconSize={chart.legend.iconSize}
+                                    iconType={chart.legend.iconType}
+                                />
+                            }
                             <Radar dataKey={chart.data[0].dataSeries[0].dataSeriesLabel} fill={`var(--color-${chart.data[0].dataSeries[0].dataSeriesLabel})`} />
                         </RadarChart>
                     </ChartContainer>
@@ -229,7 +270,16 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                 return (
                     <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
                         <RadialBarChart accessibilityLayer data={chartData}>
-                            {chart.display.displayLegend && <ChartLegend content={<ChartLegendContent />} />}
+                            {chart.legend.enabled &&
+                                <ChartLegend
+                                    content={<ChartLegendContent />}
+                                    layout={chart.legend.layout}
+                                    align={chart.legend.align}
+                                    verticalAlign={chart.legend.verticalAlign}
+                                    iconSize={chart.legend.iconSize}
+                                    iconType={chart.legend.iconType}
+                                />
+                            }
                             <RadialBar dataKey={chart.data[0].dataSeries[0].dataSeriesLabel} fill={`var(--color-${chart.data[0].dataSeries[0].dataSeriesLabel})`}>
                                 <LabelList
                                     position="insideStart"
@@ -264,7 +314,7 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
             `import { ${chartComponent}, ${chartElement}, ${additionalImports.join(', ')} } from "recharts"` :
             `import { ${chartComponent}, ${chartElement} } from "recharts"`;
 
-        const chartImports = chart.display.displayLegend ?
+        const chartImports = chart.legend.enabled ?
             `import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent } from "@/components/ui/chart"` :
             `import { ChartConfig, ChartContainer } from "@/components/ui/chart"`;
 
@@ -288,7 +338,7 @@ export default function Component() {
         ).join('\n        ')}
         ${(chart.chartType !== 'pie' && chart.chartType !== 'radar' && chart.chartType !== 'radial' && 'displayXAxis' in chart && chart.displayXAxis) ? '<XAxis dataKey="label" />' : ''}
         ${(chart.chartType !== 'pie' && chart.chartType !== 'radar' && chart.chartType !== 'radial' && 'displayYAxis' in chart && chart.displayYAxis) ? '<YAxis stroke="#333" />' : ''}
-        ${chart.display.displayLegend ? '<ChartLegend content={<ChartLegendContent />} />' : ''}
+        ${chart.legend.enabled ? '<ChartLegend content={<ChartLegendContent />} />' : ''}
       </${chartComponent}>
     </ChartContainer>
   )

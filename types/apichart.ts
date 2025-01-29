@@ -47,9 +47,14 @@ const CartesianGridSettings = z.object({
     fillOpacity: z.number().optional(),
 });
 
-const DisplaySettings = z.object({
-    displayLegend: z.boolean(),
-    displayLabel: z.boolean(),
+
+const LegendSettings = z.object({
+    enabled: z.boolean(),
+    layout: z.enum(['horizontal', 'vertical']).optional(),
+    align: z.enum(['left', 'center', 'right']).optional(),
+    verticalAlign: z.enum(['top', 'middle', 'bottom']).optional(),
+    iconSize: z.number().optional(),
+    iconType: z.enum(['line', 'plainline', 'square', 'rect', 'circle', 'cross', 'diamond', 'star', 'triangle', 'wye']).optional(),
 });
 
 // Main Chart Schema
@@ -61,12 +66,12 @@ export const ApiChart = z.discriminatedUnion('chartType', [
         xAxis: AxisSettings,
         yAxis: AxisSettings,
         cartesianGrid: CartesianGridSettings,
-        display: DisplaySettings,
+        legend: LegendSettings,
     }),
     z.object({
         chartType: z.literal('bar'),
         data: z.array(DataRow),
-        display: DisplaySettings,
+        legend: LegendSettings,
         barChartHorizontal: z.boolean(),
         barChartNegative: z.boolean().optional(),
 
@@ -89,7 +94,7 @@ export const ApiChart = z.discriminatedUnion('chartType', [
     z.object({
         chartType: z.literal('line'),
         data: z.array(DataRow),
-        display: DisplaySettings,
+        legend: LegendSettings,
         lineChartDots: z.boolean(),
 
         // UI Settings
@@ -101,7 +106,7 @@ export const ApiChart = z.discriminatedUnion('chartType', [
     z.object({
         chartType: z.literal('scatter'),
         data: z.array(DataRow),
-        display: DisplaySettings,
+        legend: LegendSettings,
         scatterChartThreeDimensions: z.boolean(),
 
         // UI Settings
@@ -113,19 +118,19 @@ export const ApiChart = z.discriminatedUnion('chartType', [
     z.object({
         chartType: z.literal('pie'),
         data: z.array(DataRow),
-        display: DisplaySettings,
+        legend: LegendSettings,
         pieChartDonut: z.boolean(),
     }),
     z.object({
         chartType: z.literal('radar'),
         data: z.array(DataRow),
-        display: DisplaySettings,
+        legend: LegendSettings,
         radarChartDots: z.boolean(),
     }),
     z.object({
         chartType: z.literal('radial'),
         data: z.array(DataRow),
-        display: DisplaySettings,
+        legend: LegendSettings,
         radialChartText: z.boolean(),
     }),
 ]);
