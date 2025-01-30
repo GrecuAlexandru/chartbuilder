@@ -3,7 +3,7 @@
 import React, { useEffect } from "react"
 import dynamic from "next/dynamic"
 import { ChartContainer, ChartLegend, ChartLegendContent } from "@/components/ui/chart"
-import { Bar, Area, Pie, Radar, RadialBar, Line, XAxis, YAxis, CartesianGrid, Legend } from "recharts"
+import { Bar, Area, Pie, Radar, RadialBar, Line, XAxis, YAxis, CartesianGrid, Legend, Scatter } from "recharts"
 import { useToPng } from '@hugocxl/react-to-image'
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -257,11 +257,118 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                 const LineChart = dynamic(() => import("recharts").then(mod => mod.LineChart));
                 return (
                     <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
-                        <LineChart accessibilityLayer data={chartData}>
-                            {chart.xAxis.enabled && <XAxis dataKey="label" />}
-                            {chart.yAxis.enabled && <YAxis stroke="#333" />}
+                        <LineChart
+                            accessibilityLayer
+                            data={chartData}
+                        >
+                            {chart.cartesianGrid.enabled && (
+                                <CartesianGrid
+                                    horizontal={chart.cartesianGrid.horizontal ?? true}
+                                    vertical={chart.cartesianGrid.vertical ?? true}
+                                    fill={chart.cartesianGrid.backgroundFill}
+                                    fillOpacity={chart.cartesianGrid.fillOpacity}
+                                />
+                            )}
+                            {chart.xAxis.enabled && (
+                                <XAxis
+                                    dataKey="label"
+                                    stroke="#333"
+
+                                    height={chart.xAxis.height}
+                                    orientation={chart.xAxis.orientation}
+                                    type={chart.xAxis.type}
+                                    allowDecimals={chart.xAxis.allowDecimals}
+                                    tickCount={chart.xAxis.tickCount}
+                                    padding={{ left: chart.xAxis.paddingLeft, right: chart.xAxis.paddingRight }}
+                                    tickSize={chart.xAxis.tickSize}
+                                    mirror={chart.xAxis.mirror}
+                                    reversed={chart.xAxis.reversed}
+                                />
+                            )}
+                            {chart.yAxis.enabled && (
+                                <YAxis
+                                    // type="number"
+                                    stroke="#333"
+
+                                    width={chart.yAxis.height}
+                                    orientation={chart.yAxis.orientation == 'bottom' ? 'left' : 'right'}
+                                    type={chart.yAxis.type}
+                                    allowDecimals={chart.yAxis.allowDecimals}
+                                    tickCount={chart.yAxis.tickCount}
+                                    padding={{ top: chart.yAxis.paddingLeft, bottom: chart.yAxis.paddingRight }}
+                                    tickSize={chart.yAxis.tickSize}
+                                    mirror={chart.yAxis.mirror}
+                                    reversed={chart.yAxis.reversed}
+                                />
+                            )}
                             {Object.keys(chartConfig).map((key, index) => (
-                                <Line key={index} dataKey={key} stroke={chartConfig[key].color} />
+                                <Line
+                                    key={index}
+                                    dataKey={key}
+                                    type={chart.uiLineType}
+                                    stroke={chart.uiLineStroke}
+                                    strokeWidth={chart.uiLineStrokeWidth}
+                                    connectNulls={chart.uiLineConnectNulls}
+                                />
+                            ))}
+                        </LineChart>
+                    </ChartContainer>
+                );
+            case 'scatter':
+                const ScatterChart = dynamic(() => import("recharts").then(mod => mod.ScatterChart));
+                return (
+                    <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
+                        <ScatterChart
+                            accessibilityLayer
+                            data={chartData}
+                        >
+                            {chart.cartesianGrid.enabled && (
+                                <CartesianGrid
+                                    horizontal={chart.cartesianGrid.horizontal ?? true}
+                                    vertical={chart.cartesianGrid.vertical ?? true}
+                                    fill={chart.cartesianGrid.backgroundFill}
+                                    fillOpacity={chart.cartesianGrid.fillOpacity}
+                                />
+                            )}
+                            {chart.xAxis.enabled && (
+                                <XAxis
+                                    dataKey="label"
+                                    stroke="#333"
+
+                                    height={chart.xAxis.height}
+                                    orientation={chart.xAxis.orientation}
+                                    type={chart.xAxis.type}
+                                    allowDecimals={chart.xAxis.allowDecimals}
+                                    tickCount={chart.xAxis.tickCount}
+                                    padding={{ left: chart.xAxis.paddingLeft, right: chart.xAxis.paddingRight }}
+                                    tickSize={chart.xAxis.tickSize}
+                                    mirror={chart.xAxis.mirror}
+                                    reversed={chart.xAxis.reversed}
+                                />
+                            )}
+                            {chart.yAxis.enabled && (
+                                <YAxis
+                                    // type="number"
+                                    stroke="#333"
+
+                                    width={chart.yAxis.height}
+                                    orientation={chart.yAxis.orientation == 'bottom' ? 'left' : 'right'}
+                                    type={chart.yAxis.type}
+                                    allowDecimals={chart.yAxis.allowDecimals}
+                                    tickCount={chart.yAxis.tickCount}
+                                    padding={{ top: chart.yAxis.paddingLeft, bottom: chart.yAxis.paddingRight }}
+                                    tickSize={chart.yAxis.tickSize}
+                                    mirror={chart.yAxis.mirror}
+                                    reversed={chart.yAxis.reversed}
+                                />
+                            )}
+                            {Object.keys(chartConfig).map((key, index) => (
+                                <Scatter
+                                    key={index}
+                                    dataKey={key}
+                                    fill={chartConfig[key].color}
+                                    isAnimationActive={false}
+                                />
                             ))}
                             {chart.legend.enabled &&
                                 <ChartLegend
@@ -273,7 +380,7 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                     iconType={chart.legend.iconType}
                                 />
                             }
-                        </LineChart>
+                        </ScatterChart>
                     </ChartContainer>
                 );
             case 'pie':
@@ -281,7 +388,19 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                 return (
                     <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
                         <PieChart accessibilityLayer>
-                            <Pie data={chartData} dataKey={chart.data[0].dataSeries[0].dataSeriesLabel} />
+                            <Pie
+                                data={chartData}
+                                dataKey={chart.data[0].dataSeries[0].dataSeriesLabel}
+                                cx={chart.uiPieCX}
+                                cy={chart.uiPieCY}
+                                innerRadius={chart.uiPieInnerRadius}
+                                outerRadius={chart.uiPieOuterRadius}
+                                startAngle={chart.uiPieStartAngle}
+                                endAngle={chart.uiPieEndAngle}
+                                minAngle={chart.uiPieMinAngle}
+                                paddingAngle={chart.uiPiePaddingAngle}
+                                activeIndex={chart.uiPieActiveIndex}
+                            />
                             {chart.legend.enabled &&
                                 <ChartLegend
                                     content={<ChartLegendContent nameKey="label" />}

@@ -97,32 +97,40 @@ export const ApiChart = z.discriminatedUnion('chartType', [
     z.object({
         chartType: z.literal('line'),
         data: z.array(DataRow),
-        legend: LegendSettings,
-        lineChartDots: z.boolean(),
-
-        // UI Settings
-
         xAxis: AxisSettings,
         yAxis: AxisSettings,
         cartesianGrid: CartesianGridSettings,
+        legend: LegendSettings,
+
+        // Line
+        uiLineType: z.enum(['basis', 'basisClosed', 'basisOpen', 'bumpX', 'bumpY', 'bump', 'linear', 'linearClosed', 'natural', 'monotoneX', 'monotoneY', 'monotone', 'step', 'stepBefore', 'stepAfter']).optional(),
+        uiLineStroke: z.string().optional(),
+        uiLineStrokeWidth: z.number().optional(),
+        uiLineConnectNulls: z.boolean().optional(),
     }),
     z.object({
         chartType: z.literal('scatter'),
         data: z.array(DataRow),
-        legend: LegendSettings,
-        scatterChartThreeDimensions: z.boolean(),
-
-        // UI Settings
-
         xAxis: AxisSettings,
         yAxis: AxisSettings,
         cartesianGrid: CartesianGridSettings,
+        legend: LegendSettings,
     }),
     z.object({
         chartType: z.literal('pie'),
         data: z.array(DataRow),
         legend: LegendSettings,
-        pieChartDonut: z.boolean(),
+
+        // Pie
+        uiPieCX: z.string().optional(),
+        uiPieCY: z.string().optional(),
+        uiPieInnerRadius: z.number().optional(),
+        uiPieOuterRadius: z.number().optional(),
+        uiPieStartAngle: z.number().optional(),
+        uiPieEndAngle: z.number().optional(),
+        uiPieMinAngle: z.number().optional(),
+        uiPiePaddingAngle: z.number().optional(),
+        uiPieActiveIndex: z.number().optional(),
     }),
     z.object({
         chartType: z.literal('radar'),

@@ -41,6 +41,7 @@ export function ChartSettings({ chart, setChart }: ChartSettingsProps) {
                         <option>Pie</option>
                         <option>Radar</option>
                         <option>Radial</option>
+                        <option>Scatter</option>
                     </select>
                 </div>
             </div>
@@ -166,6 +167,68 @@ export function ChartSettings({ chart, setChart }: ChartSettingsProps) {
                 </div>
             )}
 
+            {chart.chartType === 'line' && (
+                <div className="space-y-4 mt-4 mb-8">
+                    <h1 className="text-2xl font-semibold">Line Chart Settings</h1>
+                    <div>
+                        <Label htmlFor="lineType">Line Type</Label>
+                        <select
+                            id="lineType"
+                            value={chart.uiLineType ?? 'linear'}
+                            onChange={(e) => setChart({ ...chart, uiLineType: e.target.value as any })}
+                            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                        >
+                            {['basis', 'basisClosed', 'basisOpen', 'bumpX', 'bumpY', 'bump', 'linear', 'linearClosed', 'natural', 'monotoneX', 'monotoneY', 'monotone', 'step', 'stepBefore', 'stepAfter'].map(type => (
+                                <option key={type} value={type}>{type}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div>
+                        <Label htmlFor="lineStroke">Stroke Color</Label>
+                        <Input
+                            id="lineStroke"
+                            type="color"
+                            value={chart.uiLineStroke ?? '#000000'}
+                            onChange={(e) => setChart({ ...chart, uiLineStroke: e.target.value })}
+                            className="w-full h-10"
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="lineWidth">Stroke Width</Label>
+                        <Input
+                            id="lineWidth"
+                            type="number"
+                            value={chart.uiLineStrokeWidth ?? 1}
+                            onChange={(e) => setChart({ ...chart, uiLineStrokeWidth: parseInt(e.target.value) })}
+                        />
+                    </div>
+                    <div className="flex items-center justify-between">
+                        <Label htmlFor="connectNulls">Connect Nulls</Label>
+                        <Switch
+                            id="connectNulls"
+                            checked={chart.uiLineConnectNulls ?? false}
+                            onCheckedChange={(checked) => setChart({ ...chart, uiLineConnectNulls: checked })}
+                        />
+                    </div>
+                </div>
+            )}
+
+            {chart.chartType === 'bar' && (
+                <div className="space-y-4 mb-8">
+                    <h1 className="text-2xl font-semibold">Bar Settings</h1>
+                    <div>
+                        <Label>Background Fill</Label>
+                        <Input
+                            type="color"
+                            value={chart.uiBarBackgroundFill ?? chart.cartesianGrid.backgroundFill ?? '#ffffff'}
+                            onChange={(e) => setChart({ ...chart, uiBarBackgroundFill: e.target.value })}
+                            className="w-full h-10"
+                        />
+                        <Button onClick={() => setChart({ ...chart, uiBarBackgroundFill: chart.cartesianGrid.backgroundFill ?? '#ffffff' })} className="mt-2">Clear</Button>
+                    </div>
+                </div>
+            )}
+
             {chart.chartType == 'bar' && (
                 <div className="space-y-4 mb-8">
                     <h1 className="text-2xl font-semibold">Cartesian Grid Settings</h1>
@@ -218,7 +281,94 @@ export function ChartSettings({ chart, setChart }: ChartSettingsProps) {
                 </div>
             )}
 
-            {chart.chartType === 'bar' || chart.chartType === 'area' && (
+            {chart.chartType === 'pie' && (
+                <div className="space-y-4 mt-4 mb-8">
+                    <h1 className="text-2xl font-semibold">Pie Chart Settings</h1>
+                    <div>
+                        <Label htmlFor="cx">Center X (%)</Label>
+                        <Input
+                            id="cx"
+                            type="text"
+                            value={(chart.uiPieCX ?? '50%')}
+                            onChange={(e) => setChart({ ...chart, uiPieCX: e.target.value })}
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="cy">Center Y (%)</Label>
+                        <Input
+                            id="cy"
+                            type="text"
+                            value={(chart.uiPieCY ?? '50%')}
+                            onChange={(e) => setChart({ ...chart, uiPieCY: e.target.value })}
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="innerRadius">Inner Radius</Label>
+                        <Input
+                            id="innerRadius"
+                            type="number"
+                            value={chart.uiPieInnerRadius ?? 0}
+                            onChange={(e) => setChart({ ...chart, uiPieInnerRadius: parseInt(e.target.value) })}
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="outerRadius">Outer Radius</Label>
+                        <Input
+                            id="outerRadius"
+                            type="number"
+                            value={chart.uiPieOuterRadius ?? 80}
+                            onChange={(e) => setChart({ ...chart, uiPieOuterRadius: parseInt(e.target.value) })}
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="startAngle">Start Angle</Label>
+                        <Input
+                            id="startAngle"
+                            type="number"
+                            value={chart.uiPieStartAngle ?? 0}
+                            onChange={(e) => setChart({ ...chart, uiPieStartAngle: parseInt(e.target.value) })}
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="endAngle">End Angle</Label>
+                        <Input
+                            id="endAngle"
+                            type="number"
+                            value={chart.uiPieEndAngle ?? 360}
+                            onChange={(e) => setChart({ ...chart, uiPieEndAngle: parseInt(e.target.value) })}
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="minAngle">Minimum Angle</Label>
+                        <Input
+                            id="minAngle"
+                            type="number"
+                            value={chart.uiPieMinAngle ?? 0}
+                            onChange={(e) => setChart({ ...chart, uiPieMinAngle: parseInt(e.target.value) })}
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="paddingAngle">Padding Angle</Label>
+                        <Input
+                            id="paddingAngle"
+                            type="number"
+                            value={chart.uiPiePaddingAngle ?? 0}
+                            onChange={(e) => setChart({ ...chart, uiPiePaddingAngle: parseInt(e.target.value) })}
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="activeIndex">Active Segment</Label>
+                        <Input
+                            id="activeIndex"
+                            type="number"
+                            value={chart.uiPieActiveIndex ?? -1}
+                            onChange={(e) => setChart({ ...chart, uiPieActiveIndex: parseInt(e.target.value) })}
+                        />
+                    </div>
+                </div>
+            )}
+
+            {chart.chartType === 'bar' || chart.chartType === 'area' || chart.chartType === 'line' || chart.chartType === 'scatter' && (
                 <div className="space-y-4 mb-8">
                     <h1 className="text-2xl font-semibold">X Axis Settings</h1>
                     <div className="flex items-center justify-between">
@@ -305,23 +455,7 @@ export function ChartSettings({ chart, setChart }: ChartSettingsProps) {
                 </div>
             )}
 
-            {chart.chartType === 'bar' && (
-                <div className="space-y-4 mb-8">
-                    <h1 className="text-2xl font-semibold">Bar Settings</h1>
-                    <div>
-                        <Label>Background Fill</Label>
-                        <Input
-                            type="color"
-                            value={chart.uiBarBackgroundFill ?? chart.cartesianGrid.backgroundFill ?? '#ffffff'}
-                            onChange={(e) => setChart({ ...chart, uiBarBackgroundFill: e.target.value })}
-                            className="w-full h-10"
-                        />
-                        <Button onClick={() => setChart({ ...chart, uiBarBackgroundFill: chart.cartesianGrid.backgroundFill ?? '#ffffff' })} className="mt-2">Clear</Button>
-                    </div>
-                </div>
-            )}
-
-            {chart.chartType === 'bar' || chart.chartType === 'area' && (
+            {chart.chartType === 'bar' || chart.chartType === 'area' || chart.chartType === 'line' || chart.chartType === 'scatter' && (
                 <div className="space-y-4 mb-8">
                     <h1 className="text-2xl font-semibold">Y Axis Settings</h1>
                     <div className="flex items-center justify-between">

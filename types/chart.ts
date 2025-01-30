@@ -102,11 +102,6 @@ export const Chart = z.discriminatedUnion('chartType', [
     z.object({
         chartType: z.literal('line'),
         data: z.array(DataRow),
-        legend: LegendSettings,
-        lineChartDots: z.boolean().default(false),
-
-        // UI Settings
-
         xAxis: AxisSettings.default({
             type: 'category'
         }),
@@ -114,15 +109,17 @@ export const Chart = z.discriminatedUnion('chartType', [
             type: 'number'
         }),
         cartesianGrid: CartesianGridSettings,
+        legend: LegendSettings,
+
+        // Line
+        uiLineType: z.enum(['basis', 'basisClosed', 'basisOpen', 'bumpX', 'bumpY', 'bump', 'linear', 'linearClosed', 'natural', 'monotoneX', 'monotoneY', 'monotone', 'step', 'stepBefore', 'stepAfter']).optional().default('linear'),
+        uiLineStroke: z.string().optional().default('#3182bd'),
+        uiLineStrokeWidth: z.number().optional().default(1),
+        uiLineConnectNulls: z.boolean().optional().default(false),
     }),
     z.object({
         chartType: z.literal('scatter'),
         data: z.array(DataRow),
-        legend: LegendSettings,
-        scatterChartThreeDimensions: z.boolean().default(false),
-
-        // UI Settings
-
         xAxis: AxisSettings.default({
             type: 'category'
         }),
@@ -130,12 +127,24 @@ export const Chart = z.discriminatedUnion('chartType', [
             type: 'number'
         }),
         cartesianGrid: CartesianGridSettings,
+        legend: LegendSettings,
     }),
     z.object({
         chartType: z.literal('pie'),
         data: z.array(DataRow),
         legend: LegendSettings,
-        pieChartDonut: z.boolean().default(false),
+
+        // Pie
+        uiPieCX: z.string().optional().default('50%'),
+        uiPieCY: z.string().optional().default('50%'),
+        uiPieInnerRadius: z.number().optional().default(0),
+        uiPieOuterRadius: z.number().optional().default(80),
+        uiPieStartAngle: z.number().optional().default(0),
+        uiPieEndAngle: z.number().optional().default(360),
+        uiPieMinAngle: z.number().optional().default(0),
+        uiPiePaddingAngle: z.number().optional().default(0),
+        uiPieActiveIndex: z.number().optional().default(-1),
+
     }),
     z.object({
         chartType: z.literal('radar'),
