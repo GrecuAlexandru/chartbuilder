@@ -184,7 +184,7 @@ export async function POST(req: NextRequest) {
 
     const { api_calls } = data;
 
-    if (api_calls >= 10) {
+    if (api_calls >= 100) {
         return NextResponse.json({ error: "API rate limit exceeded" }, { status: 429 });
     }
 
