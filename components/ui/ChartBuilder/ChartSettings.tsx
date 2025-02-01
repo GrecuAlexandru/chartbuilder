@@ -281,6 +281,230 @@ export function ChartSettings({ chart, setChart }: ChartSettingsProps) {
                 </div>
             )}
 
+            {chart.chartType === 'radar' && (
+                <div className="space-y-4 mt-4 mb-8">
+                    <h1 className="text-2xl font-semibold">Radar Chart Settings</h1>
+                    <div>
+                        <Label htmlFor="cx">Center X (%)</Label>
+                        <Input
+                            id="cx"
+                            type="text"
+                            value={(chart.uiRadarChartCX ?? '50%')}
+                            onChange={(e) => setChart({ ...chart, uiRadarChartCX: e.target.value })}
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="cy">Center Y (%)</Label>
+                        <Input
+                            id="cy"
+                            type="text"
+                            value={(chart.uiRadarChartCY ?? '50%')}
+                            onChange={(e) => setChart({ ...chart, uiRadarChartCY: e.target.value })}
+                        />
+                    </div>
+                </div>
+            )}
+
+            {chart.chartType === 'radar' && (
+                <div className="space-y-4 mt-4 mb-8">
+                    <h1 className="text-2xl font-semibold">Radar Settings</h1>
+                    <div>
+                        <Label htmlFor="fillOpacity">Fill Opacity</Label>
+                        <Slider
+                            id="fillOpacity"
+                            value={[chart.uiRadarBarFillOpacity ?? 0.8]}
+                            onValueChange={(value) => setChart({ ...chart, uiRadarBarFillOpacity: value[0] })}
+                            min={0}
+                            max={1}
+                            step={0.1}
+                            className="w-full"
+                        />
+                        <div className="text-xs text-gray-500 mt-1">
+                            {(chart.uiRadarBarFillOpacity ?? 0.8).toFixed(1)}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {chart.chartType === 'radial' && (
+                <div className="space-y-4 mt-4 mb-8">
+                    <h1 className="text-2xl font-semibold">Radial Bar Chart Settings</h1>
+                    <div>
+                        <Label htmlFor="fillOpacity">Fill Opacity</Label>
+                        <Slider
+                            id="fillOpacity"
+                            value={[chart.uiRadialBarFillOpacity ?? 0.8]}
+                            onValueChange={(value) => setChart({ ...chart, uiRadialBarFillOpacity: value[0] })}
+                            min={0}
+                            max={1}
+                            step={0.1}
+                            className="w-full"
+                        />
+                        <div className="text-xs text-gray-500 mt-1">
+                            {(chart.uiRadialBarFillOpacity ?? 0.8).toFixed(1)}
+                        </div>
+                    </div>
+                    <div>
+                        <Label htmlFor="barCategoryGap">Bar Category Gap</Label>
+                        <Input
+                            id="barCategoryGap"
+                            type="text"
+                            value={chart.uiRadialBarChartBarCategoryGap ?? '10%'}
+                            onChange={(e) => setChart({ ...chart, uiRadialBarChartBarCategoryGap: e.target.value })}
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="barGap">Bar Gap</Label>
+                        <Input
+                            id="barGap"
+                            type="number"
+                            value={chart.uiRadialBarChartBarGap ?? 4}
+                            onChange={(e) => setChart({ ...chart, uiRadialBarChartBarGap: parseInt(e.target.value) })}
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="cx">Center X</Label>
+                        <Input
+                            id="cx"
+                            type="text"
+                            value={chart.uiRadialBarChartCX ?? '50%'}
+                            onChange={(e) => setChart({ ...chart, uiRadialBarChartCX: e.target.value })}
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="cy">Center Y</Label>
+                        <Input
+                            id="cy"
+                            type="text"
+                            value={chart.uiRadialBarChartCY ?? '50%'}
+                            onChange={(e) => setChart({ ...chart, uiRadialBarChartCY: e.target.value })}
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="startAngle">Start Angle</Label>
+                        <Input
+                            id="startAngle"
+                            type="number"
+                            value={chart.uiRadialBarChartStartAngle ?? 0}
+                            onChange={(e) => setChart({ ...chart, uiRadialBarChartStartAngle: parseInt(e.target.value) })}
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="endAngle">End Angle</Label>
+                        <Input
+                            id="endAngle"
+                            type="number"
+                            value={chart.uiRadialBarChartEndAngle ?? 360}
+                            onChange={(e) => setChart({ ...chart, uiRadialBarChartEndAngle: parseInt(e.target.value) })}
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="innerRadius">Inner Radius</Label>
+                        <Input
+                            id="innerRadius"
+                            type="text"
+                            value={chart.uiRadialBarChartInnerRadius ?? '30%'}
+                            onChange={(e) => setChart({ ...chart, uiRadialBarChartInnerRadius: e.target.value })}
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="outerRadius">Outer Radius</Label>
+                        <Input
+                            id="outerRadius"
+                            type="text"
+                            value={chart.uiRadialBarChartOuterRadius ?? '100%'}
+                            onChange={(e) => setChart({ ...chart, uiRadialBarChartOuterRadius: e.target.value })}
+                        />
+                    </div>
+                    <div className="flex items-center justify-between">
+                        <Label htmlFor="background">Show Background</Label>
+                        <Switch
+                            id="background"
+                            checked={chart.uiRadialBarBackground ?? false}
+                            onCheckedChange={(checked) => setChart({ ...chart, uiRadialBarBackground: checked })}
+                        />
+                    </div>
+                </div>
+            )}
+
+            {chart.chartType === 'radar' || chart.chartType === 'radial' && (
+                <div className="space-y-4 mb-8">
+                    <h1 className="text-2xl font-semibold">Polar Grid Settings</h1>
+                    <div className="flex items-center justify-between">
+                        <Label>Enable Polar Grid</Label>
+                        <Switch
+                            checked={chart.polarGrid?.enabled ?? true}
+                            onCheckedChange={(checked) => setChart({ ...chart, polarGrid: { ...chart.polarGrid, enabled: checked } })}
+                        />
+                    </div>
+                    <div className={`space-y-4 ${!chart.polarGrid?.enabled ? 'opacity-50 pointer-events-none' : ''}`}>
+                        <div>
+                            <Label>Inner Radius</Label>
+                            <Input
+                                type="number"
+                                value={chart.polarGrid?.innerRadius ?? 0}
+                                onChange={(e) => setChart({ ...chart, polarGrid: { ...chart.polarGrid, innerRadius: parseInt(e.target.value) } })}
+                            />
+                        </div>
+                        <div>
+                            <Label>Outer Radius</Label>
+                            <Input
+                                type="number"
+                                value={chart.polarGrid?.outerRadius ?? 80}
+                                onChange={(e) => setChart({ ...chart, polarGrid: { ...chart.polarGrid, outerRadius: parseInt(e.target.value) } })}
+                            />
+                        </div>
+                        <div>
+                            <Label>Polar Angles Count</Label>
+                            <Input
+                                type="number"
+                                value={chart.polarGrid?.polarAnglesCount ?? 6}
+                                onChange={(e) => setChart({ ...chart, polarGrid: { ...chart.polarGrid, polarAnglesCount: parseInt(e.target.value) } })}
+                            />
+                        </div>
+                        <div>
+                            <Label>Polar Radius Count</Label>
+                            <Input
+                                type="number"
+                                value={chart.polarGrid?.polarRadiusCount ?? 6}
+                                onChange={(e) => setChart({ ...chart, polarGrid: { ...chart.polarGrid, polarRadiusCount: parseInt(e.target.value) } })}
+                            />
+                        </div>
+                        <div>
+                            <Label>Grid Type</Label>
+                            <select
+                                value={chart.polarGrid?.gridType ?? 'polygon'}
+                                onChange={(e) => setChart({ ...chart, polarGrid: { ...chart.polarGrid, gridType: e.target.value as 'circle' | 'polygon' } })}
+                                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                            >
+                                <option value="circle">Circle</option>
+                                <option value="polygon">Polygon</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {chart.chartType === 'radar' && (
+                <div className="space-y-4 mb-8">
+                    <h1 className="text-2xl font-semibold">Polar Angle Axis Settings</h1>
+                    <div className="flex items-center justify-between">
+                        <Label>Show Tick</Label>
+                        <Switch
+                            checked={chart.uiPolarAnlgeAxisTick ?? true}
+                            onCheckedChange={(checked) => setChart({ ...chart, uiPolarAnlgeAxisTick: checked })}
+                        />
+                    </div>
+                    <div className="flex items-center justify-between">
+                        <Label>Allow Duplicated Category</Label>
+                        <Switch
+                            checked={chart.uiPolarAngleAxisAllowDuplicatedCategory ?? true}
+                            onCheckedChange={(checked) => setChart({ ...chart, uiPolarAngleAxisAllowDuplicatedCategory: checked })}
+                        />
+                    </div>
+                </div>
+            )}
+
             {chart.chartType === 'pie' && (
                 <div className="space-y-4 mt-4 mb-8">
                     <h1 className="text-2xl font-semibold">Pie Chart Settings</h1>

@@ -47,6 +47,14 @@ const CartesianGridSettings = z.object({
     fillOpacity: z.number().optional(),
 });
 
+const PolarGridSettings = z.object({
+    enabled: z.boolean(),
+    innerRadius: z.number().optional(),
+    outerRadius: z.number().optional(),
+    polarAnglesCount: z.number().optional(),
+    polarRadiusCount: z.number().optional(),
+    gridType: z.enum(['circle', 'polygon']).optional(),
+});
 
 const LegendSettings = z.object({
     enabled: z.boolean(),
@@ -135,14 +143,40 @@ export const ApiChart = z.discriminatedUnion('chartType', [
     z.object({
         chartType: z.literal('radar'),
         data: z.array(DataRow),
+        polarGrid: PolarGridSettings,
         legend: LegendSettings,
-        radarChartDots: z.boolean(),
+
+        // Radar Chart
+        uiRadarChartCX: z.string().optional(),
+        uiRadarChartCY: z.string().optional(),
+
+        // Radar
+        uiRadarFillOpacity: z.number().optional(),
+
+        // PolarAngleAxis
+        uiPolarAngleAxisEnabled: z.boolean(),
+        uiPolarAnlgeAxisTick: z.boolean().optional(),
+        uiPolarAngleAxisAllowDuplicatedCategory: z.boolean().optional(),
     }),
     z.object({
         chartType: z.literal('radial'),
         data: z.array(DataRow),
+        polarGrid: PolarGridSettings,
         legend: LegendSettings,
-        radialChartText: z.boolean(),
+
+        // Radial Bar Chart
+        uiRadialFillOpacity: z.number().optional(),
+        uiRadialBarChartBarCategoryGap: z.string().optional(),
+        uiRadialBarChartBarGap: z.number().optional(),
+        uiRadialBarChartCX: z.string().optional(),
+        uiRadialBarChartCY: z.string().optional(),
+        uiRadialBarChartStartAngle: z.number().optional(),
+        uiRadialBarChartEndAngle: z.number().optional(),
+        uiRadialBarChartInnerRadius: z.string().optional(),
+        uiRadialBarChartOuterRadius: z.string().optional(),
+
+        // Radial Bar
+        uiRadialBarBackground: z.boolean().optional(),
     }),
 ]);
 

@@ -1,6 +1,7 @@
 /* Chart with default values */
 
 
+import { PolarGrid } from "recharts";
 import { z } from "zod";
 
 export const ChartType = z.enum([
@@ -43,6 +44,15 @@ const CartesianGridSettings = z.object({
     vertical: z.boolean().optional().default(true),
     backgroundFill: z.string().default('#fff'),
     fillOpacity: z.number().optional().default(1),
+});
+
+const PolarGridSettings = z.object({
+    enabled: z.boolean().default(true),
+    innerRadius: z.number().optional().default(0),
+    outerRadius: z.number().optional().default(80),
+    polarAnglesCount: z.number().optional().default(6),
+    polarRadiusCount: z.number().optional().default(6),
+    gridType: z.enum(['circle', 'polygon']).optional().default('polygon'),
 });
 
 const LegendSettings = z.object({
@@ -149,14 +159,40 @@ export const Chart = z.discriminatedUnion('chartType', [
     z.object({
         chartType: z.literal('radar'),
         data: z.array(DataRow),
+        polarGrid: PolarGridSettings,
         legend: LegendSettings,
-        radarChartDots: z.boolean().default(false),
+
+        // Radar Chart
+        uiRadarChartCX: z.string().optional().default('50%'),
+        uiRadarChartCY: z.string().optional().default('50%'),
+
+        // Radar
+
+        // PolarAngleAxis
+        uiRadarBarFillOpacity: z.number().optional().default(0.8),
+        uiPolarAngleAxisEnabled: z.boolean().default(true),
+        uiPolarAnlgeAxisTick: z.boolean().optional().default(true),
+        uiPolarAngleAxisAllowDuplicatedCategory: z.boolean().optional().default(true),
     }),
     z.object({
         chartType: z.literal('radial'),
         data: z.array(DataRow),
+        polarGrid: PolarGridSettings,
         legend: LegendSettings,
-        radialChartText: z.boolean().default(false),
+
+        // Radial Bar Chart
+        uiRadialBarChartBarCategoryGap: z.string().optional().default('10%'),
+        uiRadialBarChartBarGap: z.number().optional().default(4),
+        uiRadialBarChartCX: z.string().optional().default('50%'),
+        uiRadialBarChartCY: z.string().optional().default('50%'),
+        uiRadialBarChartStartAngle: z.number().optional().default(0),
+        uiRadialBarChartEndAngle: z.number().optional().default(360),
+        uiRadialBarChartInnerRadius: z.string().optional().default('30%'),
+        uiRadialBarChartOuterRadius: z.string().optional().default('100%'),
+
+        // Radial Bar
+        uiRadialBarFillOpacity: z.number().optional().default(0.8),
+        uiRadialBarBackground: z.boolean().optional().default(false),
     }),
 ]);
 

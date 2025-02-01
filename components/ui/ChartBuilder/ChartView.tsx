@@ -3,7 +3,7 @@
 import React, { useEffect } from "react"
 import dynamic from "next/dynamic"
 import { ChartContainer, ChartLegend, ChartLegendContent } from "@/components/ui/chart"
-import { Bar, Area, Pie, Radar, RadialBar, Line, XAxis, YAxis, CartesianGrid, Legend, Scatter } from "recharts"
+import { Bar, Area, Pie, Radar, RadialBar, Line, XAxis, YAxis, CartesianGrid, Legend, Scatter, PolarGrid, PolarAngleAxis } from "recharts"
 import { useToPng } from '@hugocxl/react-to-image'
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -417,9 +417,40 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                 );
             case 'radar':
                 const RadarChart = dynamic(() => import("recharts").then(mod => mod.RadarChart));
+                const radarPolarAngles = Array.from(
+                    { length: chart.polarGrid.polarAnglesCount || 0 },
+                    (_, i) => 360 / (chart.polarGrid.polarAnglesCount || 1) * i
+                );
+
+                const radarPolarRadius = Array.from(
+                    { length: chart.polarGrid.polarRadiusCount || 0 },
+                    (_, i) => (chart.polarGrid.outerRadius || 0) / (chart.polarGrid.polarRadiusCount || 1) * (i + 1)
+                );
+
                 return (
                     <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
-                        <RadarChart accessibilityLayer data={chartData}>
+                        <RadarChart
+                            accessibilityLayer
+                            data={chartData}
+                            cx={chart.uiRadarChartCX}
+                            cy={chart.uiRadarChartCY}
+                        >
+                            {chart.uiPolarAngleAxisEnabled &&
+                                <PolarAngleAxis
+                                    dataKey="label"
+                                    tick={chart.uiPolarAnlgeAxisTick}
+                                    allowDuplicatedCategory={chart.uiPolarAngleAxisAllowDuplicatedCategory}
+                                />
+                            }
+                            {chart.polarGrid.enabled &&
+                                <PolarGrid
+                                    innerRadius={chart.polarGrid.innerRadius}
+                                    outerRadius={chart.polarGrid.outerRadius}
+                                    polarAngles={radarPolarAngles}
+                                    polarRadius={radarPolarRadius}
+                                    gridType={chart.polarGrid.gridType}
+                                />
+                            }
                             {chart.legend.enabled &&
                                 <ChartLegend
                                     content={<ChartLegendContent />}
@@ -430,16 +461,51 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                     iconType={chart.legend.iconType}
                                 />
                             }
-                            <Radar dataKey={chart.data[0].dataSeries[0].dataSeriesLabel} fill={`var(--color-${chart.data[0].dataSeries[0].dataSeriesLabel})`} />
+                            <Radar
+                                isAnimationActive={false}
+                                dataKey={chart.data[0].dataSeries[0].dataSeriesLabel}
+                                fill={`var(--color-${chart.data[0].dataSeries[0].dataSeriesLabel})`}
+                                fillOpacity={chart.uiRadarBarFillOpacity}
+                            />
                         </RadarChart>
                     </ChartContainer>
                 );
             case 'radial':
                 const RadialBarChart = dynamic(() => import("recharts").then(mod => mod.RadialBarChart), { ssr: false });
                 const LabelList = dynamic(() => import("recharts").then(mod => mod.LabelList));
+
+                const radialPolarAngles = Array.from(
+                    { length: chart.polarGrid.polarAnglesCount || 0 },
+                    (_, i) => 360 / (chart.polarGrid.polarAnglesCount || 1) * i
+                );
+
+                const radialPolarRadius = Array.from(
+                    { length: chart.polarGrid.polarRadiusCount || 0 },
+                    (_, i) => (chart.polarGrid.outerRadius || 0) / (chart.polarGrid.polarRadiusCount || 1) * (i + 1)
+                );
                 return (
                     <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
-                        <RadialBarChart accessibilityLayer data={chartData}>
+                        <RadialBarChart
+                            accessibilityLayer
+                            data={chartData}
+                            barCategoryGap={chart.uiRadialBarChartBarCategoryGap}
+                            barGap={chart.uiRadialBarChartBarGap}
+                            cx={chart.uiRadialBarChartCX}
+                            cy={chart.uiRadialBarChartCY}
+                            startAngle={chart.uiRadialBarChartStartAngle}
+                            endAngle={chart.uiRadialBarChartEndAngle}
+                            innerRadius={chart.uiRadialBarChartInnerRadius}
+                            outerRadius={chart.uiRadialBarChartOuterRadius}
+                        >
+                            {chart.polarGrid.enabled &&
+                                <PolarGrid
+                                    innerRadius={chart.polarGrid.innerRadius}
+                                    outerRadius={chart.polarGrid.outerRadius}
+                                    polarAngles={radialPolarAngles}
+                                    polarRadius={radialPolarRadius}
+                                    gridType={chart.polarGrid.gridType}
+                                />
+                            }
                             {chart.legend.enabled &&
                                 <ChartLegend
                                     content={<ChartLegendContent />}
@@ -450,7 +516,12 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                     iconType={chart.legend.iconType}
                                 />
                             }
-                            <RadialBar dataKey={chart.data[0].dataSeries[0].dataSeriesLabel} fill={`var(--color-${chart.data[0].dataSeries[0].dataSeriesLabel})`}>
+                            <RadialBar
+                                dataKey={chart.data[0].dataSeries[0].dataSeriesLabel}
+                                fill={`var(--color-${chart.data[0].dataSeries[0].dataSeriesLabel})`}
+                                fillOpacity={chart.uiRadialBarFillOpacity}
+                                background={chart.uiRadialBarBackground}
+                            >
                                 <LabelList
                                     position="insideStart"
                                     dataKey="label"
