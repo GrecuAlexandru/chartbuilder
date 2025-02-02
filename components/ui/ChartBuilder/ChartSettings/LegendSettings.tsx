@@ -2,6 +2,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Chart } from "@/types/chart"; // Assuming you have a Chart type defined
+import { SliderInput } from "../../sliderinput";
 
 interface LegendSettingsProps {
     chart: Chart;
@@ -57,11 +58,15 @@ export default function LegendSettings({ chart, setChart }: LegendSettingsProps)
                 </div>
                 <div>
                     <Label>Icon Size</Label>
-                    <Input
+                    <SliderInput
                         type="number"
+                        min={0}
+                        max={20}
                         value={chart.legend.iconSize ?? 14}
                         onChange={(e) => setChart({ ...chart, legend: { ...chart.legend, iconSize: parseInt(e.target.value) } })}
                     />
+
+
                 </div>
                 <div>
                     <Label>Icon Type</Label>
