@@ -1,8 +1,8 @@
 import { Switch } from "@/components/ui/switch"
-import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Chart } from "@/types/chart";
+import ColorPicker from "@/components/ui/color-picker"
 
 
 interface BarChartSettingsProps {
@@ -18,7 +18,7 @@ export default function BarChartSettings({ chart, setChart }: BarChartSettingsPr
             <div className="space-y-4 mt-4 mb-8">
                 <h1 className="text-2xl font-semibold">Bar Chart Settings</h1>
                 <div>
-                    <Label htmlFor="layout">Layout</Label>
+                    <h1>Layout</h1>
                     <select
                         id="layout"
                         value={chart.uiBarChartLayout ?? 'vertical'}
@@ -30,7 +30,7 @@ export default function BarChartSettings({ chart, setChart }: BarChartSettingsPr
                     </select>
                 </div>
                 <div>
-                    <Label htmlFor="barCategoryGap">Bar Category Gap</Label>
+                    <h1>Bar Category Gap</h1>
                     <Input
                         id="barCategoryGap"
                         type="text"
@@ -40,7 +40,7 @@ export default function BarChartSettings({ chart, setChart }: BarChartSettingsPr
                     />
                 </div>
                 <div>
-                    <Label htmlFor="barGap">Bar Gap</Label>
+                    <h1>Bar Gap</h1>
                     <Input
                         id="barGap"
                         type="text"
@@ -50,7 +50,7 @@ export default function BarChartSettings({ chart, setChart }: BarChartSettingsPr
                     />
                 </div>
                 <div>
-                    <Label htmlFor="stackOffset">Stack Offset</Label>
+                    <h1>Stack Offset</h1>
                     <select
                         id="stackOffset"
                         value={chart.uiBarChartStackOffset ?? 'none'}
@@ -65,7 +65,7 @@ export default function BarChartSettings({ chart, setChart }: BarChartSettingsPr
                     </select>
                 </div>
                 <div className="flex items-center justify-between">
-                    <Label htmlFor="reverseStackOrder">Reverse Stack Order</Label>
+                    <h1>Reverse Stack Order</h1>
                     <Switch
                         id="reverseStackOrder"
                         checked={chart.uiBarChartReverseStackOrder ?? false}
@@ -77,12 +77,10 @@ export default function BarChartSettings({ chart, setChart }: BarChartSettingsPr
             <div className="space-y-4 mb-8">
                 <h1 className="text-2xl font-semibold">Bar Settings</h1>
                 <div>
-                    <Label>Background Fill</Label>
-                    <Input
-                        type="color"
-                        value={chart.uiBarBackgroundFill ?? chart.cartesianGrid.backgroundFill ?? '#ffffff'}
-                        onChange={(e) => setChart({ ...chart, uiBarBackgroundFill: e.target.value })}
-                        className="w-full h-10"
+                    <h1>Background Fill</h1>
+                    <ColorPicker
+                        default_value={chart.uiBarBackgroundFill ?? chart.cartesianGrid.backgroundFill ?? '#ffffff'}
+                        onChange={(color) => setChart({ ...chart, uiBarBackgroundFill: color })}
                     />
                     <Button
                         onClick={() => setChart({ ...chart, uiBarBackgroundFill: chart.cartesianGrid.backgroundFill ?? '#ffffff' })}

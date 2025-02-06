@@ -2,6 +2,7 @@ import { Chart } from "@/types/chart";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
+import ColorPicker from "@/components/ui/color-picker";
 
 interface CartesianGridSettingsProps {
     chart: Chart;
@@ -38,11 +39,9 @@ export default function CartesianGridSettings({ chart, setChart }: CartesianGrid
                 </div>
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Background Fill</label>
-                    <Input
-                        type="color"
-                        value={chart.cartesianGrid.backgroundFill ?? '#ffffff'}
-                        onChange={(e) => setChart({ ...chart, cartesianGrid: { ...chart.cartesianGrid, backgroundFill: e.target.value } })}
-                        className="w-full h-10"
+                    <ColorPicker
+                        default_value={chart.cartesianGrid.backgroundFill ?? '#ffffff'}
+                        onChange={(color) => setChart({ ...chart, cartesianGrid: { ...chart.cartesianGrid, backgroundFill: color } })}
                     />
                 </div>
                 <div>

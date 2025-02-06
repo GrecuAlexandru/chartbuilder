@@ -30,7 +30,7 @@ export default function ChatInput() {
             });
             const data = await response.json();
 
-            console.log(data);
+            // console.log(data);
 
             const string_text = JSON.stringify(data.chart, null, 2);
 

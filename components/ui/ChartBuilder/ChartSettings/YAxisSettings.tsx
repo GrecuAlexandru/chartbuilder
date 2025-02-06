@@ -1,5 +1,4 @@
 import { Chart } from "@/types/chart";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 
@@ -15,7 +14,7 @@ export default function YAxisSettings({ chart, setChart }: YAxisSettingsProps) {
         <div className="space-y-4 mb-8">
             <h1 className="text-2xl font-semibold">Y Axis Settings</h1>
             <div className="flex items-center justify-between">
-                <Label>Enable Y Axis</Label>
+                <h1>Enable Y Axis</h1>
                 <Switch
                     checked={chart.yAxis.enabled ?? false}
                     onCheckedChange={(checked) => setChart({ ...chart, yAxis: { ...chart.yAxis, enabled: checked } })}
@@ -23,7 +22,7 @@ export default function YAxisSettings({ chart, setChart }: YAxisSettingsProps) {
             </div>
             <div className={`space-y-4 ${!chart.yAxis.enabled ? 'opacity-50 pointer-events-none' : ''}`}>
                 <div>
-                    <Label>Width</Label>
+                    <h1>Width</h1>
                     <Input
                         type="number"
                         value={chart.yAxis.height ?? 30}
@@ -31,7 +30,7 @@ export default function YAxisSettings({ chart, setChart }: YAxisSettingsProps) {
                     />
                 </div>
                 <div>
-                    <Label>Orientation</Label>
+                    <h1>Orientation</h1>
                     <select
                         value={chart.yAxis.orientation ?? 'bottom'}
                         onChange={(e) => setChart({ ...chart, yAxis: { ...chart.yAxis, orientation: e.target.value as 'top' | 'bottom' } })}
@@ -42,14 +41,14 @@ export default function YAxisSettings({ chart, setChart }: YAxisSettingsProps) {
                     </select>
                 </div>
                 <div className="flex items-center justify-between">
-                    <Label>Allow Decimals</Label>
+                    <h1>Allow Decimals</h1>
                     <Switch
                         checked={chart.yAxis.allowDecimals ?? true}
                         onCheckedChange={(checked) => setChart({ ...chart, yAxis: { ...chart.yAxis, allowDecimals: checked } })}
                     />
                 </div>
                 <div>
-                    <Label>Tick Count</Label>
+                    <h1>Tick Count</h1>
                     <Input
                         type="number"
                         value={chart.yAxis.tickCount ?? 5}
@@ -57,7 +56,7 @@ export default function YAxisSettings({ chart, setChart }: YAxisSettingsProps) {
                     />
                 </div>
                 <div>
-                    <Label>Padding Top</Label>
+                    <h1>Padding Top</h1>
                     <Input
                         type="number"
                         value={chart.yAxis.paddingLeft ?? 0}
@@ -65,7 +64,7 @@ export default function YAxisSettings({ chart, setChart }: YAxisSettingsProps) {
                     />
                 </div>
                 <div>
-                    <Label>Padding Bottom</Label>
+                    <h1>Padding Bottom</h1>
                     <Input
                         type="number"
                         value={chart.yAxis.paddingRight ?? 0}
@@ -73,7 +72,7 @@ export default function YAxisSettings({ chart, setChart }: YAxisSettingsProps) {
                     />
                 </div>
                 <div>
-                    <Label>Tick Size</Label>
+                    <h1>Tick Size</h1>
                     <Input
                         type="number"
                         value={chart.yAxis.tickSize ?? 6}
@@ -81,14 +80,14 @@ export default function YAxisSettings({ chart, setChart }: YAxisSettingsProps) {
                     />
                 </div>
                 <div className="flex items-center justify-between">
-                    <Label>Mirror</Label>
+                    <h1>Mirror</h1>
                     <Switch
                         checked={chart.yAxis.mirror ?? false}
                         onCheckedChange={(checked) => setChart({ ...chart, yAxis: { ...chart.yAxis, mirror: checked } })}
                     />
                 </div>
                 <div className="flex items-center justify-between">
-                    <Label>Reversed</Label>
+                    <h1>Reversed</h1>
                     <Switch
                         checked={chart.yAxis.reversed ?? false}
                         onCheckedChange={(checked) => setChart({ ...chart, yAxis: { ...chart.yAxis, reversed: checked } })}

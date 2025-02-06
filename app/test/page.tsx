@@ -1,109 +1,33 @@
 "use client"
 
-import { TrendingUp } from "lucide-react"
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
+import { useState } from 'react';
+import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
+import ColorPicker from '@/components/ui/color-picker';
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart"
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-]
-
-const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "hsl(var(--chart-1))",
-  },
-  mobile: {
-    label: "Mobile",
-    color: "hsl(var(--chart-2))",
-  },
-} satisfies ChartConfig
+const data = [{ name: 'Page A', uv: 400, pv: 2400, amt: 2400 },
+{ name: 'Page A', uv: 500, pv: 2400, amt: 2400 },
+{ name: 'Page A', uv: 600, pv: 2400, amt: 2400 },
+{ name: 'Page A', uv: 700, pv: 2400, amt: 2400 }
+];
 
 export default function Component() {
+  const [lineColor, setLineColor] = useState('#8884d8');
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Area Chart - Legend</CardTitle>
-        <CardDescription>
-          Showing total visitors for the last 6 months
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig}>
-          <AreaChart
-            accessibilityLayer
-            data={chartData}
-            margin={{
-              left: 12,
-              right: 12,
-            }}
-          >
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="line" />}
-            />
-            <Area
-              dataKey="mobile"
-              type="natural"
-              fill="var(--color-mobile)"
-              fillOpacity={0.4}
-              stroke="var(--color-mobile)"
-              stackId="a"
-              legendType="none"
-            />
-            <Area
-              dataKey="desktop"
-              type="natural"
-              fill="var(--color-desktop)"
-              fillOpacity={0.4}
-              stroke="var(--color-desktop)"
-              stackId="a"
-              legendType="none"
-            />
-            <ChartLegend content={<ChartLegendContent />} />
-          </AreaChart>
-        </ChartContainer>
-      </CardContent>
-      <CardFooter>
-        <div className="flex w-full items-start gap-2 text-sm">
-          <div className="grid gap-2">
-            <div className="flex items-center gap-2 font-medium leading-none">
-              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-            </div>
-            <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              January - June 2024
-            </div>
-          </div>
+    <div>
+      <div className="space-y-4 mb-8">
+        <h1 className="text-2xl font-semibold">Line Settings</h1>
+        <div>
+          {/* <Label>Line Color</Label> */}
+          <ColorPicker onChange={setLineColor} />
         </div>
-      </CardFooter>
-    </Card>
+      </div>
+      <LineChart width={600} height={300} data={data}>
+        <Line isAnimationActive={false} type="monotone" dataKey="uv" stroke={lineColor} />
+        {/* <CartesianGrid stroke="#ccc" /> */}
+        {/* <XAxis dataKey="name" /> */}
+        {/* <YAxis /> */}
+      </LineChart>
+    </div>
   )
 }

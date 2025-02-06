@@ -1,7 +1,7 @@
 import { Chart } from "@/types/chart";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import ColorPicker from "@/components/ui/color-picker";
 
 interface LineChartSettingsProps {
     chart: Chart;
@@ -15,7 +15,7 @@ export default function LineChartSettings({ chart, setChart }: LineChartSettings
         <div className="space-y-4 mt-4 mb-8">
             <h1 className="text-2xl font-semibold">Line Chart Settings</h1>
             <div>
-                <Label htmlFor="lineType">Line Type</Label>
+                <h1>Line Type</h1>
                 <select
                     id="lineType"
                     value={chart.uiLineType ?? 'linear'}
@@ -28,17 +28,14 @@ export default function LineChartSettings({ chart, setChart }: LineChartSettings
                 </select>
             </div>
             <div>
-                <Label htmlFor="lineStroke">Stroke Color</Label>
-                <Input
-                    id="lineStroke"
-                    type="color"
-                    value={chart.uiLineStroke ?? '#000000'}
-                    onChange={(e) => setChart({ ...chart, uiLineStroke: e.target.value })}
-                    className="w-full h-10"
+                <h1>Stroke Color</h1>
+                <ColorPicker
+                    default_value={chart.uiLineStroke ?? '#000000'}
+                    onChange={(color) => setChart({ ...chart, uiLineStroke: color })}
                 />
             </div>
             <div>
-                <Label htmlFor="lineWidth">Stroke Width</Label>
+                <h1>Stroke Width</h1>
                 <Input
                     id="lineWidth"
                     type="number"
@@ -47,7 +44,7 @@ export default function LineChartSettings({ chart, setChart }: LineChartSettings
                 />
             </div>
             <div className="flex items-center justify-between">
-                <Label htmlFor="connectNulls">Connect Nulls</Label>
+                <h1>Connect Nulls</h1>
                 <Switch
                     id="connectNulls"
                     checked={chart.uiLineConnectNulls ?? false}

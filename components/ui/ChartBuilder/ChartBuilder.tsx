@@ -24,8 +24,6 @@ export default function ChartBuilder() {
     const [chartData, setChartData] = useState<{ label: string;[key: string]: any }[]>([])
     const [chartConfig, setChartConfig] = useState<ChartConfig>({})
 
-    console.log(Chart);
-
     const handleDemoRequest = () => {
         const demoMessage = 'Bar chart with 3 random values';
         setMessage(demoMessage);
@@ -111,16 +109,12 @@ export default function ChartBuilder() {
         if (!messageToUse.trim()) return;
 
         const msg = messageToUse;
-        console.log("msg", msg);
         setMessage('');
         if (msg.trim()) {
             const oldHistory = chatHistory;
             const newHistory = [...chatHistory, { role: 'user', content: msg }];
             setChatHistory(newHistory);
             try {
-
-                console.log(msg);
-
                 const response = await fetch('/api/chartbot', {
                     method: 'POST',
                     headers: {
@@ -135,8 +129,6 @@ export default function ChartBuilder() {
                 const data = await response.json();
                 const validatedChart = Chart.parse(data.chart);
                 setChart(validatedChart);
-                console.log(data);
-
 
                 if (data.chart.chartType === 'pie') {
                     const chData: { label: string;[key: string]: any }[] = data.chart.data.map((row: zInfer<typeof DataRow>) => {

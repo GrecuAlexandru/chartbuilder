@@ -1,5 +1,4 @@
 import { Chart } from "@/types/chart";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
@@ -16,7 +15,7 @@ export default function PolarGridSettings({ chart, setChart }: PolarGridSettings
         <div className="space-y-4 mb-8">
             <h1 className="text-2xl font-semibold">Polar Grid Settings</h1>
             <div className="flex items-center justify-between">
-                <Label>Enable Polar Grid</Label>
+                <h1>Enable Polar Grid</h1>
                 <Switch
                     checked={chart.polarGrid?.enabled ?? true}
                     onCheckedChange={(checked) => setChart({ ...chart, polarGrid: { ...chart.polarGrid, enabled: checked } })}
@@ -24,7 +23,7 @@ export default function PolarGridSettings({ chart, setChart }: PolarGridSettings
             </div>
             <div className={`space-y-4 ${!chart.polarGrid?.enabled ? 'opacity-50 pointer-events-none' : ''}`}>
                 <div>
-                    <Label>Inner Radius</Label>
+                    <h1>Inner Radius</h1>
                     <Input
                         type="number"
                         value={chart.polarGrid?.innerRadius ?? 0}
@@ -32,7 +31,7 @@ export default function PolarGridSettings({ chart, setChart }: PolarGridSettings
                     />
                 </div>
                 <div>
-                    <Label>Outer Radius</Label>
+                    <h1>Outer Radius</h1>
                     <Input
                         type="number"
                         value={chart.polarGrid?.outerRadius ?? 80}
@@ -40,7 +39,7 @@ export default function PolarGridSettings({ chart, setChart }: PolarGridSettings
                     />
                 </div>
                 <div>
-                    <Label>Polar Angles Count</Label>
+                    <h1>Polar Angles Count</h1>
                     <Input
                         type="number"
                         value={chart.polarGrid?.polarAnglesCount ?? 6}
@@ -48,7 +47,7 @@ export default function PolarGridSettings({ chart, setChart }: PolarGridSettings
                     />
                 </div>
                 <div>
-                    <Label>Polar Radius Count</Label>
+                    <h1>Polar Radius Count</h1>
                     <Input
                         type="number"
                         value={chart.polarGrid?.polarRadiusCount ?? 6}
@@ -56,7 +55,7 @@ export default function PolarGridSettings({ chart, setChart }: PolarGridSettings
                     />
                 </div>
                 <div>
-                    <Label>Grid Type</Label>
+                    <h1>Grid Type</h1>
                     <select
                         value={chart.polarGrid?.gridType ?? 'polygon'}
                         onChange={(e) => setChart({ ...chart, polarGrid: { ...chart.polarGrid, gridType: e.target.value as 'circle' | 'polygon' } })}

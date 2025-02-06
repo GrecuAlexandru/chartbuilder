@@ -1,5 +1,4 @@
 import { Chart } from "@/types/chart";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
@@ -16,7 +15,7 @@ export default function RadialBarChartSettings({ chart, setChart }: RadialBarCha
         <div className="space-y-4 mt-4 mb-8">
             <h1 className="text-2xl font-semibold">Radial Bar Chart Settings</h1>
             <div>
-                <Label htmlFor="fillOpacity">Fill Opacity</Label>
+                <h1>Fill Opacity</h1>
                 <Slider
                     id="fillOpacity"
                     value={[chart.uiRadialBarFillOpacity ?? 0.8]}
@@ -31,7 +30,7 @@ export default function RadialBarChartSettings({ chart, setChart }: RadialBarCha
                 </div>
             </div>
             <div>
-                <Label htmlFor="barCategoryGap">Bar Category Gap</Label>
+                <h1>Bar Category Gap</h1>
                 <Input
                     id="barCategoryGap"
                     type="text"
@@ -40,7 +39,7 @@ export default function RadialBarChartSettings({ chart, setChart }: RadialBarCha
                 />
             </div>
             <div>
-                <Label htmlFor="barGap">Bar Gap</Label>
+                <h1>Bar Gap</h1>
                 <Input
                     id="barGap"
                     type="number"
@@ -49,7 +48,7 @@ export default function RadialBarChartSettings({ chart, setChart }: RadialBarCha
                 />
             </div>
             <div>
-                <Label htmlFor="cx">Center X</Label>
+                <h1>Center X</h1>
                 <Input
                     id="cx"
                     type="text"
@@ -58,7 +57,7 @@ export default function RadialBarChartSettings({ chart, setChart }: RadialBarCha
                 />
             </div>
             <div>
-                <Label htmlFor="cy">Center Y</Label>
+                <h1>Center Y</h1>
                 <Input
                     id="cy"
                     type="text"
@@ -67,7 +66,7 @@ export default function RadialBarChartSettings({ chart, setChart }: RadialBarCha
                 />
             </div>
             <div>
-                <Label htmlFor="startAngle">Start Angle</Label>
+                <h1>Start Angle</h1>
                 <Input
                     id="startAngle"
                     type="number"
@@ -76,7 +75,7 @@ export default function RadialBarChartSettings({ chart, setChart }: RadialBarCha
                 />
             </div>
             <div>
-                <Label htmlFor="endAngle">End Angle</Label>
+                <h1>End Angle</h1>
                 <Input
                     id="endAngle"
                     type="number"
@@ -85,7 +84,7 @@ export default function RadialBarChartSettings({ chart, setChart }: RadialBarCha
                 />
             </div>
             <div>
-                <Label htmlFor="innerRadius">Inner Radius</Label>
+                <h1>Inner Radius</h1>
                 <Input
                     id="innerRadius"
                     type="text"
@@ -94,7 +93,7 @@ export default function RadialBarChartSettings({ chart, setChart }: RadialBarCha
                 />
             </div>
             <div>
-                <Label htmlFor="outerRadius">Outer Radius</Label>
+                <h1>Outer Radius</h1>
                 <Input
                     id="outerRadius"
                     type="text"
@@ -103,7 +102,7 @@ export default function RadialBarChartSettings({ chart, setChart }: RadialBarCha
                 />
             </div>
             <div className="flex items-center justify-between">
-                <Label htmlFor="background">Show Background</Label>
+                <h1>Show Background</h1>
                 <Switch
                     id="background"
                     checked={chart.uiRadialBarBackground ?? false}

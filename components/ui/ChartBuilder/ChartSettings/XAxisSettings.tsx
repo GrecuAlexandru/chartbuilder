@@ -1,5 +1,4 @@
 import { Chart } from "@/types/chart";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 
@@ -15,7 +14,7 @@ export default function XAxisSettings({ chart, setChart }: XAxisSettingsProps) {
         <div className="space-y-4 mb-8">
             <h1 className="text-2xl font-semibold">X Axis Settings</h1>
             <div className="flex items-center justify-between">
-                <Label>Enable X Axis</Label>
+                <h1>Enable X Axis</h1>
                 <Switch
                     checked={chart.xAxis?.enabled ?? false}
                     onCheckedChange={(checked) => setChart({ ...chart, xAxis: { ...chart.xAxis, enabled: checked } })}
@@ -23,7 +22,7 @@ export default function XAxisSettings({ chart, setChart }: XAxisSettingsProps) {
             </div>
             <div className={`space-y-4 ${!chart.xAxis?.enabled ? 'opacity-50 pointer-events-none' : ''}`}>
                 <div>
-                    <Label>Height</Label>
+                    <h1>Height</h1>
                     <Input
                         type="number"
                         value={chart.xAxis?.height ?? 30}
@@ -31,7 +30,7 @@ export default function XAxisSettings({ chart, setChart }: XAxisSettingsProps) {
                     />
                 </div>
                 <div>
-                    <Label>Orientation</Label>
+                    <h1>Orientation</h1>
                     <select
                         value={chart.xAxis?.orientation ?? 'bottom'}
                         onChange={(e) => setChart({ ...chart, xAxis: { ...chart.xAxis, orientation: e.target.value as 'top' | 'bottom' } })}
@@ -42,14 +41,14 @@ export default function XAxisSettings({ chart, setChart }: XAxisSettingsProps) {
                     </select>
                 </div>
                 <div className="flex items-center justify-between">
-                    <Label>Allow Decimals</Label>
+                    <h1>Allow Decimals</h1>
                     <Switch
                         checked={chart.xAxis?.allowDecimals ?? true}
                         onCheckedChange={(checked) => setChart({ ...chart, xAxis: { ...chart.xAxis, allowDecimals: checked } })}
                     />
                 </div>
                 <div>
-                    <Label>Tick Count</Label>
+                    <h1>Tick Count</h1>
                     <Input
                         type="number"
                         value={chart.xAxis?.tickCount ?? 5}
@@ -57,7 +56,7 @@ export default function XAxisSettings({ chart, setChart }: XAxisSettingsProps) {
                     />
                 </div>
                 <div>
-                    <Label>Padding Left</Label>
+                    <h1>Padding Left</h1>
                     <Input
                         type="number"
                         value={chart.xAxis?.paddingLeft ?? 0}
@@ -65,7 +64,7 @@ export default function XAxisSettings({ chart, setChart }: XAxisSettingsProps) {
                     />
                 </div>
                 <div>
-                    <Label>Padding Right</Label>
+                    <h1>Padding Right</h1>
                     <Input
                         type="number"
                         value={chart.xAxis?.paddingRight ?? 0}
@@ -73,7 +72,7 @@ export default function XAxisSettings({ chart, setChart }: XAxisSettingsProps) {
                     />
                 </div>
                 <div>
-                    <Label>Tick Size</Label>
+                    <h1>Tick Size</h1>
                     <Input
                         type="number"
                         value={chart.xAxis?.tickSize ?? 6}
@@ -81,14 +80,14 @@ export default function XAxisSettings({ chart, setChart }: XAxisSettingsProps) {
                     />
                 </div>
                 <div className="flex items-center justify-between">
-                    <Label>Mirror</Label>
+                    <h1>Mirror</h1>
                     <Switch
                         checked={chart.xAxis?.mirror ?? false}
                         onCheckedChange={(checked) => setChart({ ...chart, xAxis: { ...chart.xAxis, mirror: checked } })}
                     />
                 </div>
                 <div className="flex items-center justify-between">
-                    <Label>Reversed</Label>
+                    <h1>Reversed</h1>
                     <Switch
                         checked={chart.xAxis?.reversed ?? false}
                         onCheckedChange={(checked) => setChart({ ...chart, xAxis: { ...chart.xAxis, reversed: checked } })}

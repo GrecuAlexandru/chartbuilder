@@ -1,5 +1,4 @@
 import { Chart } from "@/types/chart";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 
@@ -16,7 +15,7 @@ export default function RadarChartSettings({ chart, setChart }: RadarChartSettin
             <div className="space-y-4 mt-4 mb-8">
                 <h1 className="text-2xl font-semibold">Radar Chart Settings</h1>
                 <div>
-                    <Label htmlFor="cx">Center X (%)</Label>
+                    <h1>Center X (%)</h1>
                     <Input
                         id="cx"
                         type="text"
@@ -25,7 +24,7 @@ export default function RadarChartSettings({ chart, setChart }: RadarChartSettin
                     />
                 </div>
                 <div>
-                    <Label htmlFor="cy">Center Y (%)</Label>
+                    <h1>Center Y (%)</h1>
                     <Input
                         id="cy"
                         type="text"
@@ -38,7 +37,7 @@ export default function RadarChartSettings({ chart, setChart }: RadarChartSettin
             <div className="space-y-4 mt-4 mb-8">
                 <h1 className="text-2xl font-semibold">Radar Settings</h1>
                 <div>
-                    <Label htmlFor="fillOpacity">Fill Opacity</Label>
+                    <h1>Fill Opacity</h1>
                     <Slider
                         id="fillOpacity"
                         value={[chart.uiRadarBarFillOpacity ?? 0.8]}

@@ -1,5 +1,4 @@
 import { Chart } from "@/types/chart";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
 interface PieChartSettingsProps {
@@ -14,7 +13,7 @@ export default function PieChartSettings({ chart, setChart }: PieChartSettingsPr
         <div className="space-y-4 mb-8">
             <h1 className="text-2xl font-semibold">Pie Chart Settings</h1>
             <div>
-                <Label htmlFor="cx">Center X (%)</Label>
+                <h1>Center X (%)</h1>
                 <Input
                     id="cx"
                     type="text"
@@ -23,7 +22,7 @@ export default function PieChartSettings({ chart, setChart }: PieChartSettingsPr
                 />
             </div>
             <div>
-                <Label htmlFor="cy">Center Y (%)</Label>
+                <h1>Center Y (%)</h1>
                 <Input
                     id="cy"
                     type="text"
@@ -32,7 +31,7 @@ export default function PieChartSettings({ chart, setChart }: PieChartSettingsPr
                 />
             </div>
             <div>
-                <Label htmlFor="innerRadius">Inner Radius</Label>
+                <h1>Inner Radius</h1>
                 <Input
                     id="innerRadius"
                     type="number"
@@ -41,7 +40,7 @@ export default function PieChartSettings({ chart, setChart }: PieChartSettingsPr
                 />
             </div>
             <div>
-                <Label htmlFor="outerRadius">Outer Radius</Label>
+                <h1>Outer Radius</h1>
                 <Input
                     id="outerRadius"
                     type="number"
@@ -50,7 +49,7 @@ export default function PieChartSettings({ chart, setChart }: PieChartSettingsPr
                 />
             </div>
             <div>
-                <Label htmlFor="startAngle">Start Angle</Label>
+                <h1>Start Angle</h1>
                 <Input
                     id="startAngle"
                     type="number"
@@ -59,7 +58,7 @@ export default function PieChartSettings({ chart, setChart }: PieChartSettingsPr
                 />
             </div>
             <div>
-                <Label htmlFor="endAngle">End Angle</Label>
+                <h1>End Angle</h1>
                 <Input
                     id="endAngle"
                     type="number"
@@ -68,7 +67,7 @@ export default function PieChartSettings({ chart, setChart }: PieChartSettingsPr
                 />
             </div>
             <div>
-                <Label htmlFor="minAngle">Minimum Angle</Label>
+                <h1>Minimum Angle</h1>
                 <Input
                     id="minAngle"
                     type="number"
@@ -77,7 +76,7 @@ export default function PieChartSettings({ chart, setChart }: PieChartSettingsPr
                 />
             </div>
             <div>
-                <Label htmlFor="paddingAngle">Padding Angle</Label>
+                <h1>Padding Angle</h1>
                 <Input
                     id="paddingAngle"
                     type="number"
@@ -86,7 +85,7 @@ export default function PieChartSettings({ chart, setChart }: PieChartSettingsPr
                 />
             </div>
             <div>
-                <Label htmlFor="activeIndex">Active Segment</Label>
+                <h1>Active Segment</h1>
                 <Input
                     id="activeIndex"
                     type="number"

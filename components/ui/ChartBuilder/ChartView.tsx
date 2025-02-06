@@ -1,16 +1,14 @@
 "use client"
 
 import React, { useEffect } from "react"
-import dynamic from "next/dynamic"
 import { ChartContainer, ChartLegend, ChartLegendContent } from "@/components/ui/chart"
-import { Bar, Area, Pie, Radar, RadialBar, Line, XAxis, YAxis, CartesianGrid, Legend, Scatter, PolarGrid, PolarAngleAxis } from "recharts"
+import { BarChart, AreaChart, LineChart, RadarChart, ScatterChart, RadialBarChart, LabelList, PieChart, Bar, Area, Pie, Radar, RadialBar, Line, XAxis, YAxis, CartesianGrid, Legend, Scatter, PolarGrid, PolarAngleAxis } from "recharts"
 import { useToPng } from '@hugocxl/react-to-image'
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent } from "@/components/ui/card"
 import PrismLoader from "@/components/ui/CustomUI/prism-loader";
 import { Chart } from "@/types/chart"
-
 
 interface ChartViewProps {
     chart?: Chart
@@ -44,8 +42,6 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
         }
     }, [chartCode]);
 
-    console.log(chart);
-
     const renderChart = () => {
         if (!chart) return <div>Loading...</div>;
 
@@ -72,7 +68,6 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
 
         switch (chart.chartType) {
             case 'bar':
-                const BarChart = dynamic(() => import("recharts").then(mod => mod.BarChart));
                 return (
                     <ChartContainer ref={ref} config={chartConfig} className="w-full p-4 pb-8 bg-white">
                         <BarChart
@@ -180,7 +175,6 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                     </ChartContainer>
                 );
             case 'area':
-                const AreaChart = dynamic(() => import("recharts").then(mod => mod.AreaChart));
                 return (
                     <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
                         <AreaChart
@@ -254,7 +248,6 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                     </ChartContainer>
                 );
             case 'line':
-                const LineChart = dynamic(() => import("recharts").then(mod => mod.LineChart));
                 return (
                     <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
                         <LineChart
@@ -315,7 +308,6 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                     </ChartContainer>
                 );
             case 'scatter':
-                const ScatterChart = dynamic(() => import("recharts").then(mod => mod.ScatterChart));
                 return (
                     <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
                         <ScatterChart
@@ -384,7 +376,6 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                     </ChartContainer>
                 );
             case 'pie':
-                const PieChart = dynamic(() => import("recharts").then(mod => mod.PieChart));
                 return (
                     <ChartContainer config={chartConfig} className="w-full p-4 pb-8">
                         <PieChart accessibilityLayer>
@@ -416,7 +407,6 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                     </ChartContainer>
                 );
             case 'radar':
-                const RadarChart = dynamic(() => import("recharts").then(mod => mod.RadarChart));
                 const radarPolarAngles = Array.from(
                     { length: chart.polarGrid.polarAnglesCount || 0 },
                     (_, i) => 360 / (chart.polarGrid.polarAnglesCount || 1) * i
@@ -471,8 +461,6 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                     </ChartContainer>
                 );
             case 'radial':
-                const RadialBarChart = dynamic(() => import("recharts").then(mod => mod.RadialBarChart), { ssr: false });
-                const LabelList = dynamic(() => import("recharts").then(mod => mod.LabelList));
 
                 const radialPolarAngles = Array.from(
                     { length: chart.polarGrid.polarAnglesCount || 0 },

@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Send } from "lucide-react"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { memo } from "react"
 
 interface ChatInterfaceProps {
     chatHistory: { role: string, content: string }[]
@@ -12,7 +13,7 @@ interface ChatInterfaceProps {
     handleDemoRequest: () => void;
 }
 
-export function ChatInterface({
+export const ChatInterface = memo(function ChatInterface({
     chatHistory,
     message,
     setMessage,
@@ -55,4 +56,4 @@ export function ChatInterface({
             </form>
         </div>
     )
-}
+});

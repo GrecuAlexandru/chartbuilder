@@ -1,7 +1,7 @@
 import { Chart } from "@/types/chart";
 import { Switch } from "@/components/ui/switch"
-import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
+import ColorPicker from "@/components/ui/color-picker"
 
 interface AreaSettingsProps {
     chart: Chart;
@@ -15,7 +15,7 @@ export default function AreaChartSettings({ chart, setChart }: AreaSettingsProps
         <div className="space-y-4 mt-4 mb-8">
             <h1 className="text-2xl font-semibold">Area Chart Settings</h1>
             <div>
-                <Label htmlFor="stackOffset">Stack Offset</Label>
+                <h1>Stack Offset</h1>
                 <select
                     id="stackOffset"
                     value={chart.uiAreaChartStackOffset ?? 'none'}
@@ -29,7 +29,7 @@ export default function AreaChartSettings({ chart, setChart }: AreaSettingsProps
                 </select>
             </div>
             <div>
-                <Label htmlFor="areaType">Area Type</Label>
+                <h1>Area Type</h1>
                 <select
                     id="areaType"
                     value={chart.uiAreaType ?? 'linear'}
@@ -42,17 +42,14 @@ export default function AreaChartSettings({ chart, setChart }: AreaSettingsProps
                 </select>
             </div>
             <div>
-                <Label htmlFor="areaStroke">Stroke Color</Label>
-                <Input
-                    id="areaStroke"
-                    type="color"
-                    value={chart.uiAreaStroke ?? '#000000'}
-                    onChange={(e) => setChart({ ...chart, uiAreaStroke: e.target.value })}
-                    className="w-full h-10"
+                <h1>Stroke Color</h1>
+                <ColorPicker
+                    default_value={chart.uiAreaStroke ?? '#000000'}
+                    onChange={(color) => setChart({ ...chart, uiAreaStroke: color })}
                 />
             </div>
             <div>
-                <Label htmlFor="strokeWidth">Stroke Width</Label>
+                <h1>Stroke Width</h1>
                 <Input
                     id="strokeWidth"
                     type="number"
@@ -61,7 +58,7 @@ export default function AreaChartSettings({ chart, setChart }: AreaSettingsProps
                 />
             </div>
             <div className="flex items-center justify-between">
-                <Label htmlFor="connectNulls">Connect Nulls</Label>
+                <h1>Connect Nulls</h1>
                 <Switch
                     id="connectNulls"
                     checked={chart.uiAreaConnectNulls ?? false}

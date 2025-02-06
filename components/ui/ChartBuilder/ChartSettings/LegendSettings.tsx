@@ -1,4 +1,3 @@
-import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Chart } from "@/types/chart"; // Assuming you have a Chart type defined
@@ -14,7 +13,7 @@ export default function LegendSettings({ chart, setChart }: LegendSettingsProps)
         <div className="space-y-4 mb-8">
             <h1 className="text-2xl font-semibold">Legend Settings</h1>
             <div className="flex items-center justify-between">
-                <Label>Enable Legend</Label>
+                <h1>Enable Legend</h1>
                 <Switch
                     checked={chart.legend.enabled ?? false}
                     onCheckedChange={(checked) => setChart({ ...chart, legend: { ...chart.legend, enabled: checked } })}
@@ -22,7 +21,7 @@ export default function LegendSettings({ chart, setChart }: LegendSettingsProps)
             </div>
             <div className={`space-y-4 ${!chart.legend.enabled ? 'opacity-50 pointer-events-none' : ''}`}>
                 <div>
-                    <Label>Layout</Label>
+                    <h1>Layout</h1>
                     <select
                         value={chart.legend.layout ?? 'horizontal'}
                         onChange={(e) => setChart({ ...chart, legend: { ...chart.legend, layout: e.target.value as 'horizontal' | 'vertical' } })}
@@ -33,7 +32,7 @@ export default function LegendSettings({ chart, setChart }: LegendSettingsProps)
                     </select>
                 </div>
                 <div>
-                    <Label>Align</Label>
+                    <h1>Align</h1>
                     <select
                         value={chart.legend.align ?? 'center'}
                         onChange={(e) => setChart({ ...chart, legend: { ...chart.legend, align: e.target.value as 'left' | 'center' | 'right' } })}
@@ -45,7 +44,7 @@ export default function LegendSettings({ chart, setChart }: LegendSettingsProps)
                     </select>
                 </div>
                 <div>
-                    <Label>Vertical Align</Label>
+                    <h1>Vertical Align</h1>
                     <select
                         value={chart.legend.verticalAlign ?? 'bottom'}
                         onChange={(e) => setChart({ ...chart, legend: { ...chart.legend, verticalAlign: e.target.value as 'top' | 'middle' | 'bottom' } })}
@@ -57,7 +56,7 @@ export default function LegendSettings({ chart, setChart }: LegendSettingsProps)
                     </select>
                 </div>
                 <div>
-                    <Label>Icon Size</Label>
+                    <h1>Icon Size</h1>
                     <SliderInput
                         type="number"
                         min={0}
@@ -69,7 +68,7 @@ export default function LegendSettings({ chart, setChart }: LegendSettingsProps)
 
                 </div>
                 <div>
-                    <Label>Icon Type</Label>
+                    <h1>Icon Type</h1>
                     <select
                         value={chart.legend.iconType ?? 'rect'}
                         onChange={(e) => setChart({ ...chart, legend: { ...chart.legend, iconType: e.target.value as any } })}
