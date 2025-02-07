@@ -26,6 +26,8 @@ export const DataRow = z.object({
 
 const AxisSettings = z.object({
     enabled: z.boolean().default(true),
+    tickLine: z.boolean().optional().default(true),
+    axisLine: z.boolean().optional().default(true),
     height: z.number().optional().default(30),
     orientation: z.enum(['top', 'bottom']).optional().default('bottom'),
     type: z.enum(['number', 'category']).optional(),
@@ -108,6 +110,7 @@ export const Chart = z.discriminatedUnion('chartType', [
 
         // Bar
         uiBarBackgroundFill: z.string().optional().default('false'),
+        uiBarRadius: z.number().optional().default(0),
     }),
     z.object({
         chartType: z.literal('line'),

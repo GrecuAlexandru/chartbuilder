@@ -22,6 +22,20 @@ export default function YAxisSettings({ chart, setChart }: YAxisSettingsProps) {
             </div>
             <div className={`space-y-4 ${!chart.yAxis.enabled ? 'opacity-50 pointer-events-none' : ''}`}>
                 <div>
+                    <h1>Tick Line</h1>
+                    <Switch
+                        checked={chart.yAxis.tickLine ?? true}
+                        onCheckedChange={(checked) => setChart({ ...chart, yAxis: { ...chart.yAxis, tickLine: checked } })}
+                    />
+                </div>
+                <div>
+                    <h1>Axis Line</h1>
+                    <Switch
+                        checked={chart.yAxis.axisLine ?? true}
+                        onCheckedChange={(checked) => setChart({ ...chart, yAxis: { ...chart.yAxis, axisLine: checked } })}
+                    />
+                </div>
+                <div>
                     <h1>Width</h1>
                     <Input
                         type="number"

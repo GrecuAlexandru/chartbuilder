@@ -92,6 +92,8 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                     dataKey="label"
                                     stroke="#333"
 
+                                    tickLine={chart.xAxis.tickLine}
+                                    axisLine={chart.xAxis.axisLine}
                                     height={chart.xAxis.height}
                                     orientation={chart.xAxis.orientation}
                                     type={chart.xAxis.type}
@@ -108,6 +110,8 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                     // type="number"
                                     stroke="#333"
 
+                                    tickLine={chart.yAxis.tickLine}
+                                    axisLine={chart.yAxis.axisLine}
                                     width={chart.yAxis.height}
                                     orientation={chart.yAxis.orientation == 'bottom' ? 'left' : 'right'}
                                     type={chart.yAxis.type}
@@ -125,6 +129,8 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                     type={chart.xAxis.type}
                                     stroke="#333"
 
+                                    tickLine={chart.xAxis.tickLine}
+                                    axisLine={chart.xAxis.axisLine}
                                     width={chart.yAxis.height}
                                     orientation={chart.xAxis.orientation}
                                     allowDecimals={chart.xAxis.allowDecimals}
@@ -142,6 +148,8 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                     // type="category"
                                     stroke="#333"
 
+                                    tickLine={chart.yAxis.tickLine}
+                                    axisLine={chart.yAxis.axisLine}
                                     width={chart.yAxis.height}
                                     orientation={chart.yAxis.orientation == 'bottom' ? 'left' : 'right'}
                                     allowDecimals={chart.yAxis.allowDecimals}
@@ -159,6 +167,7 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                     fill={chartConfig[key].color}
                                     isAnimationActive={false}
                                     background={chart.uiBarBackgroundFill == 'false' ? false : { fill: chart.uiBarBackgroundFill }}
+                                    radius={chart.uiBarRadius}
                                 />
                             ))}
                             {chart.legend.enabled &&
@@ -195,6 +204,8 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                     dataKey="label"
                                     stroke="#333"
 
+                                    tickLine={chart.xAxis.tickLine}
+                                    axisLine={chart.xAxis.axisLine}
                                     height={chart.xAxis.height}
                                     orientation={chart.xAxis.orientation}
                                     type={chart.xAxis.type}
@@ -211,6 +222,8 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                     // type="number"
                                     stroke="#333"
 
+                                    tickLine={chart.yAxis.tickLine}
+                                    axisLine={chart.yAxis.axisLine}
                                     width={chart.yAxis.height}
                                     orientation={chart.yAxis.orientation == 'bottom' ? 'left' : 'right'}
                                     type={chart.yAxis.type}
@@ -267,6 +280,8 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                     dataKey="label"
                                     stroke="#333"
 
+                                    tickLine={chart.xAxis.tickLine}
+                                    axisLine={chart.xAxis.axisLine}
                                     height={chart.xAxis.height}
                                     orientation={chart.xAxis.orientation}
                                     type={chart.xAxis.type}
@@ -283,6 +298,8 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                     // type="number"
                                     stroke="#333"
 
+                                    tickLine={chart.yAxis.tickLine}
+                                    axisLine={chart.yAxis.axisLine}
                                     width={chart.yAxis.height}
                                     orientation={chart.yAxis.orientation == 'bottom' ? 'left' : 'right'}
                                     type={chart.yAxis.type}
@@ -327,6 +344,8 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                     dataKey="label"
                                     stroke="#333"
 
+                                    tickLine={chart.xAxis.tickLine}
+                                    axisLine={chart.xAxis.axisLine}
                                     height={chart.xAxis.height}
                                     orientation={chart.xAxis.orientation}
                                     type={chart.xAxis.type}
@@ -343,6 +362,8 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                     // type="number"
                                     stroke="#333"
 
+                                    tickLine={chart.yAxis.tickLine}
+                                    axisLine={chart.yAxis.axisLine}
                                     width={chart.yAxis.height}
                                     orientation={chart.yAxis.orientation == 'bottom' ? 'left' : 'right'}
                                     type={chart.yAxis.type}

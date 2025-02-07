@@ -61,7 +61,7 @@ export default function ChartBuilder() {
                 if (!chConfig[row.label]) {
                     chConfig[row.label] = {
                         label: row.label,
-                        color: `hsl(var(--chart-${Math.floor(Math.random() * 5) + 1}))`,
+                        color: '#4287f5',
                     };
                 }
             });
@@ -82,7 +82,7 @@ export default function ChartBuilder() {
                     if (!chConfig[dataPoint.dataSeriesLabel]) {
                         chConfig[dataPoint.dataSeriesLabel] = {
                             label: dataPoint.dataSeriesLabel,
-                            color: `hsl(var(--chart-${Math.floor(Math.random() * 5) + 1}))`,
+                            color: '#4287f5',
                         };
                     }
                 });
@@ -149,7 +149,7 @@ export default function ChartBuilder() {
                         if (!chConfig[row.label]) {
                             chConfig[row.label] = {
                                 label: row.label,
-                                color: `hsl(var(--chart-${Math.floor(Math.random() * 5) + 1}))`,
+                                color: '#4287f5',
                             };
                         }
                     });
@@ -170,7 +170,7 @@ export default function ChartBuilder() {
                             if (!chConfig[dataPoint.dataSeriesLabel]) {
                                 chConfig[dataPoint.dataSeriesLabel] = {
                                     label: dataPoint.dataSeriesLabel,
-                                    color: `hsl(var(--chart-${Math.floor(Math.random() * 5) + 1}))`,
+                                    color: '#4287f5',
                                 };
                             }
                         });
@@ -258,7 +258,9 @@ export default function ChartBuilder() {
                         >
                             <ChartSettings
                                 chart={chart}
+                                chartConfig={chartConfig}
                                 setChart={setChart}
+                                setChartConfig={setChartConfig}
                             />
                         </motion.div>
                     </motion.div>

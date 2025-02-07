@@ -18,13 +18,16 @@ import PieChartSettings from "@/components/ui/ChartBuilder/ChartSettings/PieChar
 import XAxisSettings from "@/components/ui/ChartBuilder/ChartSettings/XAxisSettings";
 import YAxisSettings from "@/components/ui/ChartBuilder/ChartSettings/YAxisSettings";
 import LegendSettings from "@/components/ui/ChartBuilder/ChartSettings/LegendSettings";
+import DataColorSettings from "@/components/ui/ChartBuilder/ChartSettings/DataColorSettings";
 
 interface ChartSettingsProps {
     chart?: Chart
+    chartConfig: any
     setChart: (chart: Chart) => void
+    setChartConfig: (chartConfig: any) => void
 }
 
-export function ChartSettings({ chart, setChart }: ChartSettingsProps) {
+export function ChartSettings({ chart, chartConfig, setChart, setChartConfig }: ChartSettingsProps) {
     const handleChartTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         if (!chart) return;
         setChart({
@@ -33,7 +36,7 @@ export function ChartSettings({ chart, setChart }: ChartSettingsProps) {
         } as Chart)
     }
 
-    if (!chart) return null;
+    if (!chart || !chartConfig) return null;
 
     return (
         <ScrollArea className="w-full h-full p-4">
@@ -57,6 +60,8 @@ export function ChartSettings({ chart, setChart }: ChartSettingsProps) {
                 </div>
             </div>
 
+            <DataColorSettings chart={chart} chartConfig={chartConfig} setChart={setChart} setChartConfig={setChartConfig} />
+
             {chart.chartType === 'area' && (
                 <AreaChartSettings chart={chart} setChart={setChart} />
             )}
@@ -65,7 +70,7 @@ export function ChartSettings({ chart, setChart }: ChartSettingsProps) {
                 <BarChartSettings chart={chart} setChart={setChart} />
             )}
 
-            {chart.chartType == 'bar' || chart.chartType == 'area' || chart.chartType == 'line' || chart.chartType == 'scatter' && (
+            {(chart.chartType == 'bar' || chart.chartType == 'area' || chart.chartType == 'line' || chart.chartType == 'scatter') && (
                 <CartesianGridSettings chart={chart} setChart={setChart} />
             )}
 
@@ -81,7 +86,7 @@ export function ChartSettings({ chart, setChart }: ChartSettingsProps) {
                 <RadialBarChartSettings chart={chart} setChart={setChart} />
             )}
 
-            {chart.chartType === 'radar' || chart.chartType === 'radial' && (
+            {(chart.chartType === 'radar' || chart.chartType === 'radial') && (
                 <PolarGridSettings chart={chart} setChart={setChart} />
             )}
 
@@ -89,11 +94,11 @@ export function ChartSettings({ chart, setChart }: ChartSettingsProps) {
                 <PieChartSettings chart={chart} setChart={setChart} />
             )}
 
-            {chart.chartType === 'bar' || chart.chartType === 'area' || chart.chartType === 'line' || chart.chartType === 'scatter' && (
+            {(chart.chartType === 'bar' || chart.chartType === 'area' || chart.chartType === 'line' || chart.chartType === 'scatter') && (
                 <XAxisSettings chart={chart} setChart={setChart} />
             )}
 
-            {chart.chartType === 'bar' || chart.chartType === 'area' || chart.chartType === 'line' || chart.chartType === 'scatter' && (
+            {(chart.chartType === 'bar' || chart.chartType === 'area' || chart.chartType === 'line' || chart.chartType === 'scatter') && (
                 <YAxisSettings chart={chart} setChart={setChart} />
             )}
 

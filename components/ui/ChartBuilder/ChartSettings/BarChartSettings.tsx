@@ -89,6 +89,16 @@ export default function BarChartSettings({ chart, setChart }: BarChartSettingsPr
                         Clear
                     </Button>
                 </div>
+                <div>
+                    <h1>Bar Radius</h1>
+                    <Input
+                        id="barRadius"
+                        type="text"
+                        value={chart.uiBarRadius ?? ''}
+                        onChange={(e) => setChart({ ...chart, uiBarRadius: parseInt(e.target.value) })}
+                        className="w-full"
+                    />
+                </div>
             </div>
         </>
     )

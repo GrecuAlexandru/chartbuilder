@@ -22,6 +22,20 @@ export default function XAxisSettings({ chart, setChart }: XAxisSettingsProps) {
             </div>
             <div className={`space-y-4 ${!chart.xAxis?.enabled ? 'opacity-50 pointer-events-none' : ''}`}>
                 <div>
+                    <h1>Tick Line</h1>
+                    <Switch
+                        checked={chart.xAxis?.tickLine ?? true}
+                        onCheckedChange={(checked) => setChart({ ...chart, xAxis: { ...chart.xAxis, tickLine: checked } })}
+                    />
+                </div>
+                <div>
+                    <h1>Axis Line</h1>
+                    <Switch
+                        checked={chart.xAxis?.axisLine ?? true}
+                        onCheckedChange={(checked) => setChart({ ...chart, xAxis: { ...chart.xAxis, axisLine: checked } })}
+                    />
+                </div>
+                <div>
                     <h1>Height</h1>
                     <Input
                         type="number"

@@ -32,6 +32,8 @@ const AxisSettings = z.object({
     type: z.enum(['number', 'category']).optional(),
     allowDecimals: z.boolean().optional(),
     tickCount: z.number().optional(),
+    tickLine: z.boolean().optional(),
+    axisLine: z.boolean().optional(),
     paddingLeft: z.number().optional(),
     paddingRight: z.number().optional(),
     tickSize: z.number().optional(),
@@ -101,6 +103,7 @@ export const ApiChart = z.discriminatedUnion('chartType', [
 
         // Bar
         uiBarBackgroundFill: z.string().optional(),
+        uiBarRadius: z.number().optional(),
     }),
     z.object({
         chartType: z.literal('line'),
