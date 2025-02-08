@@ -168,7 +168,18 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                     isAnimationActive={false}
                                     background={chart.uiBarBackgroundFill == 'false' ? false : { fill: chart.uiBarBackgroundFill }}
                                     radius={chart.uiBarRadius}
-                                />
+                                >
+                                    {chart.labels[index].enabled && (
+                                        <LabelList
+                                            key={index}
+                                            dataKey={key}
+                                            position={chart.labels[index].position}
+                                            offset={chart.labels[index].offset}
+                                            fontSize={chart.labels[index].fontSize}
+                                            fill={chart.labels[index].fill}
+                                        />
+                                    )}
+                                </Bar>
                             ))}
                             {chart.legend.enabled &&
                                 <ChartLegend
@@ -245,7 +256,18 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                     stroke={chart.uiAreaStroke}
                                     strokeWidth={chart.uiAreaStrokeWidth}
                                     connectNulls={chart.uiAreaConnectNulls}
-                                />
+                                >
+                                    {chart.labels[index].enabled && (
+                                        <LabelList
+                                            key={index}
+                                            dataKey={key}
+                                            position={chart.labels[index].position}
+                                            offset={chart.labels[index].offset}
+                                            fontSize={chart.labels[index].fontSize}
+                                            fill={chart.labels[index].fill}
+                                        />
+                                    )}
+                                </Area>
                             ))}
                             {chart.legend.enabled &&
                                 <ChartLegend
@@ -319,7 +341,18 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                     stroke={chart.uiLineStroke}
                                     strokeWidth={chart.uiLineStrokeWidth}
                                     connectNulls={chart.uiLineConnectNulls}
-                                />
+                                >
+                                    {chart.labels[index].enabled && (
+                                        <LabelList
+                                            key={index}
+                                            dataKey={key}
+                                            position={chart.labels[index].position}
+                                            offset={chart.labels[index].offset}
+                                            fontSize={chart.labels[index].fontSize}
+                                            fill={chart.labels[index].fill}
+                                        />
+                                    )}
+                                </Line>
                             ))}
                         </LineChart>
                     </ChartContainer>
@@ -381,7 +414,18 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                     dataKey={key}
                                     fill={chartConfig[key].color}
                                     isAnimationActive={false}
-                                />
+                                >
+                                    {chart.labels[index].enabled && (
+                                        <LabelList
+                                            key={index}
+                                            dataKey={key}
+                                            position={chart.labels[index].position}
+                                            offset={chart.labels[index].offset}
+                                            fontSize={chart.labels[index].fontSize}
+                                            fill={chart.labels[index].fill}
+                                        />
+                                    )}
+                                </Scatter>
                             ))}
                             {chart.legend.enabled &&
                                 <ChartLegend
@@ -412,7 +456,18 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                 minAngle={chart.uiPieMinAngle}
                                 paddingAngle={chart.uiPiePaddingAngle}
                                 activeIndex={chart.uiPieActiveIndex}
-                            />
+                            >
+                                {chart.labels[0].enabled && (
+                                    <LabelList
+                                        key={0}
+                                        dataKey={chart.data[0].dataSeries[0].dataSeriesLabel}
+                                        position={chart.labels[0].position}
+                                        offset={chart.labels[0].offset}
+                                        fontSize={chart.labels[0].fontSize}
+                                        fill={chart.labels[0].fill}
+                                    />
+                                )}
+                            </Pie>
                             {chart.legend.enabled &&
                                 <ChartLegend
                                     content={<ChartLegendContent nameKey="label" />}
@@ -477,7 +532,18 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                 dataKey={chart.data[0].dataSeries[0].dataSeriesLabel}
                                 fill={`var(--color-${chart.data[0].dataSeries[0].dataSeriesLabel})`}
                                 fillOpacity={chart.uiRadarBarFillOpacity}
-                            />
+                            >
+                                {chart.labels[0].enabled && (
+                                    <LabelList
+                                        key={0}
+                                        dataKey={chart.data[0].dataSeries[0].dataSeriesLabel}
+                                        position={chart.labels[0].position}
+                                        offset={chart.labels[0].offset}
+                                        fontSize={chart.labels[0].fontSize}
+                                        fill={chart.labels[0].fill}
+                                    />
+                                )}
+                            </Radar>
                         </RadarChart>
                     </ChartContainer>
                 );
@@ -531,12 +597,23 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                 fillOpacity={chart.uiRadialBarFillOpacity}
                                 background={chart.uiRadialBarBackground}
                             >
-                                <LabelList
+                                {chart.labels[0].enabled && (
+                                    <LabelList
+                                        key={0}
+                                        dataKey={chart.data[0].dataSeries[0].dataSeriesLabel}
+                                        position={chart.labels[0].position}
+                                        offset={chart.labels[0].offset}
+                                        className="fill-white capitalize mix-blend-luminosity"
+                                        fontSize={chart.labels[0].fontSize}
+                                        fill={chart.labels[0].fill}
+                                    />
+                                )}
+                                {/* <LabelList
                                     position="insideStart"
                                     dataKey="label"
                                     className="fill-white capitalize mix-blend-luminosity"
                                     fontSize={11}
-                                />
+                                /> */}
                             </RadialBar>
                         </RadialBarChart>
                     </ChartContainer>

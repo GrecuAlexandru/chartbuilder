@@ -19,6 +19,7 @@ import XAxisSettings from "@/components/ui/ChartBuilder/ChartSettings/XAxisSetti
 import YAxisSettings from "@/components/ui/ChartBuilder/ChartSettings/YAxisSettings";
 import LegendSettings from "@/components/ui/ChartBuilder/ChartSettings/LegendSettings";
 import DataColorSettings from "@/components/ui/ChartBuilder/ChartSettings/DataColorSettings";
+import LabelSettings from "@/components/ui/ChartBuilder/ChartSettings/LabelSettings";
 
 interface ChartSettingsProps {
     chart?: Chart
@@ -61,6 +62,8 @@ export function ChartSettings({ chart, chartConfig, setChart, setChartConfig }: 
             </div>
 
             <DataColorSettings chart={chart} chartConfig={chartConfig} setChart={setChart} setChartConfig={setChartConfig} />
+
+            <LabelSettings chart={chart} setChart={setChart} />
 
             {chart.chartType === 'area' && (
                 <AreaChartSettings chart={chart} setChart={setChart} />
