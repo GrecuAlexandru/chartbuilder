@@ -68,8 +68,8 @@ const LegendSettings = z.object({
 
 const LabelSettings = z.object({
     enabled: z.boolean().default(false),
-    dataKey: z.string(),
-    position: z.enum(['top', 'left', 'right', 'bottom', 'inside', 'outside', 'insideLeft', 'insideRight', 'insideTop', 'insideBottom', 'insideTopLeft', 'insideBottomLeft', 'insideTopRight', 'insideBottomRight', 'insideStart', 'insideEnd', 'end', 'center']).optional().default('top'),
+    dataKey: z.string().default('label'),
+    position: z.enum(['top', 'left', 'right', 'bottom', 'inside', 'outside', 'insideLeft', 'insideRight', 'insideTop', 'insideBottom', 'insideTopLeft', 'insideBottomLeft', 'insideTopRight', 'insideBottomRight', 'insideStart', 'insideEnd', 'end', 'center']).optional().default('inside'),
     offset: z.number().optional().default(5),
     fontSize: z.number().optional().default(12),
     fill: z.string().optional().default('#000'),
@@ -88,7 +88,14 @@ export const Chart = z.discriminatedUnion('chartType', [
         }),
         cartesianGrid: CartesianGridSettings,
         legend: LegendSettings,
-        labels: z.array(LabelSettings),
+        keyLabelsIndividualEdit: z.boolean().optional().default(false),
+        valueLabelsIndividualEdit: z.boolean().optional().default(false),
+        keyLabels: z.array(LabelSettings).default([{
+            position: 'inside'
+        }]),
+        valueLabels: z.array(LabelSettings).default([{
+            position: 'top'
+        }]),
 
         // Area Chart
         uiAreaChartStackOffset: z.enum(['expand', 'none', 'wiggle', 'silhouette']).optional().default('none'),
@@ -110,7 +117,14 @@ export const Chart = z.discriminatedUnion('chartType', [
         }),
         cartesianGrid: CartesianGridSettings,
         legend: LegendSettings,
-        labels: z.array(LabelSettings),
+        keyLabelsIndividualEdit: z.boolean().optional().default(false),
+        valueLabelsIndividualEdit: z.boolean().optional().default(false),
+        keyLabels: z.array(LabelSettings).default([{
+            position: 'inside'
+        }]),
+        valueLabels: z.array(LabelSettings).default([{
+            position: 'top'
+        }]),
 
         // Bar Chart
         uiBarChartLayout: z.enum(['vertical', 'horizontal']).optional().default('horizontal'),
@@ -134,7 +148,15 @@ export const Chart = z.discriminatedUnion('chartType', [
         }),
         cartesianGrid: CartesianGridSettings,
         legend: LegendSettings,
-        labels: z.array(LabelSettings),
+        keyLabelsIndividualEdit: z.boolean().optional().default(false),
+        valueLabelsIndividualEdit: z.boolean().optional().default(false),
+        keyLabels: z.array(LabelSettings).default([{
+            position: 'inside'
+        }]),
+        valueLabels: z.array(LabelSettings).default([{
+            position: 'top'
+        }]),
+
 
         // Line
         uiLineType: z.enum(['basis', 'basisClosed', 'basisOpen', 'bumpX', 'bumpY', 'bump', 'linear', 'linearClosed', 'natural', 'monotoneX', 'monotoneY', 'monotone', 'step', 'stepBefore', 'stepAfter']).optional().default('linear'),
@@ -153,13 +175,29 @@ export const Chart = z.discriminatedUnion('chartType', [
         }),
         cartesianGrid: CartesianGridSettings,
         legend: LegendSettings,
-        labels: z.array(LabelSettings),
+        keyLabelsIndividualEdit: z.boolean().optional().default(false),
+        valueLabelsIndividualEdit: z.boolean().optional().default(false),
+        keyLabels: z.array(LabelSettings).default([{
+            position: 'inside'
+        }]),
+        valueLabels: z.array(LabelSettings).default([{
+            position: 'top'
+        }]),
+
     }),
     z.object({
         chartType: z.literal('pie'),
         data: z.array(DataRow),
         legend: LegendSettings,
-        labels: z.array(LabelSettings),
+        keyLabelsIndividualEdit: z.boolean().optional().default(false),
+        valueLabelsIndividualEdit: z.boolean().optional().default(false),
+        keyLabels: z.array(LabelSettings).default([{
+            position: 'inside'
+        }]),
+        valueLabels: z.array(LabelSettings).default([{
+            position: 'top'
+        }]),
+
 
         // Pie
         uiPieCX: z.string().optional().default('50%'),
@@ -178,7 +216,15 @@ export const Chart = z.discriminatedUnion('chartType', [
         data: z.array(DataRow),
         polarGrid: PolarGridSettings,
         legend: LegendSettings,
-        labels: z.array(LabelSettings),
+        keyLabelsIndividualEdit: z.boolean().optional().default(false),
+        valueLabelsIndividualEdit: z.boolean().optional().default(false),
+        keyLabels: z.array(LabelSettings).default([{
+            position: 'inside'
+        }]),
+        valueLabels: z.array(LabelSettings).default([{
+            position: 'top'
+        }]),
+
 
         // Radar Chart
         uiRadarChartCX: z.string().optional().default('50%'),
@@ -197,7 +243,15 @@ export const Chart = z.discriminatedUnion('chartType', [
         data: z.array(DataRow),
         polarGrid: PolarGridSettings,
         legend: LegendSettings,
-        labels: z.array(LabelSettings),
+        keyLabelsIndividualEdit: z.boolean().optional().default(false),
+        valueLabelsIndividualEdit: z.boolean().optional().default(false),
+        keyLabels: z.array(LabelSettings).default([{
+            position: 'inside'
+        }]),
+        valueLabels: z.array(LabelSettings).default([{
+            position: 'top'
+        }]),
+
 
         // Radial Bar Chart
         uiRadialBarChartBarCategoryGap: z.string().optional().default('10%'),

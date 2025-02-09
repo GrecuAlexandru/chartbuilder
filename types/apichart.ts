@@ -68,6 +68,7 @@ const LegendSettings = z.object({
 });
 
 const LabelSettings = z.object({
+    individual: z.boolean().optional(),
     enabled: z.boolean(),
     dataKey: z.string(),
     position: z.enum(['top', 'left', 'right', 'bottom', 'inside', 'outside', 'insideLeft', 'insideRight', 'insideTop', 'insideBottom', 'insideTopLeft', 'insideBottomLeft', 'insideTopRight', 'insideBottomRight', 'insideStart', 'insideEnd', 'end', 'center']).optional(),
@@ -85,7 +86,10 @@ export const ApiChart = z.discriminatedUnion('chartType', [
         yAxis: AxisSettings,
         cartesianGrid: CartesianGridSettings,
         legend: LegendSettings,
-        labels: z.array(LabelSettings),
+        keyLabelsIndividualEdit: z.boolean().optional(),
+        valueLabelsIndividualEdit: z.boolean().optional(),
+        keyLabels: z.array(LabelSettings),
+        valueLabels: z.array(LabelSettings),
 
         // Area Chart
         uiAreaChartStackOffset: z.enum(['expand', 'none', 'wiggle', 'silhouette']).optional(),
@@ -103,7 +107,10 @@ export const ApiChart = z.discriminatedUnion('chartType', [
         yAxis: AxisSettings,
         cartesianGrid: CartesianGridSettings,
         legend: LegendSettings,
-        labels: z.array(LabelSettings),
+        keyLabelsIndividualEdit: z.boolean().optional(),
+        valueLabelsIndividualEdit: z.boolean().optional(),
+        keyLabels: z.array(LabelSettings),
+        valueLabels: z.array(LabelSettings),
 
         // Bar Chart
         uiBarChartLayout: z.enum(['vertical', 'horizontal']).optional(),
@@ -123,7 +130,10 @@ export const ApiChart = z.discriminatedUnion('chartType', [
         yAxis: AxisSettings,
         cartesianGrid: CartesianGridSettings,
         legend: LegendSettings,
-        labels: z.array(LabelSettings),
+        keyLabelsIndividualEdit: z.boolean().optional(),
+        valueLabelsIndividualEdit: z.boolean().optional(),
+        keyLabels: z.array(LabelSettings),
+        valueLabels: z.array(LabelSettings),
 
         // Line
         uiLineType: z.enum(['basis', 'basisClosed', 'basisOpen', 'bumpX', 'bumpY', 'bump', 'linear', 'linearClosed', 'natural', 'monotoneX', 'monotoneY', 'monotone', 'step', 'stepBefore', 'stepAfter']).optional(),
@@ -138,13 +148,17 @@ export const ApiChart = z.discriminatedUnion('chartType', [
         yAxis: AxisSettings,
         cartesianGrid: CartesianGridSettings,
         legend: LegendSettings,
-        labels: z.array(LabelSettings),
+        keyLabels: z.array(LabelSettings),
+        valueLabels: z.array(LabelSettings),
     }),
     z.object({
         chartType: z.literal('pie'),
         data: z.array(DataRow),
         legend: LegendSettings,
-        labels: z.array(LabelSettings),
+        keyLabelsIndividualEdit: z.boolean().optional(),
+        valueLabelsIndividualEdit: z.boolean().optional(),
+        keyLabels: z.array(LabelSettings),
+        valueLabels: z.array(LabelSettings),
 
         // Pie
         uiPieCX: z.string().optional(),
@@ -162,7 +176,10 @@ export const ApiChart = z.discriminatedUnion('chartType', [
         data: z.array(DataRow),
         polarGrid: PolarGridSettings,
         legend: LegendSettings,
-        labels: z.array(LabelSettings),
+        keyLabelsIndividualEdit: z.boolean().optional(),
+        valueLabelsIndividualEdit: z.boolean().optional(),
+        keyLabels: z.array(LabelSettings),
+        valueLabels: z.array(LabelSettings),
 
         // Radar Chart
         uiRadarChartCX: z.string().optional(),
@@ -181,7 +198,10 @@ export const ApiChart = z.discriminatedUnion('chartType', [
         data: z.array(DataRow),
         polarGrid: PolarGridSettings,
         legend: LegendSettings,
-        labels: z.array(LabelSettings),
+        keyLabelsIndividualEdit: z.boolean().optional(),
+        valueLabelsIndividualEdit: z.boolean().optional(),
+        keyLabels: z.array(LabelSettings),
+        valueLabels: z.array(LabelSettings),
 
         // Radial Bar Chart
         uiRadialFillOpacity: z.number().optional(),

@@ -42,6 +42,8 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
         }
     }, [chartCode]);
 
+    console.log(chart);
+
     const renderChart = () => {
         if (!chart) return <div>Loading...</div>;
 
@@ -169,14 +171,24 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                     background={chart.uiBarBackgroundFill == 'false' ? false : { fill: chart.uiBarBackgroundFill }}
                                     radius={chart.uiBarRadius}
                                 >
-                                    {chart.labels[index].enabled && (
+                                    {chart.keyLabels[index].enabled && (
+                                        <LabelList
+                                            key={index}
+                                            dataKey="label"
+                                            position={chart.keyLabels[index].position}
+                                            offset={chart.keyLabels[index].offset}
+                                            fontSize={chart.keyLabels[index].fontSize}
+                                            fill={chart.keyLabels[index].fill}
+                                        />
+                                    )}
+                                    {chart.valueLabels[index].enabled && (
                                         <LabelList
                                             key={index}
                                             dataKey={key}
-                                            position={chart.labels[index].position}
-                                            offset={chart.labels[index].offset}
-                                            fontSize={chart.labels[index].fontSize}
-                                            fill={chart.labels[index].fill}
+                                            position={chart.valueLabels[index].position}
+                                            offset={chart.valueLabels[index].offset}
+                                            fontSize={chart.valueLabels[index].fontSize}
+                                            fill={chart.valueLabels[index].fill}
                                         />
                                     )}
                                 </Bar>
@@ -257,14 +269,24 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                     strokeWidth={chart.uiAreaStrokeWidth}
                                     connectNulls={chart.uiAreaConnectNulls}
                                 >
-                                    {chart.labels[index].enabled && (
+                                    {chart.keyLabels[index].enabled && (
+                                        <LabelList
+                                            key={index}
+                                            dataKey="label"
+                                            position={chart.keyLabels[index].position}
+                                            offset={chart.keyLabels[index].offset}
+                                            fontSize={chart.keyLabels[index].fontSize}
+                                            fill={chart.keyLabels[index].fill}
+                                        />
+                                    )}
+                                    {chart.valueLabels[index].enabled && (
                                         <LabelList
                                             key={index}
                                             dataKey={key}
-                                            position={chart.labels[index].position}
-                                            offset={chart.labels[index].offset}
-                                            fontSize={chart.labels[index].fontSize}
-                                            fill={chart.labels[index].fill}
+                                            position={chart.valueLabels[index].position}
+                                            offset={chart.valueLabels[index].offset}
+                                            fontSize={chart.valueLabels[index].fontSize}
+                                            fill={chart.valueLabels[index].fill}
                                         />
                                     )}
                                 </Area>
@@ -335,6 +357,7 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                             )}
                             {Object.keys(chartConfig).map((key, index) => (
                                 <Line
+                                    isAnimationActive={false}
                                     key={index}
                                     dataKey={key}
                                     type={chart.uiLineType}
@@ -342,14 +365,24 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                     strokeWidth={chart.uiLineStrokeWidth}
                                     connectNulls={chart.uiLineConnectNulls}
                                 >
-                                    {chart.labels[index].enabled && (
+                                    {chart.keyLabels[index].enabled && (
+                                        <LabelList
+                                            key={index}
+                                            dataKey="label"
+                                            position={chart.keyLabels[index].position}
+                                            offset={chart.keyLabels[index].offset}
+                                            fontSize={chart.keyLabels[index].fontSize}
+                                            fill={chart.keyLabels[index].fill}
+                                        />
+                                    )}
+                                    {chart.valueLabels[index].enabled && (
                                         <LabelList
                                             key={index}
                                             dataKey={key}
-                                            position={chart.labels[index].position}
-                                            offset={chart.labels[index].offset}
-                                            fontSize={chart.labels[index].fontSize}
-                                            fill={chart.labels[index].fill}
+                                            position={chart.valueLabels[index].position}
+                                            offset={chart.valueLabels[index].offset}
+                                            fontSize={chart.valueLabels[index].fontSize}
+                                            fill={chart.valueLabels[index].fill}
                                         />
                                     )}
                                 </Line>
@@ -415,14 +448,24 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                     fill={chartConfig[key].color}
                                     isAnimationActive={false}
                                 >
-                                    {chart.labels[index].enabled && (
+                                    {chart.keyLabels[index].enabled && (
+                                        <LabelList
+                                            key={index}
+                                            dataKey="label"
+                                            position={chart.keyLabels[index].position}
+                                            offset={chart.keyLabels[index].offset}
+                                            fontSize={chart.keyLabels[index].fontSize}
+                                            fill={chart.keyLabels[index].fill}
+                                        />
+                                    )}
+                                    {chart.valueLabels[index].enabled && (
                                         <LabelList
                                             key={index}
                                             dataKey={key}
-                                            position={chart.labels[index].position}
-                                            offset={chart.labels[index].offset}
-                                            fontSize={chart.labels[index].fontSize}
-                                            fill={chart.labels[index].fill}
+                                            position={chart.valueLabels[index].position}
+                                            offset={chart.valueLabels[index].offset}
+                                            fontSize={chart.valueLabels[index].fontSize}
+                                            fill={chart.valueLabels[index].fill}
                                         />
                                     )}
                                 </Scatter>
@@ -456,15 +499,27 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                 minAngle={chart.uiPieMinAngle}
                                 paddingAngle={chart.uiPiePaddingAngle}
                                 activeIndex={chart.uiPieActiveIndex}
+                                isAnimationActive={false}
                             >
-                                {chart.labels[0].enabled && (
+                                {chart.valueLabelsIndividualEdit && chart.valueLabels.map((label, index) => (
                                     <LabelList
-                                        key={0}
+                                        key={index}
                                         dataKey={chart.data[0].dataSeries[0].dataSeriesLabel}
-                                        position={chart.labels[0].position}
-                                        offset={chart.labels[0].offset}
-                                        fontSize={chart.labels[0].fontSize}
-                                        fill={chart.labels[0].fill}
+                                        position={label.position}
+                                        offset={label.offset}
+                                        fontSize={label.fontSize}
+                                        fill={label.fill}
+                                        stroke="none"
+                                    />
+                                ))}
+                                {!chart.valueLabelsIndividualEdit && (
+                                    <LabelList
+                                        dataKey={chart.data[0].dataSeries[0].dataSeriesLabel}
+                                        position={chart.valueLabels[0].position}
+                                        offset={chart.valueLabels[0].offset}
+                                        fontSize={chart.valueLabels[0].fontSize}
+                                        fill={chart.valueLabels[0].fill}
+                                        stroke="none"
                                     />
                                 )}
                             </Pie>
@@ -533,14 +588,14 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                 fill={`var(--color-${chart.data[0].dataSeries[0].dataSeriesLabel})`}
                                 fillOpacity={chart.uiRadarBarFillOpacity}
                             >
-                                {chart.labels[0].enabled && (
+                                {chart.valueLabels[0].enabled && (
                                     <LabelList
                                         key={0}
                                         dataKey={chart.data[0].dataSeries[0].dataSeriesLabel}
-                                        position={chart.labels[0].position}
-                                        offset={chart.labels[0].offset}
-                                        fontSize={chart.labels[0].fontSize}
-                                        fill={chart.labels[0].fill}
+                                        position={chart.valueLabels[0].position}
+                                        offset={chart.valueLabels[0].offset}
+                                        fontSize={chart.valueLabels[0].fontSize}
+                                        fill={chart.valueLabels[0].fill}
                                     />
                                 )}
                             </Radar>
@@ -596,16 +651,17 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                 fill={`var(--color-${chart.data[0].dataSeries[0].dataSeriesLabel})`}
                                 fillOpacity={chart.uiRadialBarFillOpacity}
                                 background={chart.uiRadialBarBackground}
+                                isAnimationActive={false}
                             >
-                                {chart.labels[0].enabled && (
+                                {chart.valueLabels[0].enabled && (
                                     <LabelList
                                         key={0}
                                         dataKey={chart.data[0].dataSeries[0].dataSeriesLabel}
-                                        position={chart.labels[0].position}
-                                        offset={chart.labels[0].offset}
+                                        position={chart.valueLabels[0].position}
+                                        offset={chart.valueLabels[0].offset}
                                         className="fill-white capitalize mix-blend-luminosity"
-                                        fontSize={chart.labels[0].fontSize}
-                                        fill={chart.labels[0].fill}
+                                        fontSize={chart.valueLabels[0].fontSize}
+                                        fill={chart.valueLabels[0].fill}
                                     />
                                 )}
                                 {/* <LabelList

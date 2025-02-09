@@ -176,6 +176,12 @@ export default function ChartBuilder() {
                         });
                     });
                     setChartConfig(chConfig);
+
+                    if (validatedChart.valueLabels) {
+                        validatedChart.valueLabels.forEach(valueLabel => {
+                            valueLabel.position = 'top';
+                        });
+                    }
                 }
 
                 // Update chat history with response
@@ -194,7 +200,7 @@ export default function ChartBuilder() {
     }
 
     // console.log("chartData", chartData);
-    // console.log("chartConfig", chartConfig);
+    console.log("chartConfig", JSON.stringify(chartConfig, null, 2));
     // console.log("chart", chart);
 
     return (

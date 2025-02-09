@@ -10,27 +10,55 @@ interface LabelSettingsProps {
     setChart: (chart: Chart) => void;
 }
 
-const labelPositions = ['top', 'left', 'right', 'bottom', 'inside', 'outside', 'insideLeft',
-    'insideRight', 'insideTop', 'insideBottom', 'insideTopLeft', 'insideBottomLeft',
-    'insideTopRight', 'insideBottomRight', 'insideStart', 'insideEnd', 'end', 'center'
-] as const;
+type LabelGroup = 'keyLabels' | 'valueLabels';
 
 export default function LabelSettings({ chart, setChart }: LabelSettingsProps) {
-    const updateLabel = (dataKey: string, field: string, value: any) => {
+
+    const labelPositions =
+        chart.chartType === 'pie'
+            ? (['inside', 'outside', 'insideStart', 'insideEnd', 'end', 'center'] as const)
+            : ([
+                'top',
+                'left',
+                'right',
+                'bottom',
+                'inside',
+                'outside',
+                'insideLeft',
+                'insideRight',
+                'insideTop',
+                'insideBottom',
+                'insideTopLeft',
+                'insideBottomLeft',
+                'insideTopRight',
+                'insideBottomRight',
+                'insideStart',
+                'insideEnd',
+                'end',
+                'center'
+            ] as const);
+
+    const updateLabel = (
+        labelGroup: LabelGroup,
+        dataKey: string,
+        field: string,
+        value: any
+    ) => {
         setChart({
             ...chart,
-            labels: chart.labels.map(label =>
+            [labelGroup]: chart[labelGroup].map(label =>
                 label.dataKey === dataKey ? { ...label, [field]: value } : label
             )
         });
     };
 
-    return (
-        <div className="space-y-4 mb-8">
-            <h1 className="text-2xl font-semibold">Label Settings</h1>
-            {chart.labels.map((label) => (
+    const renderLabels = (labelGroup: LabelGroup, title: string) => (
+        <section>
+            <h2 className="text-xl font-semibold">{title}</h2>
+            {chart[labelGroup].map((label) => (
                 <div key={label.dataKey} className="space-y-4 p-4 border rounded">
-                    <h1 className="text-lg font-semibold">{label.dataKey}</h1>
+                    <h3 className="text-lg font-semibold">{label.dataKey}</h3>
+
                     <div className="flex items-center justify-between">
                         <label htmlFor={`label-switch-${label.dataKey}`} className="text-sm font-medium">
                             Labels
@@ -39,7 +67,7 @@ export default function LabelSettings({ chart, setChart }: LabelSettingsProps) {
                             id={`label-switch-${label.dataKey}`}
                             checked={label.enabled}
                             onCheckedChange={(checked) =>
-                                updateLabel(label.dataKey, 'enabled', checked)
+                                updateLabel(labelGroup, label.dataKey, 'enabled', checked)
                             }
                         />
                     </div>
@@ -51,7 +79,7 @@ export default function LabelSettings({ chart, setChart }: LabelSettingsProps) {
                                 <select
                                     value={label.position}
                                     onChange={(e) =>
-                                        updateLabel(label.dataKey, 'position', e.target.value)
+                                        updateLabel(labelGroup, label.dataKey, 'position', e.target.value)
                                     }
                                     className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
                                 >
@@ -63,18 +91,20 @@ export default function LabelSettings({ chart, setChart }: LabelSettingsProps) {
                                 </select>
                             </div>
 
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium">Offset</label>
-                                <Slider
-                                    value={[label.offset]}
-                                    min={0}
-                                    max={20}
-                                    step={1}
-                                    onValueChange={([value]) =>
-                                        updateLabel(label.dataKey, 'offset', value)
-                                    }
-                                />
-                            </div>
+                            {(chart.chartType === 'pie' && label.position === 'center') || (chart.chartType === 'pie' && label.position === 'inside') ? null : (
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium">Offset</label>
+                                    <Slider
+                                        value={[label.offset]}
+                                        min={0}
+                                        max={20}
+                                        step={1}
+                                        onValueChange={([value]) =>
+                                            updateLabel(labelGroup, label.dataKey, 'offset', value)
+                                        }
+                                    />
+                                </div>
+                            )}
 
                             <div className="space-y-2">
                                 <label className="text-sm font-medium">Font Size</label>
@@ -84,7 +114,7 @@ export default function LabelSettings({ chart, setChart }: LabelSettingsProps) {
                                     max={52}
                                     step={1}
                                     onValueChange={([value]) =>
-                                        updateLabel(label.dataKey, 'fontSize', value)
+                                        updateLabel(labelGroup, label.dataKey, 'fontSize', value)
                                     }
                                 />
                             </div>
@@ -94,7 +124,7 @@ export default function LabelSettings({ chart, setChart }: LabelSettingsProps) {
                                 <ColorPicker
                                     default_value={label.fill}
                                     onChange={(color) =>
-                                        updateLabel(label.dataKey, 'fill', color)
+                                        updateLabel(labelGroup, label.dataKey, 'fill', color)
                                     }
                                 />
                             </div>
@@ -102,6 +132,66 @@ export default function LabelSettings({ chart, setChart }: LabelSettingsProps) {
                     )}
                 </div>
             ))}
+        </section>
+    );
+
+    return (
+        <div className="space-y-4 mb-8">
+            <h1 className="text-2xl font-semibold">Label Settings</h1>
+
+            <div className="p-4 border rounded">
+                {chart.chartType !== 'pie' && (
+                    <div className="flex items-center justify-between mb-2">
+                        <label htmlFor="key-labels-toggle" className="text-sm font-medium">
+                            Individual Key Label Editing
+                        </label>
+                        <Switch
+                            id="key-labels-toggle"
+                            checked={chart.keyLabelsIndividualEdit}
+                            onCheckedChange={(checked) =>
+                                setChart({ ...chart, keyLabelsIndividualEdit: checked })
+                            }
+                        />
+                    </div>
+                )}
+
+                <div className="flex items-center justify-between">
+                    <label htmlFor="value-labels-toggle" className="text-sm font-medium">
+                        Individual Value Label Editing
+                    </label>
+                    <Switch
+                        id="value-labels-toggle"
+                        checked={chart.valueLabelsIndividualEdit}
+                        onCheckedChange={(checked) =>
+                            setChart({ ...chart, valueLabelsIndividualEdit: checked })
+                        }
+                    />
+                </div>
+
+                {chart.chartType !== 'pie' ? (
+                    chart.keyLabelsIndividualEdit ? (
+                        renderLabels('keyLabels', 'Key Labels')
+                    ) : (
+                        <div className="p-4 border rounded">
+                            <h2 className="text-xl font-semibold">Key Labels</h2>
+                            <p className="text-sm text-gray-600">
+                                Individual key label editing is disabled.
+                            </p>
+                        </div>
+                    )
+                ) : null}
+
+                {chart.valueLabelsIndividualEdit ? (
+                    renderLabels('valueLabels', 'Value Labels')
+                ) : (
+                    <div className="p-4 border rounded">
+                        <h2 className="text-xl font-semibold">Value Labels</h2>
+                        <p className="text-sm text-gray-600">
+                            Individual value label editing is disabled.
+                        </p>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

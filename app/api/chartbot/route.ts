@@ -114,7 +114,7 @@ function removeAllOptionalFields(
 
 async function generateChart(body: { text: string, history?: { role: string, content: string }[] }) {
     const systemPrompt = `You are a detail-oriented data visualization assistant for creating charts based on user prompts. Analyze user requests and generate accurate, structured, and schema-compliant chart configurations. Always ensure you are extracting the data series correctly and entirely. Make sure you do not add more data series than asked.`;
-    const explanation = `DataRow's label represents the name or value of the point on the X axis (e.g. "January", "February", "March" or 1, 2, 3). DataRow's dataSeries can represent multiple Categories (e.g. "Desktop users", "Mobile users") for drawing different lines/bars/etc on the chart. Each dataSeriesLabel represents the name of the Category and dataSeriesValue represents the value of the point on the Y axis. Each element of chart.labels vector is a Category from the dataSeries.`;
+    const explanation = `DataRow's label represents the name or value of the point on the X axis (e.g. "January", "February", "March" or 1, 2, 3). DataRow's dataSeries can represent multiple Categories (e.g. "Desktop users", "Mobile users") for drawing different lines/bars/etc on the chart. Each dataSeriesLabel represents the name of the Category and dataSeriesValue represents the value of the point on the Y axis. Each element of chart.valueLabels vector is a Category from the dataSeries.`;
     const messages: ChatCompletionMessageParam[] = [
         { role: "system", content: systemPrompt },
         { role: "user", content: explanation },
