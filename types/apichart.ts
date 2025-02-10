@@ -190,7 +190,6 @@ export const ApiChart = z.discriminatedUnion('chartType', [
 
         // PolarAngleAxis
         uiPolarAngleAxisEnabled: z.boolean(),
-        uiPolarAnlgeAxisTick: z.boolean().optional(),
         uiPolarAngleAxisAllowDuplicatedCategory: z.boolean().optional(),
     }),
     z.object({

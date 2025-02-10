@@ -1,6 +1,7 @@
 import { Chart } from "@/types/chart";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
 
 interface RadarChartSettingsProps {
     chart: Chart;
@@ -19,7 +20,7 @@ export default function RadarChartSettings({ chart, setChart }: RadarChartSettin
                     <Input
                         id="cx"
                         type="text"
-                        value={(chart.uiRadarChartCX ?? '50%')}
+                        value={chart.uiRadarChartCX ?? '50%'}
                         onChange={(e) => setChart({ ...chart, uiRadarChartCX: e.target.value })}
                     />
                 </div>
@@ -28,7 +29,7 @@ export default function RadarChartSettings({ chart, setChart }: RadarChartSettin
                     <Input
                         id="cy"
                         type="text"
-                        value={(chart.uiRadarChartCY ?? '50%')}
+                        value={chart.uiRadarChartCY ?? '50%'}
                         onChange={(e) => setChart({ ...chart, uiRadarChartCY: e.target.value })}
                     />
                 </div>
@@ -41,7 +42,9 @@ export default function RadarChartSettings({ chart, setChart }: RadarChartSettin
                     <Slider
                         id="fillOpacity"
                         value={[chart.uiRadarBarFillOpacity ?? 0.8]}
-                        onValueChange={(value) => setChart({ ...chart, uiRadarBarFillOpacity: value[0] })}
+                        onValueChange={(value) =>
+                            setChart({ ...chart, uiRadarBarFillOpacity: value[0] })
+                        }
                         min={0}
                         max={1}
                         step={0.1}
@@ -50,6 +53,30 @@ export default function RadarChartSettings({ chart, setChart }: RadarChartSettin
                     <div className="text-xs text-gray-500 mt-1">
                         {(chart.uiRadarBarFillOpacity ?? 0.8).toFixed(1)}
                     </div>
+                </div>
+            </div>
+
+            <div className="space-y-4 mt-4 mb-8">
+                <h1 className="text-2xl font-semibold">Polar Settings</h1>
+                <div className="flex items-center justify-between">
+                    <h1>Polar Angle Axis Enabled</h1>
+                    <Switch
+                        id="polarAngleAxisEnabled"
+                        checked={chart.uiPolarAngleAxisEnabled ?? true}
+                        onCheckedChange={(checked) =>
+                            setChart({ ...chart, uiPolarAngleAxisEnabled: checked })
+                        }
+                    />
+                </div>
+                <div className="flex items-center justify-between">
+                    <h1>Polar Angle Axis Allow Duplicated Category</h1>
+                    <Switch
+                        id="polarAllowDuplicated"
+                        checked={chart.uiPolarAngleAxisAllowDuplicatedCategory ?? true}
+                        onCheckedChange={(checked) =>
+                            setChart({ ...chart, uiPolarAngleAxisAllowDuplicatedCategory: checked })
+                        }
+                    />
                 </div>
             </div>
         </>

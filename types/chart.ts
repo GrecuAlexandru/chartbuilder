@@ -231,11 +231,10 @@ export const Chart = z.discriminatedUnion('chartType', [
         uiRadarChartCY: z.string().optional().default('50%'),
 
         // Radar
+        uiRadarBarFillOpacity: z.number().optional().default(0.8),
 
         // PolarAngleAxis
-        uiRadarBarFillOpacity: z.number().optional().default(0.8),
         uiPolarAngleAxisEnabled: z.boolean().default(true),
-        uiPolarAnlgeAxisTick: z.boolean().optional().default(true),
         uiPolarAngleAxisAllowDuplicatedCategory: z.boolean().optional().default(true),
     }),
     z.object({

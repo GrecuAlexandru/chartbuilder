@@ -559,7 +559,6 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                             {chart.uiPolarAngleAxisEnabled &&
                                 <PolarAngleAxis
                                     dataKey="label"
-                                    tick={chart.uiPolarAnlgeAxisTick}
                                     allowDuplicatedCategory={chart.uiPolarAngleAxisAllowDuplicatedCategory}
                                 />
                             }
@@ -588,14 +587,25 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                 fill={`var(--color-${chart.data[0].dataSeries[0].dataSeriesLabel})`}
                                 fillOpacity={chart.uiRadarBarFillOpacity}
                             >
-                                {chart.valueLabels[0].enabled && (
+                                {chart.valueLabelsIndividualEdit && chart.valueLabels.map((label, index) => (
                                     <LabelList
-                                        key={0}
+                                        key={index}
+                                        dataKey={chart.data[0].dataSeries[0].dataSeriesLabel}
+                                        position={label.position}
+                                        offset={label.offset}
+                                        fontSize={label.fontSize}
+                                        fill={label.fill}
+                                        stroke="none"
+                                    />
+                                ))}
+                                {!chart.valueLabelsIndividualEdit && (
+                                    <LabelList
                                         dataKey={chart.data[0].dataSeries[0].dataSeriesLabel}
                                         position={chart.valueLabels[0].position}
                                         offset={chart.valueLabels[0].offset}
                                         fontSize={chart.valueLabels[0].fontSize}
                                         fill={chart.valueLabels[0].fill}
+                                        stroke="none"
                                     />
                                 )}
                             </Radar>
@@ -653,15 +663,25 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                 background={chart.uiRadialBarBackground}
                                 isAnimationActive={false}
                             >
-                                {chart.valueLabels[0].enabled && (
+                                {chart.valueLabelsIndividualEdit && chart.valueLabels.map((label, index) => (
                                     <LabelList
-                                        key={0}
+                                        key={index}
+                                        dataKey={chart.data[0].dataSeries[0].dataSeriesLabel}
+                                        position={label.position}
+                                        offset={label.offset}
+                                        fontSize={label.fontSize}
+                                        fill={label.fill}
+                                        stroke="none"
+                                    />
+                                ))}
+                                {!chart.valueLabelsIndividualEdit && (
+                                    <LabelList
                                         dataKey={chart.data[0].dataSeries[0].dataSeriesLabel}
                                         position={chart.valueLabels[0].position}
                                         offset={chart.valueLabels[0].offset}
-                                        className="fill-white capitalize mix-blend-luminosity"
                                         fontSize={chart.valueLabels[0].fontSize}
                                         fill={chart.valueLabels[0].fill}
+                                        stroke="none"
                                     />
                                 )}
                                 {/* <LabelList
