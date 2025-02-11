@@ -1,18 +1,17 @@
 'use client'
 
 import { useState } from 'react'
-import { Send } from 'lucide-react'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { motion } from "motion/react"
 import { z, infer as zInfer } from "zod";
-import { Bar, BarChart, Area, AreaChart, Line, LineChart, Pie, PieChart, Sector, Radar, RadarChart, RadialBar, RadialBarChart, CartesianGrid, XAxis, YAxis, LabelList } from "recharts"
-import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent } from "@/components/ui/chart"
-import { ChatInterface } from "./ChatInterface"
-import { ChartView } from "./ChartView"
-import { ChartSettings } from "./ChartSettings"
+import { ChartConfig } from "@/components/ui/chart"
+import { ChatInterface } from "@/components/ui/ChartBuilder/ChatInterface"
+import { ChartView } from "@/components/ui/ChartBuilder/ChartView"
+import { ChartCode } from "@/components/ui/ChartBuilder/ChartCode";
+import { ChartSettings } from "@/components/ui/ChartBuilder/ChartSettings"
+import { ChartData } from "@/components/ui/ChartBuilder/ChartData"
 import { Chart, DataRow, DataSeries } from "@/types/chart"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 const demoString = `{ "chartType": "bar", "data": [ { "label": "Value 1", "dataSeries": [ { "dataSeriesLabel": "Category 1", "dataSeriesValue": 4 } ] }, { "label": "Value 2", "dataSeries": [ { "dataSeriesLabel": "Category 1", "dataSeriesValue": 7 } ] }, { "label": "Value 3", "dataSeries": [ { "dataSeriesLabel": "Category 1", "dataSeriesValue": 2 } ] } ], "display.displayLegend": true, "displayLabel": true, "displayXAxis": true, "displayYAxis": true, "barChartHorizontal": false, "barChartNegative": false, "uiBarChartLayout": "vertical", "uiBarChartBarCategoryGap": 10, "uiBarChartBarGap": 5, "uiBarChartBarSize": 20, "uiBarChartStackOffset": "none", "uiBarChartReverseStackOrder": false, "cartesianGrid.enabled": true, "cartesianGrid.horizontal": true, "cartesianGrid.vertical": true, "cartesianGrid.backgroundFill": "#f0f0f0", "cartesianGrid.fillOpacity": 0.5 }`;
 
@@ -200,7 +199,7 @@ export default function ChartBuilder() {
     }
 
     // console.log("chartData", chartData);
-    console.log("chartConfig", JSON.stringify(chartConfig, null, 2));
+    // console.log("chartConfig", JSON.stringify(chartConfig, null, 2));
     // console.log("chart", chart);
 
     return (
@@ -251,11 +250,34 @@ export default function ChartBuilder() {
                             transition={{ duration: 0.3 }}
                             className="p-4 border-r"
                         >
-                            <ChartView
-                                chart={chart}
-                                chartData={chartData}
-                                chartConfig={chartConfig}
-                            />
+                            <Tabs defaultValue="preview" className="w-full">
+                                <TabsList className="grid w-full grid-cols-3">
+                                    <TabsTrigger value="preview">Preview</TabsTrigger>
+                                    <TabsTrigger value="data">Data</TabsTrigger>
+                                    <TabsTrigger value="code">Code</TabsTrigger>
+                                </TabsList>
+                                <TabsContent value="preview">
+                                    <Card>
+                                        <CardContent className="pt-6">
+                                            <ChartView chart={chart} chartData={chartData} chartConfig={chartConfig} />
+                                        </CardContent>
+                                    </Card>
+                                </TabsContent>
+                                <TabsContent value="data">
+                                    <Card>
+                                        <CardContent className="pt-6">
+                                            <ChartData chart={chart} chartData={chartData} chartConfig={chartConfig} setChart={setChart} setChartData={setChartData} setChartConfig={setChartConfig} />
+                                        </CardContent>
+                                    </Card>
+                                </TabsContent>
+                                <TabsContent value="code">
+                                    <Card>
+                                        <CardContent className="pt-6">
+                                            <ChartCode chart={chart} chartData={chartData} chartConfig={chartConfig} />
+                                        </CardContent>
+                                    </Card>
+                                </TabsContent>
+                            </Tabs>
                         </motion.div>
                         <motion.div
                             initial={{ width: 0 }}

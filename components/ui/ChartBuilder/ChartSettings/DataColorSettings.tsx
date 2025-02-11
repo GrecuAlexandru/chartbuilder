@@ -12,7 +12,7 @@ interface DataColorSettingsProps {
 }
 
 export default function DataColorSettings({ chart, chartConfig, setChartConfig }: DataColorSettingsProps) {
-    console.log(chartConfig);
+    // console.log(chartConfig);
     const entries = Object.entries(chartConfig);
     // Exclude the first entry if chart is a pie chart
     const filteredEntries = chart.chartType === "pie" ? entries.slice(1) : entries;
