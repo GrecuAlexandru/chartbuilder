@@ -1,16 +1,18 @@
+import type React from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Send } from "lucide-react"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { memo } from "react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface ChatInterfaceProps {
-    chatHistory: { role: string, content: string }[]
+    chatHistory: { role: string; content: string }[]
     message: string
     setMessage: (message: string) => void
     handleSubmit: (e: React.FormEvent) => void
-    handleDemo: () => void;
-    handleDemoRequest: () => void;
+    handleDemo: () => void
+    handleRequestSelect: (value: string) => void
 }
 
 export const ChatInterface = memo(function ChatInterface({
@@ -19,14 +21,16 @@ export const ChatInterface = memo(function ChatInterface({
     setMessage,
     handleSubmit,
     handleDemo,
-    handleDemoRequest
+    handleRequestSelect,
 }: ChatInterfaceProps) {
     return (
         <div className="flex flex-col h-full">
             <ScrollArea className="flex-1 mb-4 pr-4 pl-4 pt-4">
                 {chatHistory.map((msg, index) => (
-                    <div key={index} className={`mb-2 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
-                        <span className={`inline-block p-2 rounded-lg ${msg.role === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}`}>
+                    <div key={index} className={`mb-2 ${msg.role === "user" ? "text-right" : "text-left"}`}>
+                        <span
+                            className={`inline-block p-2 rounded-lg ${msg.role === "user" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"}`}
+                        >
                             {msg.content}
                         </span>
                     </div>
@@ -44,16 +48,23 @@ export const ChatInterface = memo(function ChatInterface({
                     <Send className="h-4 w-4" />
                 </Button>
                 {chatHistory.length === 0 && (
-                    <div className="text-center text-sm text-gray-500">
-                        <Button type="button" className="ml-4 mr-2" onClick={handleDemo} variant="outline">
+                    <div className="flex items-center ml-4">
+                        <Button type="button" className="mr-2" onClick={handleDemo} variant="outline">
                             Demo
                         </Button>
-                        <Button type="button" className="ml-2" onClick={handleDemoRequest} variant="outline">
-                            Demo Request
-                        </Button>
+                        <Select onValueChange={handleRequestSelect}>
+                            <SelectTrigger className="w-[180px]">
+                                <SelectValue placeholder="Select request type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="bar3">Bar chart 3 random values</SelectItem>
+                                <SelectItem value="areabig">Area chart big data</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
                 )}
             </form>
         </div>
     )
-});
+})
+
