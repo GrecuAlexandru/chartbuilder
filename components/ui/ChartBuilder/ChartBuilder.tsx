@@ -134,6 +134,14 @@ export default function ChartBuilder() {
                     }),
                 });
 
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 429 || response.status === 413 || response.status === 500) {
+                        window.location.href = `/error?code=${response.status}`;
+                        return;
+                    }
+                    throw new Error('Network response was not ok');
+                }
+
                 const data = await response.json();
                 const validatedChart = Chart.parse(data.chart);
                 setChart(validatedChart);

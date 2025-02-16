@@ -141,7 +141,6 @@ async function generateChart(body: { text: string, history?: { role: string, con
     const { totalProps, maxDepth } = countPropsAndDepth(completion.choices[0].message.parsed);
     console.log("Properties:", totalProps, "Levels:", maxDepth);
 
-
     console.log(completion.usage);
 
     return completion.choices[0].message.parsed;
