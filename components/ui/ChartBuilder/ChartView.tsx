@@ -1,11 +1,14 @@
 "use client"
 
-import React, { useEffect } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import { ChartContainer, ChartLegend, ChartLegendContent } from "@/components/ui/chart"
 import { BarChart, AreaChart, LineChart, RadarChart, ScatterChart, RadialBarChart, LabelList, PieChart, Bar, Area, Pie, Radar, RadialBar, Line, XAxis, YAxis, CartesianGrid, Legend, Scatter, PolarGrid, PolarAngleAxis } from "recharts"
 import { useToPng } from '@hugocxl/react-to-image'
 import { Button } from "@/components/ui/button"
 import { Chart } from "@/types/chart"
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog"
+import { Slider } from "../slider"
+import { useDebounce } from 'use-debounce'
 
 interface ChartViewProps {
     chart?: Chart
@@ -14,17 +17,52 @@ interface ChartViewProps {
 }
 
 export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
+    const [imageWidth, setImageWidth] = useState(250);
+    const [imageHeight, setImageHeight] = useState(250);
+    const [debouncedImageWidth] = useDebounce(imageWidth, 200);
+    const [debouncedImageHeight] = useDebounce(imageHeight, 200);
+
+    // const [fileName, setFileName] = useState('');
+    // const [imageFormat, setImageFormat] = useState('png');
+
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+    const [zoom, setZoom] = useState(1);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+
     const [_, convert, ref] = useToPng<HTMLDivElement>({
-        quality: 0.8,
-        canvasHeight: 500,
-        canvasWidth: 500,
+        canvasHeight: debouncedImageHeight,
+        canvasWidth: debouncedImageWidth,
         onSuccess: data => {
-            const link = document.createElement('a');
-            link.download = 'my-image-name.jpeg';
-            link.href = data;
-            link.click();
+            setPreviewUrl(data);
         }
-    })
+    });
+
+    const handleWheel = (e: React.WheelEvent) => {
+        e.preventDefault();
+
+        setZoom(prevZoom => {
+            const newZoom = prevZoom - e.deltaY * 0.001;
+            return Math.min(4, Math.max(0.1, newZoom));
+        });
+    };
+
+    useEffect(() => {
+        const originalPixelRatio = window.devicePixelRatio;
+        window.devicePixelRatio = 1;
+        convert();
+        window.devicePixelRatio = originalPixelRatio;
+    }, [debouncedImageWidth, debouncedImageHeight]);
+
+    const handleDialogOpenChange = (isOpen: boolean) => {
+        setIsDialogOpen(isOpen);
+        if (isOpen) {
+            setImageWidth(250);
+            setImageHeight(250);
+            setZoom(1);
+            convert();
+        }
+    };
 
     const renderChart = () => {
         if (!chart) return <div>Loading...</div>;
@@ -686,7 +724,72 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
             <div className="w-full flex items-center justify-center border rounded-lg">
                 {renderChart()}
             </div>
-            <Button onClick={convert} className="w-1/2">Download Image</Button>
+                <Dialog open={isDialogOpen} onOpenChange={handleDialogOpenChange}>
+                <DialogTrigger asChild>
+                    <Button className="w-1/2">Customize & Export</Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-[900px] h-[600px] flex flex-col">
+                    <DialogHeader>
+                        <DialogTitle>Customize Image</DialogTitle>
+                        <DialogDescription>Adjust the settings below to customize your image before exporting.</DialogDescription>
+                    </DialogHeader>
+                    <div className="flex gap-4 h-full">
+                        {/* Zona de previzualizare */}
+                        <div onWheel={handleWheel}
+                        className="w-3/4 border overflow-hidden flex items-center justify-center relative bg-gray-100 cursor-grab active:cursor-grabbing">
+                            {previewUrl && (
+                                <img src={previewUrl} alt="Preview"
+                                    className=" absolute border rounded-lg transition-transform duration-200"
+                                    style={{
+                                        transform: `scale(${zoom})`,
+                                        transformOrigin: 'center center',
+                                    }} />
+                            )}
+                        </div>
+
+                        {/* Setări */}
+                        <div className="w-1/4 p-4 flex flex-col justify-between">
+                            <div>
+                                <div className="mt-2 space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700 flex items-center">
+                                        Width
+                                        <span className="ml-2 text-sm text-gray-500">{imageWidth} px</span> {/* Dimensiunea în px */}
+                                    </label>
+                                    <Slider
+                                        value={[imageWidth]}
+                                        min={1}
+                                        max={500}
+                                        step={1}
+                                        onValueChange={([value]) => setImageWidth(value)}
+                                    />
+                                </div>
+
+                                <div className="mt-2 space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700 flex items-center">
+                                        Height
+                                        <span className="ml-2 text-sm text-gray-500">{imageHeight} px</span> {/* Dimensiunea în px */}
+                                    </label>
+                                    <Slider
+                                        value={[imageHeight]}
+                                        min={1}
+                                        max={500}
+                                        step={1}
+                                        onValueChange={([value]) => setImageHeight(value)}
+                                    />
+                                </div>
+                            </div>
+
+                            <DialogFooter>
+                                {previewUrl && (
+                                    <a href={previewUrl} download="my-image-name.jpeg" className="w-full mt-4">
+                                        <Button className="w-full">Download Image</Button>
+                                    </a>
+                                )}
+                            </DialogFooter>
+                        </div>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </div>
     )
 }
