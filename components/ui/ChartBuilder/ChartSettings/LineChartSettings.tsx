@@ -1,4 +1,5 @@
 import { Chart } from "@/types/chart";
+import { ChartDefaultValues } from "@/types/chartDefaults";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import ColorPicker from "@/components/ui/color-picker";
@@ -40,7 +41,13 @@ export default function LineChartSettings({ chart, setChart }: LineChartSettings
                     id="lineWidth"
                     type="number"
                     value={chart.uiLineStrokeWidth ?? 1}
-                    onChange={(e) => setChart({ ...chart, uiLineStrokeWidth: parseInt(e.target.value) })}
+                    onChange={(e) =>
+                        setChart({
+                            ...chart,
+                            uiLineStrokeWidth:
+                                e.target.value === '' ? ChartDefaultValues.line.uiLineStrokeWidth : parseInt(e.target.value)
+                        })
+                    }
                 />
             </div>
             <div className="flex items-center justify-between">

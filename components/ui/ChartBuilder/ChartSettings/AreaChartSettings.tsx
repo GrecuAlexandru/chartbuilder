@@ -1,4 +1,5 @@
 import { Chart } from "@/types/chart";
+import { ChartDefaultValues } from "@/types/chartDefaults";
 import { Switch } from "@/components/ui/switch"
 import { Input } from "@/components/ui/input"
 import ColorPicker from "@/components/ui/color-picker"
@@ -19,7 +20,13 @@ export default function AreaChartSettings({ chart, setChart }: AreaSettingsProps
                 <select
                     id="stackOffset"
                     value={chart.uiAreaChartStackOffset ?? 'none'}
-                    onChange={(e) => setChart({ ...chart, uiAreaChartStackOffset: e.target.value as any })}
+                    onChange={(e) =>
+                        setChart({
+                            ...chart,
+                            uiAreaChartStackOffset:
+                                e.target.value === '' ? ChartDefaultValues.area.uiAreaChartStackOffset : e.target.value
+                        })
+                    }
                     className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
                 >
                     <option value="expand">Expand</option>
@@ -33,7 +40,12 @@ export default function AreaChartSettings({ chart, setChart }: AreaSettingsProps
                 <select
                     id="areaType"
                     value={chart.uiAreaType ?? 'linear'}
-                    onChange={(e) => setChart({ ...chart, uiAreaType: e.target.value as any })}
+                    onChange={(e) =>
+                        setChart({
+                            ...chart,
+                            uiAreaType: e.target.value === '' ? ChartDefaultValues.area.uiAreaType : e.target.value
+                        })
+                    }
                     className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
                 >
                     {['basis', 'basisClosed', 'basisOpen', 'bumpX', 'bumpY', 'bump', 'linear', 'linearClosed', 'natural', 'monotoneX', 'monotoneY', 'monotone', 'step', 'stepBefore', 'stepAfter'].map(type => (
@@ -54,7 +66,12 @@ export default function AreaChartSettings({ chart, setChart }: AreaSettingsProps
                     id="strokeWidth"
                     type="number"
                     value={chart.uiAreaStrokeWidth ?? 1}
-                    onChange={(e) => setChart({ ...chart, uiAreaStrokeWidth: parseInt(e.target.value) })}
+                    onChange={(e) =>
+                        setChart({
+                            ...chart,
+                            uiAreaStrokeWidth: e.target.value === '' ? ChartDefaultValues.area.uiAreaStrokeWidth : parseInt(e.target.value)
+                        })
+                    }
                 />
             </div>
             <div className="flex items-center justify-between">

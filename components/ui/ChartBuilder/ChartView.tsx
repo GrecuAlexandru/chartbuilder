@@ -2,10 +2,21 @@
 
 import React, { useEffect } from "react"
 import { ChartContainer, ChartLegend, ChartLegendContent } from "@/components/ui/chart"
-import { BarChart, AreaChart, LineChart, RadarChart, ScatterChart, RadialBarChart, LabelList, PieChart, Bar, Area, Pie, Radar, RadialBar, Line, XAxis, YAxis, CartesianGrid, Legend, Scatter, PolarGrid, PolarAngleAxis } from "recharts"
+import { BarChart, AreaChart, LineChart, RadarChart, ScatterChart, RadialBarChart, LabelList, RectangleProps, PieChart, Bar, Area, Pie, Radar, RadialBar, Line, XAxis, YAxis, CartesianGrid, Legend, Scatter, PolarGrid, PolarAngleAxis, Rectangle, Cell } from "recharts"
 import { useToPng } from '@hugocxl/react-to-image'
 import { Button } from "@/components/ui/button"
 import { Chart } from "@/types/chart"
+
+const CustomBar = (props: RectangleProps) => {
+    const { height = 0, y = 0 } = props;
+    if (height >= 0) {
+        // For positive bars, move the top down by 2 to add padding at the top end.
+        return <Rectangle {...props} y={y + 2} height={height - 2} />;
+    } else {
+        // For negative bars, reduce the downward extension by 2 (add padding at the bottom end).
+        return <Rectangle {...props} height={height + 2} />;
+    }
+};
 
 interface ChartViewProps {
     chart?: Chart
@@ -91,9 +102,7 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                             )}
                             {chart.yAxis.enabled && chart.uiBarChartLayout == 'horizontal' && (
                                 <YAxis
-                                    // type="number"
                                     stroke="#333"
-
                                     tickLine={chart.yAxis.tickLine}
                                     axisLine={chart.yAxis.axisLine}
                                     width={chart.yAxis.height}
@@ -105,6 +114,12 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                     tickSize={chart.yAxis.tickSize}
                                     mirror={chart.yAxis.mirror}
                                     reversed={chart.yAxis.reversed}
+                                    domain={
+                                        chart.yAxis.domainMin === 'auto' ? undefined :
+                                            chart.yAxis.domainMin === 'dataMin' ? ['dataMin', 'auto'] :
+                                                [chart.yAxis.dataMinNumber, chart.yAxis.domainMax === 'auto' ? 'auto' : chart.yAxis.dataMaxNumber] as [number, number]
+                                    }
+                                    allowDataOverflow={chart.yAxis.allowDataOverflow}
                                 />
                             )}
                             {chart.xAxis.enabled && chart.uiBarChartLayout == 'vertical' && (
@@ -150,8 +165,39 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                     dataKey={key}
                                     fill={chartConfig[key].color}
                                     isAnimationActive={false}
-                                    background={chart.uiBarBackgroundFill == 'false' ? false : { fill: chart.uiBarBackgroundFill }}
-                                    radius={chart.uiBarRadius}
+                                    background={chart.uiBarBackgroundFill === 'false' ? false : { fill: chart.uiBarBackgroundFill }}
+                                    shape={<CustomBar />}  // Add this line to use CustomBar
+                                    radius={
+                                        !chart.uiBarChartStacked
+                                            ? chart.uiBarRadius
+                                            : chart.uiBarChartLayout === 'horizontal'
+                                                ? (index === 0
+                                                    ? [0, 0, chart.uiBarRadius, chart.uiBarRadius]
+                                                    : index === Object.keys(chartConfig).length - 1
+                                                        ? [chart.uiBarRadius, chart.uiBarRadius, 0, 0]
+                                                        : undefined)
+                                                : // vertical layout: reverse the corner radii so that the first bar gets rounded on its bottom
+                                                // and the last bar gets rounded on its top
+                                                (index === 0
+                                                    ? [chart.uiBarRadius, 0, 0, chart.uiBarRadius]
+                                                    : index === Object.keys(chartConfig).length - 1
+                                                        ? [0, chart.uiBarRadius, chart.uiBarRadius, 0]
+                                                        : undefined)
+                                    }
+                                    activeIndex={chart.uiBarActiveIndex}
+                                    strokeWidth={2}
+                                    activeBar={({ ...props }) => {
+                                        return (
+                                            <Rectangle
+                                                {...props}
+                                                stroke="#333"
+                                                strokeWidth={2}
+                                                strokeDasharray="4 4"
+                                                fillOpacity={1}
+                                            />
+                                        )
+                                    }}
+                                    {...(chart.uiBarChartStacked && { stackId: "a" })}
                                 >
                                     {chart.keyLabels[index].enabled && (
                                         <LabelList
@@ -173,6 +219,16 @@ export function ChartView({ chart, chartData, chartConfig }: ChartViewProps) {
                                             fill={chart.valueLabels[index].fill}
                                         />
                                     )}
+                                    {chart.uiBarChartNegativeColorEnabled && chartData.map((entry, idx) => (
+                                        <Cell
+                                            key={idx}
+                                            fill={
+                                                entry[key] < 0
+                                                    ? chart.uiBarChartNegativeColor
+                                                    : chartConfig[key].color
+                                            }
+                                        />
+                                    ))}
                                 </Bar>
                             ))}
                             {chart.legend.enabled &&

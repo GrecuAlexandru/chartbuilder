@@ -59,6 +59,7 @@ export const ChatInterface = memo(function ChatInterface({
                             <SelectContent>
                                 <SelectItem value="bar3">Bar chart 3 random values</SelectItem>
                                 <SelectItem value="areabig">Area chart big data</SelectItem>
+                                <SelectItem value="stackedbar">Stacked bar chart</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>

@@ -1,4 +1,5 @@
 import { Chart } from "@/types/chart";
+import { ChartDefaultValues } from "@/types/chartDefaults";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
@@ -18,7 +19,7 @@ export default function RadialBarChartSettings({ chart, setChart }: RadialBarCha
                 <h1>Fill Opacity</h1>
                 <Slider
                     id="fillOpacity"
-                    value={[chart.uiRadialBarFillOpacity ?? 0.8]}
+                    value={[chart.uiRadialBarFillOpacity ?? ChartDefaultValues.radialBar.fillOpacity]}
                     onValueChange={(value) => setChart({ ...chart, uiRadialBarFillOpacity: value[0] })}
                     min={0}
                     max={1}
@@ -34,8 +35,11 @@ export default function RadialBarChartSettings({ chart, setChart }: RadialBarCha
                 <Input
                     id="barCategoryGap"
                     type="text"
-                    value={chart.uiRadialBarChartBarCategoryGap ?? '10%'}
-                    onChange={(e) => setChart({ ...chart, uiRadialBarChartBarCategoryGap: e.target.value })}
+                    value={chart.uiRadialBarChartBarCategoryGap ?? ChartDefaultValues.radialBar.barCategoryGap}
+                    onChange={(e) => setChart({
+                        ...chart,
+                        uiRadialBarChartBarCategoryGap: e.target.value === '' ? ChartDefaultValues.radialBar.barCategoryGap : e.target.value
+                    })}
                 />
             </div>
             <div>
@@ -43,8 +47,11 @@ export default function RadialBarChartSettings({ chart, setChart }: RadialBarCha
                 <Input
                     id="barGap"
                     type="number"
-                    value={chart.uiRadialBarChartBarGap ?? 4}
-                    onChange={(e) => setChart({ ...chart, uiRadialBarChartBarGap: parseInt(e.target.value) })}
+                    value={chart.uiRadialBarChartBarGap ?? ChartDefaultValues.radialBar.barGap}
+                    onChange={(e) => setChart({
+                        ...chart,
+                        uiRadialBarChartBarGap: e.target.value === '' ? ChartDefaultValues.radialBar.barGap : parseInt(e.target.value)
+                    })}
                 />
             </div>
             <div>
@@ -52,8 +59,11 @@ export default function RadialBarChartSettings({ chart, setChart }: RadialBarCha
                 <Input
                     id="cx"
                     type="text"
-                    value={chart.uiRadialBarChartCX ?? '50%'}
-                    onChange={(e) => setChart({ ...chart, uiRadialBarChartCX: e.target.value })}
+                    value={chart.uiRadialBarChartCX ?? ChartDefaultValues.radialBar.cx}
+                    onChange={(e) => setChart({
+                        ...chart,
+                        uiRadialBarChartCX: e.target.value === '' ? ChartDefaultValues.radialBar.cx : e.target.value
+                    })}
                 />
             </div>
             <div>

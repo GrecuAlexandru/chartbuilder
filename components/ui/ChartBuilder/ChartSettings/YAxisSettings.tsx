@@ -1,4 +1,5 @@
 import { Chart } from "@/types/chart";
+import { ChartDefaultValues } from "@/types/chartDefaults";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 
@@ -39,8 +40,14 @@ export default function YAxisSettings({ chart, setChart }: YAxisSettingsProps) {
                     <h1>Width</h1>
                     <Input
                         type="number"
-                        value={chart.yAxis.height ?? 30}
-                        onChange={(e) => setChart({ ...chart, yAxis: { ...chart.yAxis, height: parseInt(e.target.value) } })}
+                        value={chart.yAxis.height ?? ChartDefaultValues.yAxis.height}
+                        onChange={(e) => setChart({
+                            ...chart,
+                            yAxis: {
+                                ...chart.yAxis,
+                                height: e.target.value === '' ? ChartDefaultValues.yAxis.height : parseInt(e.target.value)
+                            }
+                        })}
                     />
                 </div>
                 <div>
@@ -65,32 +72,56 @@ export default function YAxisSettings({ chart, setChart }: YAxisSettingsProps) {
                     <h1>Tick Count</h1>
                     <Input
                         type="number"
-                        value={chart.yAxis.tickCount ?? 5}
-                        onChange={(e) => setChart({ ...chart, yAxis: { ...chart.yAxis, tickCount: parseInt(e.target.value) } })}
+                        value={chart.yAxis.tickCount ?? ChartDefaultValues.yAxis.tickCount}
+                        onChange={(e) => setChart({
+                            ...chart,
+                            yAxis: {
+                                ...chart.yAxis,
+                                tickCount: e.target.value === '' ? ChartDefaultValues.yAxis.tickCount : parseInt(e.target.value)
+                            }
+                        })}
                     />
                 </div>
                 <div>
                     <h1>Padding Top</h1>
                     <Input
                         type="number"
-                        value={chart.yAxis.paddingLeft ?? 0}
-                        onChange={(e) => setChart({ ...chart, yAxis: { ...chart.yAxis, paddingLeft: parseInt(e.target.value) } })}
+                        value={chart.yAxis.paddingLeft ?? ChartDefaultValues.yAxis.paddingLeft}
+                        onChange={(e) => setChart({
+                            ...chart,
+                            yAxis: {
+                                ...chart.yAxis,
+                                paddingLeft: e.target.value === '' ? ChartDefaultValues.yAxis.paddingLeft : parseInt(e.target.value)
+                            }
+                        })}
                     />
                 </div>
                 <div>
                     <h1>Padding Bottom</h1>
                     <Input
                         type="number"
-                        value={chart.yAxis.paddingRight ?? 0}
-                        onChange={(e) => setChart({ ...chart, yAxis: { ...chart.yAxis, paddingRight: parseInt(e.target.value) } })}
+                        value={chart.yAxis.paddingRight ?? ChartDefaultValues.yAxis.paddingRight}
+                        onChange={(e) => setChart({
+                            ...chart,
+                            yAxis: {
+                                ...chart.yAxis,
+                                paddingRight: e.target.value === '' ? ChartDefaultValues.yAxis.paddingRight : parseInt(e.target.value)
+                            }
+                        })}
                     />
                 </div>
                 <div>
                     <h1>Tick Size</h1>
                     <Input
                         type="number"
-                        value={chart.yAxis.tickSize ?? 6}
-                        onChange={(e) => setChart({ ...chart, yAxis: { ...chart.yAxis, tickSize: parseInt(e.target.value) } })}
+                        value={chart.yAxis.tickSize ?? ChartDefaultValues.yAxis.tickSize}
+                        onChange={(e) => setChart({
+                            ...chart,
+                            yAxis: {
+                                ...chart.yAxis,
+                                tickSize: e.target.value === '' ? ChartDefaultValues.yAxis.tickSize : parseInt(e.target.value)
+                            }
+                        })}
                     />
                 </div>
                 <div className="flex items-center justify-between">
@@ -107,6 +138,60 @@ export default function YAxisSettings({ chart, setChart }: YAxisSettingsProps) {
                         onCheckedChange={(checked) => setChart({ ...chart, yAxis: { ...chart.yAxis, reversed: checked } })}
                     />
                 </div>
+            </div>
+            <div>
+                <h1>Domain Min</h1>
+                <select
+                    value={chart.yAxis?.domainMin ?? '0'}
+                    onChange={(e) => setChart({ ...chart, yAxis: { ...chart.yAxis, domainMin: e.target.value as '0' | 'auto' | 'dataMin' } })}
+                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                >
+                    <option value="0">0</option>
+                    <option value="auto">Auto</option>
+                    <option value="dataMin">Data Min</option>
+                </select>
+                {chart.yAxis?.domainMin === 'dataMin' && (
+                    <div className="mt-2">
+                        <Input
+                            type="number"
+                            value={chart.yAxis?.dataMinNumber ?? 0}
+                            onChange={(e) => setChart({
+                                ...chart,
+                                yAxis: {
+                                    ...chart.yAxis,
+                                    dataMinNumber: e.target.value === '' ? 0 : parseFloat(e.target.value)
+                                }
+                            })}
+                        />
+                    </div>
+                )}
+            </div>
+
+            <div>
+                <h1>Domain Max</h1>
+                <select
+                    value={chart.yAxis?.domainMax ?? 'auto'}
+                    onChange={(e) => setChart({ ...chart, yAxis: { ...chart.yAxis, domainMax: e.target.value as 'auto' | 'dataMax' } })}
+                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                >
+                    <option value="auto">Auto</option>
+                    <option value="dataMax">Data Max</option>
+                </select>
+                {chart.yAxis?.domainMax === 'dataMax' && (
+                    <div className="mt-2">
+                        <Input
+                            type="number"
+                            value={chart.yAxis?.dataMaxNumber ?? 0}
+                            onChange={(e) => setChart({
+                                ...chart,
+                                yAxis: {
+                                    ...chart.yAxis,
+                                    dataMaxNumber: e.target.value === '' ? 0 : parseFloat(e.target.value)
+                                }
+                            })}
+                        />
+                    </div>
+                )}
             </div>
         </div>
     );

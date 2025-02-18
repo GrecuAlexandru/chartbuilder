@@ -39,6 +39,11 @@ const AxisSettings = z.object({
     tickSize: z.number().optional(),
     mirror: z.boolean().optional(),
     reversed: z.boolean().optional(),
+    domainMin: z.enum(['0', 'auto', 'dataMin']).optional(),
+    dataMinNumber: z.number().optional(),
+    domainMax: z.enum(['auto', 'dataMax']).optional(),
+    dataMaxNumber: z.number().optional(),
+    allowDataOverflow: z.boolean().optional(),
 });
 
 const CartesianGridSettings = z.object({
@@ -116,12 +121,16 @@ export const ApiChart = z.discriminatedUnion('chartType', [
         uiBarChartLayout: z.enum(['vertical', 'horizontal']).optional(),
         uiBarChartBarCategoryGap: z.number().optional(),
         uiBarChartBarGap: z.number().optional(),
+        uiBarChartStacked: z.boolean().optional(),
         uiBarChartStackOffset: z.enum(['expand', 'none', 'wiggle', 'silhouette', 'sign']).optional(),
         uiBarChartReverseStackOrder: z.boolean().optional(),
+        uiBarChartNegativeColorEnabled: z.boolean().optional(),
+        uiBarChartNegativeColor: z.string().optional(),
 
         // Bar
         uiBarBackgroundFill: z.string().optional(),
         uiBarRadius: z.number().optional(),
+        uiBarActiveIndex: z.number().optional(),
     }),
     z.object({
         chartType: z.literal('line'),

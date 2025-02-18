@@ -38,6 +38,11 @@ const AxisSettings = z.object({
     tickSize: z.number().optional().default(6),
     mirror: z.boolean().optional().default(false),
     reversed: z.boolean().optional().default(false),
+    domainMin: z.enum(['0', 'auto', 'dataMin']).optional().default('0'),
+    dataMinNumber: z.number().optional().default(0),
+    domainMax: z.enum(['auto', 'dataMax']).optional().default('auto'),
+    dataMaxNumber: z.number().optional().default(0),
+    allowDataOverflow: z.boolean().optional().default(false),
 });
 
 const CartesianGridSettings = z.object({
@@ -130,12 +135,16 @@ export const Chart = z.discriminatedUnion('chartType', [
         uiBarChartLayout: z.enum(['vertical', 'horizontal']).optional().default('horizontal'),
         uiBarChartBarCategoryGap: z.number().optional().default(10),
         uiBarChartBarGap: z.number().optional().default(4),
+        uiBarChartStacked: z.boolean().optional().default(false),
         uiBarChartStackOffset: z.enum(['expand', 'none', 'wiggle', 'silhouette', 'sign']).optional().default('none'),
         uiBarChartReverseStackOrder: z.boolean().optional().default(false),
+        uiBarChartNegativeColorEnabled: z.boolean().optional().default(false),
+        uiBarChartNegativeColor: z.string().optional().default('#FF0000'),
 
         // Bar
         uiBarBackgroundFill: z.string().optional().default('false'),
         uiBarRadius: z.number().optional().default(0),
+        uiBarActiveIndex: z.number().optional().default(-1),
     }),
     z.object({
         chartType: z.literal('line'),

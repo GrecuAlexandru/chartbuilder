@@ -1,4 +1,5 @@
 import { Chart } from "@/types/chart";
+import { ChartDefaultValues } from "@/types/chartDefaults";
 import { Input } from "@/components/ui/input";
 
 interface PieChartSettingsProps {
@@ -16,9 +17,15 @@ export default function PieChartSettings({ chart, setChart }: PieChartSettingsPr
                 <h1>Center X (%)</h1>
                 <Input
                     id="cx"
-                    type="text"
+                    type="number"
                     value={(chart.uiPieCX ?? '50%')}
-                    onChange={(e) => setChart({ ...chart, uiPieCX: e.target.value })}
+                    onChange={(e) =>
+                        setChart({
+                            ...chart,
+                            uiPieCX:
+                                e.target.value === '' ? ChartDefaultValues.pie.uiPieCX : parseInt(e.target.value)
+                        })
+                    }
                 />
             </div>
             <div>
@@ -27,7 +34,13 @@ export default function PieChartSettings({ chart, setChart }: PieChartSettingsPr
                     id="cy"
                     type="text"
                     value={(chart.uiPieCY ?? '50%')}
-                    onChange={(e) => setChart({ ...chart, uiPieCY: e.target.value })}
+                    onChange={(e) =>
+                        setChart({
+                            ...chart,
+                            uiPieCY:
+                                e.target.value === '' ? ChartDefaultValues.pie.uiPieCY : parseInt(e.target.value)
+                        })
+                    }
                 />
             </div>
             <div>
@@ -35,8 +48,14 @@ export default function PieChartSettings({ chart, setChart }: PieChartSettingsPr
                 <Input
                     id="innerRadius"
                     type="number"
-                    value={chart.uiPieInnerRadius ?? 0}
-                    onChange={(e) => setChart({ ...chart, uiPieInnerRadius: parseInt(e.target.value) })}
+                    value={chart.uiPieInnerRadius ?? ChartDefaultValues.pie.uiPieInnerRadius}
+                    onChange={(e) =>
+                        setChart({
+                            ...chart,
+                            uiPieInnerRadius:
+                                e.target.value === '' ? ChartDefaultValues.pie.uiPieInnerRadius : parseInt(e.target.value)
+                        })
+                    }
                 />
             </div>
             <div>
@@ -44,8 +63,14 @@ export default function PieChartSettings({ chart, setChart }: PieChartSettingsPr
                 <Input
                     id="outerRadius"
                     type="number"
-                    value={chart.uiPieOuterRadius ?? 80}
-                    onChange={(e) => setChart({ ...chart, uiPieOuterRadius: parseInt(e.target.value) })}
+                    value={chart.uiPieOuterRadius ?? ChartDefaultValues.pie.uiPieOuterRadius}
+                    onChange={(e) =>
+                        setChart({
+                            ...chart,
+                            uiPieOuterRadius:
+                                e.target.value === '' ? ChartDefaultValues.pie.uiPieOuterRadius : parseInt(e.target.value)
+                        })
+                    }
                 />
             </div>
             <div>
@@ -53,8 +78,14 @@ export default function PieChartSettings({ chart, setChart }: PieChartSettingsPr
                 <Input
                     id="startAngle"
                     type="number"
-                    value={chart.uiPieStartAngle ?? 0}
-                    onChange={(e) => setChart({ ...chart, uiPieStartAngle: parseInt(e.target.value) })}
+                    value={chart.uiPieStartAngle ?? ChartDefaultValues.pie.uiPieStartAngle}
+                    onChange={(e) =>
+                        setChart({
+                            ...chart,
+                            uiPieStartAngle:
+                                e.target.value === '' ? ChartDefaultValues.pie.uiPieStartAngle : parseInt(e.target.value)
+                        })
+                    }
                 />
             </div>
             <div>
@@ -62,8 +93,14 @@ export default function PieChartSettings({ chart, setChart }: PieChartSettingsPr
                 <Input
                     id="endAngle"
                     type="number"
-                    value={chart.uiPieEndAngle ?? 360}
-                    onChange={(e) => setChart({ ...chart, uiPieEndAngle: parseInt(e.target.value) })}
+                    value={chart.uiPieEndAngle ?? ChartDefaultValues.pie.uiPieEndAngle}
+                    onChange={(e) =>
+                        setChart({
+                            ...chart,
+                            uiPieEndAngle:
+                                e.target.value === '' ? ChartDefaultValues.pie.uiPieEndAngle : parseInt(e.target.value)
+                        })
+                    }
                 />
             </div>
             <div>
@@ -71,8 +108,14 @@ export default function PieChartSettings({ chart, setChart }: PieChartSettingsPr
                 <Input
                     id="minAngle"
                     type="number"
-                    value={chart.uiPieMinAngle ?? 0}
-                    onChange={(e) => setChart({ ...chart, uiPieMinAngle: parseInt(e.target.value) })}
+                    value={chart.uiPieMinAngle ?? ChartDefaultValues.pie.uiPieMinAngle}
+                    onChange={(e) =>
+                        setChart({
+                            ...chart,
+                            uiPieMinAngle:
+                                e.target.value === '' ? ChartDefaultValues.pie.uiPieMinAngle : parseInt(e.target.value)
+                        })
+                    }
                 />
             </div>
             <div>
@@ -80,8 +123,14 @@ export default function PieChartSettings({ chart, setChart }: PieChartSettingsPr
                 <Input
                     id="paddingAngle"
                     type="number"
-                    value={chart.uiPiePaddingAngle ?? 0}
-                    onChange={(e) => setChart({ ...chart, uiPiePaddingAngle: parseInt(e.target.value) })}
+                    value={chart.uiPiePaddingAngle ?? ChartDefaultValues.pie.uiPiePaddingAngle}
+                    onChange={(e) =>
+                        setChart({
+                            ...chart,
+                            uiPiePaddingAngle:
+                                e.target.value === '' ? ChartDefaultValues.pie.uiPiePaddingAngle : parseInt(e.target.value)
+                        })
+                    }
                 />
             </div>
             <div>
@@ -89,8 +138,14 @@ export default function PieChartSettings({ chart, setChart }: PieChartSettingsPr
                 <Input
                     id="activeIndex"
                     type="number"
-                    value={chart.uiPieActiveIndex ?? -1}
-                    onChange={(e) => setChart({ ...chart, uiPieActiveIndex: parseInt(e.target.value) })}
+                    value={chart.uiPieActiveIndex ?? ChartDefaultValues.pie.uiPieActiveIndex}
+                    onChange={(e) =>
+                        setChart({
+                            ...chart,
+                            uiPieActiveIndex:
+                                e.target.value === '' ? ChartDefaultValues.pie.uiPieActiveIndex : parseInt(e.target.value)
+                        })
+                    }
                 />
             </div>
         </div>

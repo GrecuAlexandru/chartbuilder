@@ -1,4 +1,5 @@
 import { Chart } from "@/types/chart";
+import { ChartDefaultValues } from "@/types/chartDefaults";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
@@ -9,7 +10,7 @@ interface PolarGridSettingsProps {
 }
 
 export default function PolarGridSettings({ chart, setChart }: PolarGridSettingsProps) {
-    if (chart.chartType !== 'radial' && chart.chartType !== 'radar') return null;
+    if (chart.chartType !== "radial" && chart.chartType !== "radar") return null;
 
     return (
         <div className="space-y-4 mb-8">
@@ -18,47 +19,107 @@ export default function PolarGridSettings({ chart, setChart }: PolarGridSettings
                 <h1>Enable Polar Grid</h1>
                 <Switch
                     checked={chart.polarGrid?.enabled ?? true}
-                    onCheckedChange={(checked) => setChart({ ...chart, polarGrid: { ...chart.polarGrid, enabled: checked } })}
+                    onCheckedChange={(checked) =>
+                        setChart({
+                            ...chart,
+                            polarGrid: { ...chart.polarGrid, enabled: checked },
+                        })
+                    }
                 />
             </div>
-            <div className={`space-y-4 ${!chart.polarGrid?.enabled ? 'opacity-50 pointer-events-none' : ''}`}>
+            <div className={`space-y-4 ${!chart.polarGrid?.enabled ? "opacity-50 pointer-events-none" : ""}`}>
                 <div>
                     <h1>Inner Radius</h1>
                     <Input
                         type="number"
-                        value={chart.polarGrid?.innerRadius ?? 0}
-                        onChange={(e) => setChart({ ...chart, polarGrid: { ...chart.polarGrid, innerRadius: parseInt(e.target.value) } })}
+                        value={chart.polarGrid?.innerRadius ?? ChartDefaultValues.polarGrid.innerRadius}
+                        onChange={(e) =>
+                            setChart({
+                                ...chart,
+                                polarGrid: {
+                                    ...chart.polarGrid,
+                                    innerRadius:
+                                        e.target.value === ""
+                                            ? ChartDefaultValues.polarGrid.innerRadius
+                                            : parseInt(e.target.value),
+                                },
+                            })
+                        }
                     />
                 </div>
                 <div>
                     <h1>Outer Radius</h1>
                     <Input
                         type="number"
-                        value={chart.polarGrid?.outerRadius ?? 80}
-                        onChange={(e) => setChart({ ...chart, polarGrid: { ...chart.polarGrid, outerRadius: parseInt(e.target.value) } })}
+                        value={chart.polarGrid?.outerRadius ?? ChartDefaultValues.polarGrid.outerRadius}
+                        onChange={(e) =>
+                            setChart({
+                                ...chart,
+                                polarGrid: {
+                                    ...chart.polarGrid,
+                                    outerRadius:
+                                        e.target.value === ""
+                                            ? ChartDefaultValues.polarGrid.outerRadius
+                                            : parseInt(e.target.value),
+                                },
+                            })
+                        }
                     />
                 </div>
                 <div>
                     <h1>Polar Angles Count</h1>
                     <Input
                         type="number"
-                        value={chart.polarGrid?.polarAnglesCount ?? 6}
-                        onChange={(e) => setChart({ ...chart, polarGrid: { ...chart.polarGrid, polarAnglesCount: parseInt(e.target.value) } })}
+                        value={
+                            chart.polarGrid?.polarAnglesCount ??
+                            ChartDefaultValues.polarGrid.polarAnglesCount
+                        }
+                        onChange={(e) =>
+                            setChart({
+                                ...chart,
+                                polarGrid: {
+                                    ...chart.polarGrid,
+                                    polarAnglesCount:
+                                        e.target.value === ""
+                                            ? ChartDefaultValues.polarGrid.polarAnglesCount
+                                            : parseInt(e.target.value),
+                                },
+                            })
+                        }
                     />
                 </div>
                 <div>
                     <h1>Polar Radius Count</h1>
                     <Input
                         type="number"
-                        value={chart.polarGrid?.polarRadiusCount ?? 6}
-                        onChange={(e) => setChart({ ...chart, polarGrid: { ...chart.polarGrid, polarRadiusCount: parseInt(e.target.value) } })}
+                        value={
+                            chart.polarGrid?.polarRadiusCount ??
+                            ChartDefaultValues.polarGrid.polarRadiusCount
+                        }
+                        onChange={(e) =>
+                            setChart({
+                                ...chart,
+                                polarGrid: {
+                                    ...chart.polarGrid,
+                                    polarRadiusCount:
+                                        e.target.value === ""
+                                            ? ChartDefaultValues.polarGrid.polarRadiusCount
+                                            : parseInt(e.target.value),
+                                },
+                            })
+                        }
                     />
                 </div>
                 <div>
                     <h1>Grid Type</h1>
                     <select
-                        value={chart.polarGrid?.gridType ?? 'polygon'}
-                        onChange={(e) => setChart({ ...chart, polarGrid: { ...chart.polarGrid, gridType: e.target.value as 'circle' | 'polygon' } })}
+                        value={chart.polarGrid?.gridType ?? "polygon"}
+                        onChange={(e) =>
+                            setChart({
+                                ...chart,
+                                polarGrid: { ...chart.polarGrid, gridType: e.target.value as "circle" | "polygon" },
+                            })
+                        }
                         className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
                     >
                         <option value="circle">Circle</option>

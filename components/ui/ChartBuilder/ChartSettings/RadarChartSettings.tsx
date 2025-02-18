@@ -1,4 +1,5 @@
 import { Chart } from "@/types/chart";
+import { ChartDefaultValues } from "@/types/chartDefaults"
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
@@ -20,8 +21,16 @@ export default function RadarChartSettings({ chart, setChart }: RadarChartSettin
                     <Input
                         id="cx"
                         type="text"
-                        value={chart.uiRadarChartCX ?? '50%'}
-                        onChange={(e) => setChart({ ...chart, uiRadarChartCX: e.target.value })}
+                        value={chart.uiRadarChartCX ?? ChartDefaultValues.radar.uiRadarChartCX}
+                        onChange={(e) =>
+                            setChart({
+                                ...chart,
+                                uiRadarChartCX:
+                                    e.target.value === ''
+                                        ? ChartDefaultValues.radar.uiRadarChartCX
+                                        : parseInt(e.target.value)
+                            })
+                        }
                     />
                 </div>
                 <div>
@@ -29,8 +38,16 @@ export default function RadarChartSettings({ chart, setChart }: RadarChartSettin
                     <Input
                         id="cy"
                         type="text"
-                        value={chart.uiRadarChartCY ?? '50%'}
-                        onChange={(e) => setChart({ ...chart, uiRadarChartCY: e.target.value })}
+                        value={chart.uiRadarChartCY ?? ChartDefaultValues.radar.uiRadarChartCY}
+                        onChange={(e) =>
+                            setChart({
+                                ...chart,
+                                uiRadarChartCY:
+                                    e.target.value === ''
+                                        ? ChartDefaultValues.radar.uiRadarChartCY
+                                        : parseInt(e.target.value)
+                            })
+                        }
                     />
                 </div>
             </div>
@@ -41,9 +58,12 @@ export default function RadarChartSettings({ chart, setChart }: RadarChartSettin
                     <h1>Fill Opacity</h1>
                     <Slider
                         id="fillOpacity"
-                        value={[chart.uiRadarBarFillOpacity ?? 0.8]}
+                        value={[chart.uiRadarBarFillOpacity ?? ChartDefaultValues.radar.uiRadarBarFillOpacity]}
                         onValueChange={(value) =>
-                            setChart({ ...chart, uiRadarBarFillOpacity: value[0] })
+                            setChart({
+                                ...chart,
+                                uiRadarBarFillOpacity: value[0]
+                            })
                         }
                         min={0}
                         max={1}
@@ -51,7 +71,7 @@ export default function RadarChartSettings({ chart, setChart }: RadarChartSettin
                         className="w-full"
                     />
                     <div className="text-xs text-gray-500 mt-1">
-                        {(chart.uiRadarBarFillOpacity ?? 0.8).toFixed(1)}
+                        {(chart.uiRadarBarFillOpacity ?? ChartDefaultValues.radar.uiRadarBarFillOpacity).toFixed(1)}
                     </div>
                 </div>
             </div>

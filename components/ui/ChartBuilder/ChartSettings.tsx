@@ -1,12 +1,5 @@
 import { Chart } from "@/types/chart";
-import { z } from "zod";
-import { Switch } from "@/components/ui/switch";
-import { Input } from "@/components/ui/input";
-import { Slider } from "@/components/ui/slider";
-import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
-import { Button } from "../button";
 import AreaChartSettings from "@/components/ui/ChartBuilder/ChartSettings/AreaChartSettings";
 import BarChartSettings from "@/components/ui/ChartBuilder/ChartSettings/BarChartSettings";
 import CartesianGridSettings from "@/components/ui/ChartBuilder/ChartSettings/CartesianGridSettings";
