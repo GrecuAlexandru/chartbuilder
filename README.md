@@ -32,3 +32,18 @@ AI tool for building and customizing interactive charts.
    ```
 
 6. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+
+API keys for 4PSA review: https://docs.google.com/document/d/1j_kiF8cizSUDgVaPkvBDhb0jhryrfWWA_baskM-586Y/edit?usp=sharing
+
+
+## Running example
+
+```
+Generate a bar chart with 10 random values under 1 category
+```
+
+
+```
+Generate an area chart with 5 random values under 1 category
+```
