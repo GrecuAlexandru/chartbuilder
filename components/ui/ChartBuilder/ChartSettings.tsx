@@ -13,6 +13,7 @@ import YAxisSettings from "@/components/ui/ChartBuilder/ChartSettings/YAxisSetti
 import LegendSettings from "@/components/ui/ChartBuilder/ChartSettings/LegendSettings";
 import DataColorSettings from "@/components/ui/ChartBuilder/ChartSettings/DataColorSettings";
 import LabelSettings from "@/components/ui/ChartBuilder/ChartSettings/LabelSettings";
+import ChartStyleSettings from "@/components/ui/ChartBuilder/ChartSettings/ChartStyleSettings";
 
 interface ChartSettingsProps {
     chart?: Chart
@@ -53,6 +54,8 @@ export function ChartSettings({ chart, chartConfig, setChart, setChartConfig }: 
                     </select>
                 </div>
             </div>
+
+            <ChartStyleSettings chart={chart} setChart={setChart} />
 
             <DataColorSettings chart={chart} chartConfig={chartConfig} setChart={setChart} setChartConfig={setChartConfig} />
 

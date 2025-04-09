@@ -80,11 +80,25 @@ const LabelSettings = z.object({
     fill: z.string().optional().default('#000'),
 });
 
+const ChartStyleSettings = z.object({
+    width: z.number().optional().default(800),
+    height: z.number().optional().default(400),
+    margin: z.object({
+        top: z.number().optional().default(5),
+        right: z.number().optional().default(5),
+        bottom: z.number().optional().default(5),
+        left: z.number().optional().default(5),
+    }),
+    backgroundFill: z.string().optional().default('#fff'),
+    backgroundOpacity: z.number().optional().default(1),
+})
+
 // Main Chart Schema
 export const Chart = z.discriminatedUnion('chartType', [
     z.object({
         chartType: z.literal('area'),
         data: z.array(DataRow),
+        chartStyleSettings: ChartStyleSettings,
         xAxis: AxisSettings.default({
             type: 'category'
         }),
@@ -114,6 +128,7 @@ export const Chart = z.discriminatedUnion('chartType', [
     z.object({
         chartType: z.literal('bar'),
         data: z.array(DataRow),
+        chartStyleSettings: ChartStyleSettings,
         xAxis: AxisSettings.default({
             type: 'category'
         }),
@@ -149,6 +164,7 @@ export const Chart = z.discriminatedUnion('chartType', [
     z.object({
         chartType: z.literal('line'),
         data: z.array(DataRow),
+        chartStyleSettings: ChartStyleSettings,
         xAxis: AxisSettings.default({
             type: 'category'
         }),
@@ -176,6 +192,7 @@ export const Chart = z.discriminatedUnion('chartType', [
     z.object({
         chartType: z.literal('scatter'),
         data: z.array(DataRow),
+        chartStyleSettings: ChartStyleSettings,
         xAxis: AxisSettings.default({
             type: 'category'
         }),
@@ -197,6 +214,7 @@ export const Chart = z.discriminatedUnion('chartType', [
     z.object({
         chartType: z.literal('pie'),
         data: z.array(DataRow),
+        chartStyleSettings: ChartStyleSettings,
         legend: LegendSettings,
         keyLabelsIndividualEdit: z.boolean().optional().default(false),
         valueLabelsIndividualEdit: z.boolean().optional().default(false),
@@ -223,6 +241,7 @@ export const Chart = z.discriminatedUnion('chartType', [
     z.object({
         chartType: z.literal('radar'),
         data: z.array(DataRow),
+        chartStyleSettings: ChartStyleSettings,
         polarGrid: PolarGridSettings,
         legend: LegendSettings,
         keyLabelsIndividualEdit: z.boolean().optional().default(false),
@@ -249,6 +268,7 @@ export const Chart = z.discriminatedUnion('chartType', [
     z.object({
         chartType: z.literal('radial'),
         data: z.array(DataRow),
+        chartStyleSettings: ChartStyleSettings,
         polarGrid: PolarGridSettings,
         legend: LegendSettings,
         keyLabelsIndividualEdit: z.boolean().optional().default(false),

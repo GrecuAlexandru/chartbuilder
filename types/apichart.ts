@@ -82,11 +82,31 @@ const LabelSettings = z.object({
     fill: z.string().optional(),
 });
 
+const ChartStyleSettings = z.object({
+    width: z.number().optional(),
+    height: z.number().optional(),
+    margin: z.object({
+        top: z.number().optional(),
+        right: z.number().optional(),
+        bottom: z.number().optional(),
+        left: z.number().optional(),
+    }),
+    padding: z.object({
+        top: z.number().optional(),
+        right: z.number().optional(),
+        bottom: z.number().optional(),
+        left: z.number().optional(),
+    }),
+    backgroundFill: z.string().optional(),
+    backgroundOpacity: z.number().optional(),
+})
+
 // Main Chart Schema
 export const ApiChart = z.discriminatedUnion('chartType', [
     z.object({
         chartType: z.literal('area'),
         data: z.array(DataRow),
+        chartStyleSettings: ChartStyleSettings,
         xAxis: AxisSettings,
         yAxis: AxisSettings,
         cartesianGrid: CartesianGridSettings,
@@ -108,6 +128,7 @@ export const ApiChart = z.discriminatedUnion('chartType', [
     z.object({
         chartType: z.literal('bar'),
         data: z.array(DataRow),
+        chartStyleSettings: ChartStyleSettings,
         xAxis: AxisSettings,
         yAxis: AxisSettings,
         cartesianGrid: CartesianGridSettings,
@@ -135,6 +156,7 @@ export const ApiChart = z.discriminatedUnion('chartType', [
     z.object({
         chartType: z.literal('line'),
         data: z.array(DataRow),
+        chartStyleSettings: ChartStyleSettings,
         xAxis: AxisSettings,
         yAxis: AxisSettings,
         cartesianGrid: CartesianGridSettings,
@@ -153,6 +175,7 @@ export const ApiChart = z.discriminatedUnion('chartType', [
     z.object({
         chartType: z.literal('scatter'),
         data: z.array(DataRow),
+        chartStyleSettings: ChartStyleSettings,
         xAxis: AxisSettings,
         yAxis: AxisSettings,
         cartesianGrid: CartesianGridSettings,
@@ -163,6 +186,7 @@ export const ApiChart = z.discriminatedUnion('chartType', [
     z.object({
         chartType: z.literal('pie'),
         data: z.array(DataRow),
+        chartStyleSettings: ChartStyleSettings,
         legend: LegendSettings,
         keyLabelsIndividualEdit: z.boolean().optional(),
         valueLabelsIndividualEdit: z.boolean().optional(),
@@ -183,6 +207,7 @@ export const ApiChart = z.discriminatedUnion('chartType', [
     z.object({
         chartType: z.literal('radar'),
         data: z.array(DataRow),
+        chartStyleSettings: ChartStyleSettings,
         polarGrid: PolarGridSettings,
         legend: LegendSettings,
         keyLabelsIndividualEdit: z.boolean().optional(),
@@ -204,6 +229,7 @@ export const ApiChart = z.discriminatedUnion('chartType', [
     z.object({
         chartType: z.literal('radial'),
         data: z.array(DataRow),
+        chartStyleSettings: ChartStyleSettings,
         polarGrid: PolarGridSettings,
         legend: LegendSettings,
         keyLabelsIndividualEdit: z.boolean().optional(),
