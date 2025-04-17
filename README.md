@@ -33,10 +33,6 @@ AI tool for building and customizing interactive charts.
 
 6. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-
-API keys for 4PSA review: https://docs.google.com/document/d/1j_kiF8cizSUDgVaPkvBDhb0jhryrfWWA_baskM-586Y/edit?usp=sharing
-
-
 ## Running example
 
 ```
